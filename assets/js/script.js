@@ -25,7 +25,7 @@ let oscillator;
 
 $('#keyboard button').on('mousedown', (e) => {
     let freq = notes[e.target.dataset.note];
-    console.log(freq + " Hz");
+    console.log(e.target.dataset.note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
     oscillator.type = wavetypeEl.val();
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
