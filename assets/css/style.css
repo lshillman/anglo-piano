@@ -43,9 +43,16 @@ button:hover {
    margin-left: -12.5px;
 }
 
-#keyboard {
+#keyboard-container {
    margin: 0 auto;
    width:fit-content;
+   max-width: 100%;
+   overflow-x: auto;
+}
+
+#keyboard {
+   width:fit-content;
+   white-space: nowrap;
 }
 
 #keyboard:first-child {
