@@ -1,8 +1,8 @@
 # OscillatorNode Practice
 
-## [deployed app](https://lshillman.github.io/oscillatornode-practice/)
+Just getting comfortable with OscillatorNode to generate tones.
 
-Just getting comfortable with OscillatorNode.
+The eventual goal is to re-build [anglo piano](https://anglopiano.com). Definitely not ready for prime time yet. See current progress [here](https://lshillman.github.io/oscillatornode-practice/).
 
 
 ## License
