@@ -22,36 +22,36 @@ for (note in notes) {
 }
 
 const buttons = [
-    {push: 'E3', pull: 'F3', x: 60},
-    {push: 'A3', pull: 'Bb3', x: 0},
-    {push: 'C#4', pull: 'D#4', x: 0},
-    {push: 'A4', pull: 'G4', x: 0},
-    {push: 'G#4', pull: 'Bb4', x: 0},
-    {push: 'C#5', pull: 'D#5', x: 120},
-    {push: 'A5', pull: 'G5', x: 0},
-    {push: 'G#5', pull: 'Bb5', x: 0},
-    {push: 'C#6', pull: 'D#6', x: 0},
-    {push: 'A6', pull: 'F6', x: 0},
-    {push: 'C3', pull: 'G3', x: 30, newRow: true},
-    {push: 'G3', pull: 'B3', x: 0},
-    {push: 'C4', pull: 'D4', x: 0},
-    {push: 'E4', pull: 'F4', x: 0},
-    {push: 'G4', pull: 'A4', x: 0},
-    {push: 'C5', pull: 'B4', x: 180},
-    {push: 'E5', pull: 'D5', x: 0},
-    {push: 'G5', pull: 'F5', x: 0},
-    {push: 'C6', pull: 'A5', x: 0},
-    {push: 'E6', pull: 'B5', x: 0},
-    {push: 'B3', pull: 'A3', x: 0, newRow: true},
-    {push: 'D4', pull: 'F#4', x: 0},
-    {push: 'G4', pull: 'A4', x: 0},
-    {push: 'B4', pull: 'C5', x: 0},
-    {push: 'D5', pull: 'E5', x: 0},
-    {push: 'G5', pull: 'F#5', x: 240},
-    {push: 'B5', pull: 'A5', x: 0},
-    {push: 'D6', pull: 'C6', x: 0},
-    {push: 'G6', pull: 'E6', x: 0},
-    {push: 'B6', pull: 'F#6', x: 0},
+    { push: 'E3', pull: 'F3', x: 60 },
+    { push: 'A3', pull: 'Bb3', x: 0 },
+    { push: 'C#4', pull: 'D#4', x: 0 },
+    { push: 'A4', pull: 'G4', x: 0 },
+    { push: 'G#4', pull: 'Bb4', x: 0 },
+    { push: 'C#5', pull: 'D#5', x: 120 },
+    { push: 'A5', pull: 'G5', x: 0 },
+    { push: 'G#5', pull: 'Bb5', x: 0 },
+    { push: 'C#6', pull: 'D#6', x: 0 },
+    { push: 'A6', pull: 'F6', x: 0 },
+    { push: 'C3', pull: 'G3', x: 30, newRow: true },
+    { push: 'G3', pull: 'B3', x: 0 },
+    { push: 'C4', pull: 'D4', x: 0 },
+    { push: 'E4', pull: 'F4', x: 0 },
+    { push: 'G4', pull: 'A4', x: 0 },
+    { push: 'C5', pull: 'B4', x: 180 },
+    { push: 'E5', pull: 'D5', x: 0 },
+    { push: 'G5', pull: 'F5', x: 0 },
+    { push: 'C6', pull: 'A5', x: 0 },
+    { push: 'E6', pull: 'B5', x: 0 },
+    { push: 'B3', pull: 'A3', x: 0, newRow: true },
+    { push: 'D4', pull: 'F#4', x: 0 },
+    { push: 'G4', pull: 'A4', x: 0 },
+    { push: 'B4', pull: 'C5', x: 0 },
+    { push: 'D5', pull: 'E5', x: 0 },
+    { push: 'G5', pull: 'F#5', x: 240 },
+    { push: 'B5', pull: 'A5', x: 0 },
+    { push: 'D6', pull: 'C6', x: 0 },
+    { push: 'G6', pull: 'E6', x: 0 },
+    { push: 'B6', pull: 'F#6', x: 0 },
 ]
 
 for (button of buttons) {
@@ -62,6 +62,18 @@ for (button of buttons) {
     }
 }
 
+
+function selectConcertinaButtons(note) {
+    console.log("Inside selectConcertinaButtons: " + note);
+    console.log(angloKeyboard.children.length)
+    for (button in angloKeyboard.children) {
+        for (note in button.children) {
+            if (note.dataset.note == note) {
+                console.log("I'm a match!");
+            }
+        }
+    }
+}
 
 
 
@@ -74,5 +86,7 @@ $('#keyboard button').on('mousedown', (e) => {
     oscillator.type = wavetypeEl.val();
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
-    oscillator.start()});
+    oscillator.start()
+    selectConcertinaButtons(e.target.dataset.note);
+});
 $('#keyboard button').on('mouseup', () => oscillator.stop());
