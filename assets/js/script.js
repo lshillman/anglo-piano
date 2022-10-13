@@ -2,7 +2,7 @@ console.log("I'm a JavaScript file linked to this page!");
 
 const wavetypeEl = $('#wavetype');
 const keyboard = $('#keyboard');
-const angloKeyboard = $('#anglo-keyboard')
+const angloKeyboard = $('#anglo-keyboard');
 
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -63,13 +63,16 @@ for (button of buttons) {
 }
 
 
-function selectConcertinaButtons(note) {
-    console.log("Inside selectConcertinaButtons: " + note);
-    console.log(angloKeyboard.children.length)
-    for (button in angloKeyboard.children) {
-        for (note in button.children) {
-            if (note.dataset.note == note) {
-                console.log("I'm a match!");
+function selectConcertinaButtons(clickedNote) {
+    console.log("Inside selectConcertinaButtons: " + clickedNote);
+    // console.log(angloKeyboard.children().length + " children")
+    for (button of angloKeyboard.children()) {
+        // console.log(button.children[0]);
+        for (note of button.children) {
+            // console.log(note.firstChild);
+            if (note.firstChild.data == clickedNote) {
+                note.classList.toggle("selected");
+                console.log(note);
             }
         }
     }

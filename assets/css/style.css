@@ -5,12 +5,13 @@ body {
 
 button {
    padding:0;
+   background-color: #fff;
 }
 
-#keyboard button:hover {
+/* #keyboard button:hover {
    background-color: purple;
    color: #fff;
-}
+} */
 
 .natural {
    border:1px solid #767676;
@@ -36,7 +37,10 @@ button {
    border-radius: 0 0 6px 6px;
    top: -35px;
    z-index: 50;
-   
+}
+
+.sharp:hover {
+   background-color: #555;
 }
 
 .sharp + .natural {
@@ -80,7 +84,6 @@ button {
 
 .button .top {
    position: relative;
-   background-color: #fff;
    width:50px;
    height: 25px;
    border-radius: 25px 25px 0 0;
@@ -89,17 +92,21 @@ button {
    top:-1px;
 }
 
-.button .top:hover, .button .bottom:hover {
+.button .top:hover, .button .bottom:hover, .natural:hover {
    background-color: #eee;
 }
 
 .button .bottom {
    position: relative;
-   background-color: #fff;
    width:50px;
    height: 25px;
    border-radius: 0 0 25px 25px;
    border: 1px solid #767676;
    box-sizing: border-box;
    top:-3px;
+}
+
+.selected {
+   background-color: purple;
+   color: #fff;
 }
