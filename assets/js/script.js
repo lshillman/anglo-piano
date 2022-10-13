@@ -184,9 +184,9 @@ const buttons = [
 
 for (button of buttons) {
     if (!button.newRow) {
-        angloKeyboard.append(`<div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${button.push}">${button.push}</button><button class="bottom" data-note="${button.pull}">${button.pull}</button></div>`)
+        angloKeyboard.append(`<div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
     } else {
-        angloKeyboard.append(`<br><div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${button.push}">${button.push}</button><button class="bottom" data-note="${button.pull}">${button.pull}</button></div>`)
+        angloKeyboard.append(`<br><div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
     }
 }
 
@@ -207,6 +207,7 @@ function selectPianoKey(clickedNote) {
 function selectConcertinaButtons(clickedNote) {
     for (button of angloKeyboard.children()) {
         for (note of button.children) {
+            console.log(note.firstChild);
             if (note.firstChild.data == clickedNote) {
                 note.classList.toggle("selected");
             }

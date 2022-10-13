@@ -106,7 +106,7 @@ button {
    top:-3px;
 }
 
-.selected {
+.selected, .selected:hover {
    background-color: purple;
    color: #fff;
 }
