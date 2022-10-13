@@ -197,14 +197,6 @@ for (button of buttons) {
 }
 
 
-// function selectPianoKey(clickedNote) {
-//     for (key of keyboard.children()) {
-//             if (key.dataset.note == clickedNote) {
-//                 key.classList.toggle("selected");
-//                 console.log(key);
-//             }
-//     }
-// }
 
 function selectPianoKey() {
     for (key of keyboard.children()) {
@@ -217,16 +209,6 @@ function selectPianoKey() {
     }
 }
 
-
-// function selectConcertinaButtons(clickedNote) {
-//     for (button of angloKeyboard.children()) {
-//         for (note of button.children) {
-//             if (note.dataset.note == clickedNote) {
-//                 note.classList.toggle("selected");
-//             }
-//         }
-//     }
-// }
 
 function selectConcertinaButtons() {
     for (button of angloKeyboard.children()) {

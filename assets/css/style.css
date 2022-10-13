@@ -106,7 +106,17 @@ button {
    top:-3px;
 }
 
-.selected, .selected:hover {
+#keyboard .selected, #keyboard .selected:hover {
    background-color: purple;
    color: #fff;
+}
+
+.top.selected, .top.selected:hover {
+   background-color: blue;
+   color: white;
+}
+
+.bottom.selected, .bottom.selected:hover {
+   background-color: red;
+   color: white;
 }
