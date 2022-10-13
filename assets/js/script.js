@@ -63,16 +63,24 @@ for (button of buttons) {
 }
 
 
-function selectConcertinaButtons(clickedNote) {
-    console.log("Inside selectConcertinaButtons: " + clickedNote);
+function selectPianoKey(clickedNote) {
     // console.log(angloKeyboard.children().length + " children")
-    for (button of angloKeyboard.children()) {
-        // console.log(button.children[0]);
-        for (note of button.children) {
+    for (key of keyboard.children()) {
+        // console.log(key.children[0]);
             // console.log(note.firstChild);
+            if (key.dataset.note == clickedNote) {
+                key.classList.toggle("selected");
+                console.log(key);
+            }
+    }
+}
+
+
+function selectConcertinaButtons(clickedNote) {
+    for (button of angloKeyboard.children()) {
+        for (note of button.children) {
             if (note.firstChild.data == clickedNote) {
                 note.classList.toggle("selected");
-                console.log(note);
             }
         }
     }
@@ -90,6 +98,7 @@ $('#keyboard button').on('mousedown', (e) => {
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
     oscillator.start()
+    selectPianoKey(e.target.dataset.note);
     selectConcertinaButtons(e.target.dataset.note);
 });
 $('#keyboard button').on('mouseup', () => oscillator.stop());
