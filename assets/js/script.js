@@ -218,11 +218,23 @@ function selectPianoKey() {
 }
 
 
-function selectConcertinaButtons(clickedNote) {
+// function selectConcertinaButtons(clickedNote) {
+//     for (button of angloKeyboard.children()) {
+//         for (note of button.children) {
+//             if (note.dataset.note == clickedNote) {
+//                 note.classList.toggle("selected");
+//             }
+//         }
+//     }
+// }
+
+function selectConcertinaButtons() {
     for (button of angloKeyboard.children()) {
         for (note of button.children) {
-            if (note.dataset.note == clickedNote) {
-                note.classList.toggle("selected");
+            if (selection.includes(note.dataset.note)) {
+                note.classList.add("selected");
+            } else {
+                note.classList.remove("selected");
             }
         }
     }
