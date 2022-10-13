@@ -141,6 +141,12 @@ const noteNames = {
     "Bb7": "As7"
 };
 
+// an array to hold the currently selected notes
+const selection = [];
+
+// the key that should be selected if the user starts using arrow keys to navigate the piano
+const currentIndex = 1;
+
 for (note in notes) {
     if (note.includes("s")) {
         keyboard.append(`<button id="${note}" data-note="${note}" class="sharp"></button>`)
@@ -191,11 +197,22 @@ for (button of buttons) {
 }
 
 
-function selectPianoKey(clickedNote) {
+// function selectPianoKey(clickedNote) {
+//     for (key of keyboard.children()) {
+//             if (key.dataset.note == clickedNote) {
+//                 key.classList.toggle("selected");
+//                 console.log(key);
+//             }
+//     }
+// }
+
+function selectPianoKey() {
     for (key of keyboard.children()) {
-            if (key.dataset.note == clickedNote) {
-                key.classList.toggle("selected");
-                console.log(key);
+            if (selection.includes(key.dataset.note)) {
+                key.classList.add("selected");
+                // console.log(key);
+            } else {
+                key.classList.remove("selected")
             }
     }
 }
@@ -222,8 +239,14 @@ $('#keyboard button').on('mousedown', (e) => {
     oscillator.type = wavetypeEl.val();
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
-    oscillator.start()
-    selectPianoKey(e.target.dataset.note);
+    oscillator.start();
+    if (!selection.includes(e.target.dataset.note)) {
+        selection.push(e.target.dataset.note);
+    } else {
+        selection.splice(selection.indexOf(e.target.dataset.note), 1);
+    }
+    // selectPianoKey(e.target.dataset.note);
+    selectPianoKey();
     selectConcertinaButtons(e.target.dataset.note);
 });
 $('#keyboard button').on('mouseup', () => oscillator.stop());
