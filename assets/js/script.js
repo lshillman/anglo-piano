@@ -143,8 +143,7 @@ const noteNames = {
 };
 
 // an array to hold the currently selected notes
-// const selection = []; // refactoring to Set
-const selection = new Set();
+const selection = [];
 
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 const currentIndex = 1;
@@ -202,7 +201,7 @@ for (button of buttons) {
 
 function selectPianoKey() {
     for (key of keyboard.children()) {
-            if (selection.has(key.dataset.note)) {
+            if (selection.includes(key.dataset.note)) {
                 key.classList.add("selected");
                 // console.log(key);
             } else {
@@ -215,7 +214,7 @@ function selectPianoKey() {
 function selectConcertinaButtons() {
     for (button of angloKeyboard.children()) {
         for (note of button.children) {
-            if (selection.has(note.dataset.note)) {
+            if (selection.includes(note.dataset.note)) {
                 note.classList.add("selected");
             } else {
                 note.classList.remove("selected");
@@ -226,13 +225,13 @@ function selectConcertinaButtons() {
 
 
 function updateNoteSelection(note) {
-    if (!selection.has(note) && (multiselect.checked == true || selection.size == 0)) {
-        selection.add(note);
-    } else if(!selection.has(note)) {
-        selection.clear();
-        selection.add(note);
+    if (!selection.includes(note) && (multiselect.checked == true || selection.length == 0)) {
+        selection.push(note);
+    } else if(!selection.includes(note)) {
+        selection.length = 0;
+        selection.push(note);
     } else {
-        selection.delete(note);
+        selection.splice(selection.indexOf(note), 1);
     }
     selectPianoKey();
     selectConcertinaButtons();
@@ -248,6 +247,20 @@ function playNote(note) {
     oscillator.connect(audioCtx.destination);
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + 0.5);
+}
+
+function playSelection() {
+    selection.forEach((note) => {
+        let oscillator;
+        let freq = notes[note];
+        console.log(note + " (" + freq + " Hz)");
+        oscillator = audioCtx.createOscillator(); // create Oscillator node
+        oscillator.type = wavetypeEl.val();
+        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.5);
+    });
 }
 
 $('#keyboard button').on('click', (e) => {
