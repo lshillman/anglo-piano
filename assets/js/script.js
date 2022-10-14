@@ -264,12 +264,23 @@ function playSelection() {
 }
 
 $('#keyboard button').on('click', (e) => {
-    playNote(e.target.dataset.note);
+    if (!selection.includes(e.target.dataset.note)) {
+        playNote(e.target.dataset.note);
+    }
     updateNoteSelection(e.target.dataset.note);
 });
 // $('#keyboard button').on('mouseup', () => oscillator.stop());
 
 $('#anglo-keyboard').on('click', (e) => {
-    playNote(e.target.dataset.note);
+    if (!selection.includes(e.target.dataset.note)) {
+        playNote(e.target.dataset.note);
+    }
     updateNoteSelection(e.target.dataset.note)
 });
+
+document.addEventListener('keydown', function(e) {
+    // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {
+    //   alert('Undo!')
+    // }
+    console.log(e.code);
+  })
