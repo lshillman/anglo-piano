@@ -157,22 +157,22 @@ for (note in notes) {
 }
 
 const buttons = [
-    { push: 'E3', pull: 'F3', x: 60 },
+    { push: 'E3', pull: 'F3', x: 30 },
     { push: 'A3', pull: 'Bb3', x: 0 },
     { push: 'C#4', pull: 'D#4', x: 0 },
     { push: 'A4', pull: 'G4', x: 0 },
     { push: 'G#4', pull: 'Bb4', x: 0 },
-    { push: 'C#5', pull: 'D#5', x: 120 },
+    { push: 'C#5', pull: 'D#5', x: 60 },
     { push: 'A5', pull: 'G5', x: 0 },
     { push: 'G#5', pull: 'Bb5', x: 0 },
     { push: 'C#6', pull: 'D#6', x: 0 },
     { push: 'A6', pull: 'F6', x: 0 },
-    { push: 'C3', pull: 'G3', x: 30, newRow: true },
+    { push: 'C3', pull: 'G3', x: 15, newRow: true },
     { push: 'G3', pull: 'B3', x: 0 },
     { push: 'C4', pull: 'D4', x: 0 },
     { push: 'E4', pull: 'F4', x: 0 },
     { push: 'G4', pull: 'A4', x: 0 },
-    { push: 'C5', pull: 'B4', x: 180 },
+    { push: 'C5', pull: 'B4', x: 90 },
     { push: 'E5', pull: 'D5', x: 0 },
     { push: 'G5', pull: 'F5', x: 0 },
     { push: 'C6', pull: 'A5', x: 0 },
@@ -182,7 +182,7 @@ const buttons = [
     { push: 'G4', pull: 'A4', x: 0 },
     { push: 'B4', pull: 'C5', x: 0 },
     { push: 'D5', pull: 'E5', x: 0 },
-    { push: 'G5', pull: 'F#5', x: 240 },
+    { push: 'G5', pull: 'F#5', x: 120 },
     { push: 'B5', pull: 'A5', x: 0 },
     { push: 'D6', pull: 'C6', x: 0 },
     { push: 'G6', pull: 'E6', x: 0 },
@@ -283,4 +283,13 @@ document.addEventListener('keydown', function(e) {
     //   alert('Undo!')
     // }
     console.log(e.code);
+    if (e.code.indexOf('Shift') != -1) {
+        multiselect.checked = true;
+    }
+  })
+
+  document.addEventListener('keyup', function(e) {
+    if (e.code.indexOf('Shift') != -1) {
+        multiselect.checked = false;
+    }
   })
