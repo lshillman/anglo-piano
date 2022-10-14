@@ -111,17 +111,17 @@ button {
 }
 
 #keyboard .selected, #keyboard .selected:hover {
-   background-color: purple;
+   background-color: #8400FF;
    color: #fff;
    border-color: #fff;
 }
 
 .top.selected, .top.selected:hover {
-   background-color: blue;
+   background-color: #0000FF;
    color: white;
 }
 
 .bottom.selected, .bottom.selected:hover {
-   background-color: red;
+   background-color: #A30014;
    color: white;
 }
