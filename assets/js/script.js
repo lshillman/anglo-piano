@@ -3,6 +3,7 @@ console.log("I'm a JavaScript file linked to this page!");
 const wavetypeEl = $('#wavetype');
 const keyboard = $('#keyboard');
 const angloKeyboard = $('#anglo-keyboard');
+const multiselect = document.getElementById("multiselect");
 
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -142,7 +143,8 @@ const noteNames = {
 };
 
 // an array to hold the currently selected notes
-const selection = [];
+// const selection = []; // refactoring to Set
+const selection = new Set();
 
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 const currentIndex = 1;
@@ -200,7 +202,7 @@ for (button of buttons) {
 
 function selectPianoKey() {
     for (key of keyboard.children()) {
-            if (selection.includes(key.dataset.note)) {
+            if (selection.has(key.dataset.note)) {
                 key.classList.add("selected");
                 // console.log(key);
             } else {
@@ -213,7 +215,7 @@ function selectPianoKey() {
 function selectConcertinaButtons() {
     for (button of angloKeyboard.children()) {
         for (note of button.children) {
-            if (selection.includes(note.dataset.note)) {
+            if (selection.has(note.dataset.note)) {
                 note.classList.add("selected");
             } else {
                 note.classList.remove("selected");
@@ -234,13 +236,26 @@ $('#keyboard button').on('mousedown', (e) => {
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
     oscillator.start();
-    if (!selection.includes(e.target.dataset.note)) {
-        selection.push(e.target.dataset.note);
+    if (!selection.has(e.target.dataset.note)) {
+        selection.add(e.target.dataset.note);
     } else {
-        selection.splice(selection.indexOf(e.target.dataset.note), 1);
+        selection.delete(e.target.dataset.note);
     }
     // selectPianoKey(e.target.dataset.note);
     selectPianoKey();
-    selectConcertinaButtons(e.target.dataset.note);
+    selectConcertinaButtons();
 });
 $('#keyboard button').on('mouseup', () => oscillator.stop());
+
+$('#anglo-keyboard').on('click', (e) => {
+    if (!selection.has(e.target.dataset.note) && (multiselect.checked == true || selection.size == 0)) {
+        selection.add(e.target.dataset.note);
+    } else if (!selection.has(e.target.dataset.note)) {
+        selection.clear();
+        selection.add(e.target.dataset.note);
+    } else {
+        selection.delete(e.target.dataset.note);
+    }
+    selectPianoKey();
+    selectConcertinaButtons();
+});

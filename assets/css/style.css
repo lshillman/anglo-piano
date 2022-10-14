@@ -109,6 +109,7 @@ button {
 #keyboard .selected, #keyboard .selected:hover {
    background-color: purple;
    color: #fff;
+   border-color: #fff;
 }
 
 .top.selected, .top.selected:hover {
