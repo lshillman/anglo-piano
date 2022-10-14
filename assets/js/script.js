@@ -225,40 +225,38 @@ function selectConcertinaButtons() {
 }
 
 
+function updateNoteSelection(note) {
+    if (!selection.has(note) && (multiselect.checked == true || selection.size == 0)) {
+        selection.add(note);
+    } else if(!selection.has(note)) {
+        selection.clear();
+        selection.add(note);
+    } else {
+        selection.delete(note);
+    }
+    selectPianoKey();
+    selectConcertinaButtons();
+}
 
-let oscillator;
-
-$('#keyboard button').on('mousedown', (e) => {
-    let freq = notes[e.target.dataset.note];
-    console.log(e.target.dataset.note + " (" + freq + " Hz)");
+function playNote(note) {
+    let oscillator;
+    let freq = notes[note];
+    console.log(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
     oscillator.type = wavetypeEl.val();
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
     oscillator.start();
-    if (!selection.has(e.target.dataset.note) && (multiselect.checked == true || selection.size == 0)) {
-        selection.add(e.target.dataset.note);
-    } else if(!selection.has(e.target.dataset.note)) {
-        selection.clear();
-        selection.add(e.target.dataset.note);
-    } else {
-        selection.delete(e.target.dataset.note);
-    }
-    // selectPianoKey(e.target.dataset.note);
-    selectPianoKey();
-    selectConcertinaButtons();
+    oscillator.stop(audioCtx.currentTime + 0.5);
+}
+
+$('#keyboard button').on('click', (e) => {
+    playNote(e.target.dataset.note);
+    updateNoteSelection(e.target.dataset.note);
 });
-$('#keyboard button').on('mouseup', () => oscillator.stop());
+// $('#keyboard button').on('mouseup', () => oscillator.stop());
 
 $('#anglo-keyboard').on('click', (e) => {
-    if (!selection.has(e.target.dataset.note) && (multiselect.checked == true || selection.size == 0)) {
-        selection.add(e.target.dataset.note);
-    } else if (!selection.has(e.target.dataset.note)) {
-        selection.clear();
-        selection.add(e.target.dataset.note);
-    } else {
-        selection.delete(e.target.dataset.note);
-    }
-    selectPianoKey();
-    selectConcertinaButtons();
+    playNote(e.target.dataset.note);
+    updateNoteSelection(e.target.dataset.note)
 });
