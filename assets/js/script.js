@@ -236,7 +236,10 @@ $('#keyboard button').on('mousedown', (e) => {
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
     oscillator.start();
-    if (!selection.has(e.target.dataset.note)) {
+    if (!selection.has(e.target.dataset.note) && (multiselect.checked == true || selection.size == 0)) {
+        selection.add(e.target.dataset.note);
+    } else if(!selection.has(e.target.dataset.note)) {
+        selection.clear();
         selection.add(e.target.dataset.note);
     } else {
         selection.delete(e.target.dataset.note);
