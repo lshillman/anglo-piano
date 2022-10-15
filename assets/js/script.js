@@ -24,7 +24,7 @@ activeNotes = [];
 const selection = [];
 
 // the key that should be selected if the user starts using arrow keys to navigate the piano
-const currentIndex = 1;
+let currentIndex = 1;
 
 for (note in notes) {
     activeNotes.push(note);
@@ -142,6 +142,24 @@ function playSelection() {
     });
 }
 
+function moveLeft() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        selection.length = 0;
+        updateNoteSelection(activeNotes[currentIndex]);
+        playNote(activeNotes[currentIndex]);
+    }
+}
+
+function moveRight() {
+    if (currentIndex < activeNotes.length-1) {
+        currentIndex++;
+        selection.length = 0;
+        updateNoteSelection(activeNotes[currentIndex]);
+        playNote(activeNotes[currentIndex]);
+    }
+}
+
 function findChord(chord) {
     selection.length = 1;
     let rootIndex;
@@ -189,6 +207,7 @@ $('#keyboard button').on('click', (e) => {
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
+    currentIndex = activeNotes.indexOf(e.target.dataset.note)
     updateNoteSelection(e.target.dataset.note);
 });
 // $('#keyboard button').on('mouseup', () => oscillator.stop());
@@ -197,6 +216,7 @@ $('#anglo-keyboard').on('click', (e) => {
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
+    currentIndex = activeNotes.indexOf(e.target.dataset.note)
     updateNoteSelection(e.target.dataset.note)
 });
 
@@ -207,6 +227,10 @@ document.addEventListener('keydown', function(e) {
     console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
+    } else if (e.code == "ArrowRight") {
+        moveRight();
+    } else if (e.code == "ArrowLeft") {
+        moveLeft();
     }
   })
 
