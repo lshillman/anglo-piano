@@ -79,6 +79,7 @@ button {
    width: fit-content;
    overflow: hidden;
    margin: 0 auto;
+   visibility: hidden;
 }
 
 
