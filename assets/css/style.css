@@ -32,14 +32,12 @@ button {
 .sharp {
    border: 1px solid #fff;
    border-top: none;
-   position: relative;
    height: 80px;
    width: 25px;
    background-color: #000;
    color: #fff;
    margin-left: -12.5px;
    border-radius: 0 0 6px 6px;
-   top: -35px;
    z-index: 50;
 }
 
@@ -64,6 +62,7 @@ button {
 }
 
 #keyboard {
+   display:flex;
    width: fit-content;
    white-space: nowrap;
 }

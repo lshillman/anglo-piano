@@ -125,7 +125,7 @@ function updateNoteSelection(note) {
 function playNote(note) {
     let oscillator;
     let freq = notes[note];
-    console.log(note + " (" + freq + " Hz)");
+    console.debug(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
     oscillator.type = wavetypeEl.val();
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
