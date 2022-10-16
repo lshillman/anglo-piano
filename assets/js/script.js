@@ -4,6 +4,7 @@ const wavetypeEl = $('#wavetype');
 const keyboard = $('#keyboard');
 const angloKeyboard = $('#anglo-keyboard');
 const multiselect = document.getElementById("multiselect");
+const chordBar = document.getElementById("chords");
 
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -18,7 +19,7 @@ const noteNames = {
     "A0": "A0", "A#0": "As0", "B0": "B0", "C0": "C0", "C1": "C1", "C#1": "Cs1", "D1": "D1", "D#1": "Ds1", "E1": "E1", "F1": "F1", "F#1": "Fs1", "G1": "G1", "G#1": "Gs1", "A1": "A1", "A#1": "As1", "B1": "B1", "C2": "C2", "C#2": "Cs2", "D2": "D2", "D#2": "Ds2", "E2": "E2", "F2": "F2", "F#2": "Fs2", "G2": "G2", "G#2": "Gs2", "A2": "A2", "A#2": "As2", "B2": "B2", "C3": "C3", "C#3": "Cs3", "D3": "D3", "D#3": "Ds3", "E3": "E3", "F3": "F3", "F#3": "Fs3", "G3": "G3", "G#3": "Gs3", "A3": "A3", "A#3": "As3", "B3": "B3", "C4": "C4", "C#4": "Cs4", "D4": "D4", "D#4": "Ds4", "E4": "E4", "F4": "F4", "F#4": "Fs4", "G4": "G4", "G#4": "Gs4", "A4": "A4", "A#4": "As4", "B4": "B4", "C5": "C5", "C#5": "Cs5", "D5": "D5", "D#5": "Ds5", "E5": "E5", "F5": "F5", "F#5": "Fs5", "G5": "G5", "G#5": "Gs5", "A5": "A5", "A#5": "As5", "B5": "B5", "C6": "C6", "C#6": "Cs6", "D6": "D6", "D#6": "Ds6", "E6": "E6", "F6": "F6", "F#6": "Fs6", "G6": "G6", "G#6": "Gs6", "A6": "A6", "A#6": "As6", "B6": "B6", "C7": "C7", "C#7": "Cs7", "D7": "D7", "D#7": "Ds7", "E7": "E7", "F7": "F7", "F#7": "Fs7", "G7": "G7", "G#7": "Gs7", "A7": "A7", "A#7": "As7", "B7": "B7", "C8": "C8", "Bb0": "As0", "Db1": "Cs1", "Eb1": "Ds1", "Gb1": "Fs1", "Ab1": "Gs1", "Bb1": "As1", "Db2": "Cs2", "Eb2": "Ds2", "Gb2": "Fs2", "Ab2": "Gs2", "Bb2": "As2", "Db3": "Cs3", "Eb3": "Ds3", "Gb3": "Fs3", "Ab3": "Gs3", "Bb3": "As3", "Db4": "Cs4", "Eb4": "Ds4", "Gb4": "Fs4", "Ab4": "Gs4", "Bb4": "As4", "Db5": "Cs5", "Eb5": "Ds5", "Gb5": "Fs5", "Ab5": "Gs5", "Bb5": "As5", "Db6": "Cs6", "Eb6": "Ds6", "Gb6": "Fs6", "Ab6": "Gs6", "Bb6": "As6", "Db7": "Cs7", "Eb7": "Ds7", "Gb7": "Fs7", "Ab7": "Gs7", "Bb7": "As7"
 };
 
-activeNotes = [];
+const activeNotes = [];
 
 // an array to hold the currently selected notes
 const selection = [];
@@ -114,6 +115,11 @@ function updateNoteSelection(note) {
     }
     selectPianoKey();
     selectConcertinaButtons();
+    if (selection.length > 0) {
+        chordBar.style.visibility = "visible";
+    } else {
+        chordBar.style.visibility = "hidden";
+    }
 }
 
 function playNote(note) {
@@ -212,7 +218,7 @@ $('#keyboard button').on('click', (e) => {
 });
 // $('#keyboard button').on('mouseup', () => oscillator.stop());
 
-$('#anglo-keyboard').on('click', (e) => {
+$('#anglo-keyboard button').on('click', (e) => {
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
