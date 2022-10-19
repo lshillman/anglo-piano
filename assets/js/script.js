@@ -32,7 +32,7 @@ for (note in notes) {
     if (note.includes("s")) {
         keyboard.append(`<button id="${note}" data-note="${note}" class="sharp"></button>`)
     } else {
-        keyboard.append(`<button id="${note}" data-note="${note}" class="natural"></button>`)
+        keyboard.append(`<button id="${note}" data-note="${note}" class="natural">${note}</button>`)
     }
 }
 
@@ -245,3 +245,18 @@ document.addEventListener('keydown', function(e) {
         multiselect.checked = false;
     }
   })
+
+  window.addEventListener('touchstart', function() {
+
+	// create empty buffer
+	var buffer = audioCtx.createBuffer(1, 1, 22050);
+	var source = audioCtx.createBufferSource();
+	source.buffer = buffer;
+
+	// connect to output (your speakers)
+	source.connect(audioCtx.destination);
+
+	// play the file
+	source.noteOn(0);
+
+}, false);
