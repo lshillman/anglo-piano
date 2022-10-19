@@ -32,7 +32,7 @@ for (note in notes) {
     if (note.includes("s")) {
         keyboard.append(`<button id="${note}" data-note="${note}" class="sharp"></button>`)
     } else {
-        keyboard.append(`<button id="${note}" data-note="${note}" class="natural">${note}</button>`)
+        keyboard.append(`<button id="${note}" data-note="${note}" class="natural"></button>`)
     }
 }
 
@@ -210,6 +210,7 @@ function findChord(chord) {
 }
 
 $('#keyboard button').on('click', (e) => {
+    unlock();
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
@@ -219,6 +220,7 @@ $('#keyboard button').on('click', (e) => {
 // $('#keyboard button').on('mouseup', () => oscillator.stop());
 
 $('#anglo-keyboard button').on('click', (e) => {
+    unlock();
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
@@ -246,17 +248,21 @@ document.addEventListener('keydown', function(e) {
     }
   })
 
-  window.addEventListener('touchstart', function() {
 
-	// create empty buffer
-	var buffer = audioCtx.createBuffer(1, 1, 22050);
-	var source = audioCtx.createBufferSource();
-	source.buffer = buffer;
+  function unlock() {
 
-	// connect to output (your speakers)
-	source.connect(audioCtx.destination);
-
-	// play the file
-	source.noteOn(0);
-
-}, false);
+    // play empty buffer to unmute audio
+    
+    var buffer = audioCtx.createBuffer(1, 1, 22050);
+    
+    var source = audioCtx.createBufferSource();
+    
+    source.audioCtx = buffer;
+    
+    source.connect(audioCtx.destination);
+    
+    source.start(0);
+    
+    console.log("unlocked")
+    
+    }
