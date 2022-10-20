@@ -127,7 +127,7 @@ function playNote(note) {
     let freq = notes[note];
     console.debug(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
-    oscillator.type = wavetypeEl.val();
+    oscillator.type = wavetypeEl.val(); // triangle wave by default
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
     oscillator.start();
@@ -210,7 +210,6 @@ function findChord(chord) {
 }
 
 $('#keyboard button').on('click', (e) => {
-    unlock();
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
