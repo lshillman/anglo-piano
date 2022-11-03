@@ -92,6 +92,7 @@ button {
    border-right: none;
    border-top: none;
    border-bottom: none;
+   cursor: pointer;
 }
 
 #chords button:hover {
