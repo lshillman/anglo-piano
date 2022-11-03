@@ -124,27 +124,25 @@ function updateNoteSelection(note) {
 
 function playNote(note) {
     let oscillator;
+    let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
     let freq = notes[note];
-    console.debug(note + " (" + freq + " Hz)");
+    // console.debug(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
-    oscillator.type = wavetypeEl.val();
+    oscillator.type = "sine";// wavetypeEl.val(); // triangle wave by default
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
-    oscillator.start();
+    oscillator.connect(gainNode); // connect the volume control to the oscillator
+    gainNode.connect(audioCtx.destination);
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime); // set the volume to zero when the note first starts playing
+    gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.1); // linearly increase to full volume in 0.1 seconds
+    gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
+    oscillator.start(audioCtx.currentTime);
     oscillator.stop(audioCtx.currentTime + 0.5);
 }
 
 function playSelection() {
     selection.forEach((note) => {
-        let oscillator;
-        let freq = notes[note];
-        console.log(note + " (" + freq + " Hz)");
-        oscillator = audioCtx.createOscillator(); // create Oscillator node
-        oscillator.type = wavetypeEl.val();
-        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
-        oscillator.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.5);
+        playNote(note);
     });
 }
 
@@ -210,7 +208,6 @@ function findChord(chord) {
 }
 
 $('#keyboard button').on('click', (e) => {
-    unlock();
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
