@@ -126,6 +126,10 @@ function playNote(note) {
     let oscillator;
     let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
     let freq = notes[note];
+    let fullVolume = 0;
+    if (selection.length) {
+        fullVolume = -1 + 1/selection.length // avoid the utter cracklefest on webkit and mobile browsers
+    }
     // console.debug(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
     oscillator.type = "sine";// wavetypeEl.val(); // triangle wave by default
@@ -133,8 +137,8 @@ function playNote(note) {
     oscillator.connect(audioCtx.destination);
     oscillator.connect(gainNode); // connect the volume control to the oscillator
     gainNode.connect(audioCtx.destination);
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime); // set the volume to zero when the note first starts playing
-    gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.1); // linearly increase to full volume in 0.1 seconds
+    gainNode.gain.setValueAtTime(-1, audioCtx.currentTime); // set the volume to zero when the note first starts playing
+    gainNode.gain.linearRampToValueAtTime(fullVolume, audioCtx.currentTime + 0.01); // linearly increase to full volume in 0.1 seconds
     gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
     oscillator.start(audioCtx.currentTime);
     oscillator.stop(audioCtx.currentTime + 0.5);
@@ -217,7 +221,6 @@ $('#keyboard button').on('click', (e) => {
 // $('#keyboard button').on('mouseup', () => oscillator.stop());
 
 $('#anglo-keyboard button').on('click', (e) => {
-    unlock();
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
@@ -244,22 +247,3 @@ document.addEventListener('keydown', function(e) {
         multiselect.checked = false;
     }
   })
-
-
-  function unlock() {
-
-    // play empty buffer to unmute audio
-    
-    var buffer = audioCtx.createBuffer(1, 1, 22050);
-    
-    var source = audioCtx.createBufferSource();
-    
-    source.audioCtx = buffer;
-    
-    source.connect(audioCtx.destination);
-    
-    source.start(0);
-    
-    console.log("unlocked")
-    
-    }
