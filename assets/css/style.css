@@ -99,6 +99,11 @@ button {
    background-color: #eee;
 }
 
+#chords button.selected {
+   background-color: #CC0093;
+   color: #fff;
+}
+
 #major {
    border-left: none !important;
 }
