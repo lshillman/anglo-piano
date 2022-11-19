@@ -138,11 +138,23 @@ const buttons = [
     { push: 'B6', pull: 'F#6', x: 0 },
 ]
 
-for (button of buttons) {
-    if (!button.newRow) {
-        angloKeyboard.append(`<div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
-    } else {
-        angloKeyboard.append(`<br><div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+function renderAngloKeyboard() {
+    for (button of buttons) {
+        if (!button.newRow) {
+            angloKeyboard.append(`<div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+        } else {
+            angloKeyboard.append(`<br><div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+        }
+    }
+}
+
+renderAngloKeyboard();
+
+
+function parseLegacyLayout(layout) {
+    let newLayout = [];
+    for (let i = 0; i < layout.length; i + 2) {
+
     }
 }
 
