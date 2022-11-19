@@ -1,3 +1,7 @@
+* {
+   font-family: sans-serif;
+}
+
 body {
    background-color: #fafafa;
    text-align: center;
@@ -15,6 +19,10 @@ button {
 
 #wavetype {
    display: none;
+}
+
+.natural, .sharp, .top, .bottom, #chords button {
+   font-size: 0.875rem;
 }
 
 .natural {
@@ -164,7 +172,14 @@ button {
 #keyboard .selected:hover {
    background-color: #8400FF;
    color: #fff;
-   border-color: #fff;
+   /* border-color: #fff; */
+}
+
+.natural.selected {
+   border-bottom-color: #767676;
+   border-top-color: #767676;
+   border-left-color: #fff;
+   border-right-color: #fff;
 }
 
 .top.selected,
