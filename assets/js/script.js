@@ -6,6 +6,13 @@ const angloKeyboard = $('#anglo-keyboard');
 const multiselect = document.getElementById("multiselect");
 const chordBar = document.getElementById("chords");
 
+const maj = document.getElementById("major");
+const min = document.getElementById("minor");
+const dim = document.getElementById("diminished");
+const sev = document.getElementById("seventh");
+const maj7 = document.getElementById("major7");
+const min7 = document.getElementById("minor7");
+
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -184,6 +191,12 @@ function updateNoteSelection(note) {
     }
 }
 
+function deselectChordButtons() {
+    for (let i = 0; i < chordBar.children.length; i++) {
+        chordBar.children[i].classList.remove('selected');
+    }
+}
+
 function playNote(note) {
     let oscillator;
     let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
@@ -243,29 +256,41 @@ function findChord(chord) {
         case "maj":
             activeNotes[rootIndex + 4] && selection.push(activeNotes[rootIndex + 4]);
             activeNotes[rootIndex + 7] && selection.push(activeNotes[rootIndex + 7]);
+            deselectChordButtons();
+            maj.classList.add('selected');
             break;
         case "min":
             activeNotes[rootIndex + 3] && selection.push(activeNotes[rootIndex + 3]);
             activeNotes[rootIndex + 7] && selection.push(activeNotes[rootIndex + 7]);
+            deselectChordButtons();
+            min.classList.add('selected');
             break;
         case "dim":
             activeNotes[rootIndex + 3] && selection.push(activeNotes[rootIndex + 3]);
             activeNotes[rootIndex + 6] && selection.push(activeNotes[rootIndex + 6]);
+            deselectChordButtons();
+            dim.classList.add('selected');
             break;
         case "7":
             activeNotes[rootIndex + 4] && selection.push(activeNotes[rootIndex + 4]);
             activeNotes[rootIndex + 7] && selection.push(activeNotes[rootIndex + 7]);
             activeNotes[rootIndex + 10] && selection.push(activeNotes[rootIndex + 10]);
+            deselectChordButtons();
+            sev.classList.add('selected');
             break;
         case "maj7":
             activeNotes[rootIndex + 4] && selection.push(activeNotes[rootIndex + 4]);
             activeNotes[rootIndex + 7] && selection.push(activeNotes[rootIndex + 7]);
             activeNotes[rootIndex + 11] && selection.push(activeNotes[rootIndex + 11]);
+            deselectChordButtons();
+            maj7.classList.add('selected');
             break;
         case "min7":
             activeNotes[rootIndex + 3] && selection.push(activeNotes[rootIndex + 3]);
             activeNotes[rootIndex + 7] && selection.push(activeNotes[rootIndex + 7]);
             activeNotes[rootIndex + 10] && selection.push(activeNotes[rootIndex + 10]);
+            deselectChordButtons();
+            min7.classList.add('selected');
             break;
     }
     selectPianoKey();
@@ -278,6 +303,7 @@ $('#keyboard button').on('click', (e) => {
         playNote(e.target.dataset.note);
     }
     currentIndex = activeNotes.indexOf(e.target.dataset.note)
+    deselectChordButtons();
     updateNoteSelection(e.target.dataset.note);
 });
 // $('#keyboard button').on('mouseup', () => oscillator.stop());
@@ -286,8 +312,9 @@ $('#anglo-keyboard button').on('click', (e) => {
     if (!selection.includes(e.target.dataset.note)) {
         playNote(e.target.dataset.note);
     }
-    currentIndex = activeNotes.indexOf(e.target.dataset.note)
-    updateNoteSelection(e.target.dataset.note)
+    currentIndex = activeNotes.indexOf(e.target.dataset.note);
+    deselectChordButtons();
+    updateNoteSelection(e.target.dataset.note);
 });
 
 document.addEventListener('keydown', function(e) {
@@ -298,8 +325,10 @@ document.addEventListener('keydown', function(e) {
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
     } else if (e.code == "ArrowRight") {
+        deselectChordButtons();
         moveRight();
     } else if (e.code == "ArrowLeft") {
+        deselectChordButtons();
         moveLeft();
     }
   })
