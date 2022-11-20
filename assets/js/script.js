@@ -26,6 +26,10 @@ const noteNames = {
     "A0": "A0", "A#0": "A#0", "B0": "B0", "C0": "C0", "C1": "C1", "C#1": "C#1", "D1": "D1", "D#1": "D#1", "E1": "E1", "F1": "F1", "F#1": "F#1", "G1": "G1", "G#1": "G#1", "A1": "A1", "A#1": "A#1", "B1": "B1", "C2": "C2", "C#2": "C#2", "D2": "D2", "D#2": "D#2", "E2": "E2", "F2": "F2", "F#2": "F#2", "G2": "G2", "G#2": "G#2", "A2": "A2", "A#2": "A#2", "B2": "B2", "C3": "C3", "C#3": "C#3", "D3": "D3", "D#3": "D#3", "E3": "E3", "F3": "F3", "F#3": "F#3", "G3": "G3", "G#3": "G#3", "A3": "A3", "A#3": "A#3", "B3": "B3", "C4": "C4", "C#4": "C#4", "D4": "D4", "D#4": "D#4", "E4": "E4", "F4": "F4", "F#4": "F#4", "G4": "G4", "G#4": "G#4", "A4": "A4", "A#4": "A#4", "B4": "B4", "C5": "C5", "C#5": "C#5", "D5": "D5", "D#5": "D#5", "E5": "E5", "F5": "F5", "F#5": "F#5", "G5": "G5", "G#5": "G#5", "A5": "A5", "A#5": "A#5", "B5": "B5", "C6": "C6", "C#6": "C#6", "D6": "D6", "D#6": "D#6", "E6": "E6", "F6": "F6", "F#6": "F#6", "G6": "G6", "G#6": "G#6", "A6": "A6", "A#6": "A#6", "B6": "B6", "C7": "C7", "C#7": "C#7", "D7": "D7", "D#7": "D#7", "E7": "E7", "F7": "F7", "F#7": "F#7", "G7": "G7", "G#7": "G#7", "A7": "A7", "A#7": "A#7", "B7": "B7", "C8": "C8", "Bb0": "A#0", "Db1": "C#1", "Eb1": "D#1", "Gb1": "F#1", "Ab1": "G#1", "Bb1": "A#1", "Db2": "C#2", "Eb2": "D#2", "Gb2": "F#2", "Ab2": "G#2", "Bb2": "A#2", "Db3": "C#3", "Eb3": "D#3", "Gb3": "F#3", "Ab3": "G#3", "Bb3": "A#3", "Db4": "C#4", "Eb4": "D#4", "Gb4": "F#4", "Ab4": "G#4", "Bb4": "A#4", "Db5": "C#5", "Eb5": "D#5", "Gb5": "F#5", "Ab5": "G#5", "Bb5": "A#5", "Db6": "C#6", "Eb6": "D#6", "Gb6": "F#6", "Ab6": "G#6", "Bb6": "A#6", "Db7": "C#7", "Eb7": "D#7", "Gb7": "F#7", "Ab7": "G#7", "Bb7": "A#7"
 };
 
+const noteCodes = {
+    "6": "D2", "7": "D#2", "8": "E2", "9": "F2", "0": "F#2", "A": "G2", "a": "G#2", "B": "A2", "b": "Bb2", "C": "B2", "c": "C3", "D": "C#3", "d": "D3", "E": "D#3", "e": "E3", "F": "F3", "f": "F#3", "G": "G3", "g": "G#3", "H": "A3", "h": "Bb3", "I": "B3", "i": "C4", "J": "C#4", "j": "D4", "K": "D#4", "k": "E4", "L": "F4", "l": "F#4", "M": "G4", "m": "G#4", "N": "A4", "n": "Bb4", "O": "B4", "o": "C5", "P": "C#5", "p": "D5", "Q": "D#5", "q": "E5", "R": "F5", "r": "F#5", "S": "G5", "s": "G#5", "T": "A5", "t": "Bb5", "U": "B5", "u": "C6", "V": "C#6", "v": "D6", "W": "D#6", "w": "E6", "X": "F6", "x": "F#6", "Y": "G6", "y": "G#6", "Z": "A6", "z": "Bb6", "1": "B6", "2": "C7", "3": "C#7", "4": "D7"
+};
+
 const noteInfo = [{code: "6", defaultName: "D2", altName: "", index: 1},
 {code: "7", defaultName: "D#2", altName: "Eb2", index: 2},
 {code: "8", defaultName: "E2", altName: "", index: 3},
@@ -138,12 +142,59 @@ const buttons = [
     { push: 'B6', pull: 'F#6', x: 0 },
 ]
 
-for (button of buttons) {
-    if (!button.newRow) {
-        angloKeyboard.append(`<div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
-    } else {
-        angloKeyboard.append(`<br><div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+function renderAngloKeyboard() {
+    for (button of buttons) {
+        if (!button.newRow) {
+            angloKeyboard.append(`<div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+        } else {
+            angloKeyboard.append(`<br><div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+        }
     }
+}
+
+renderAngloKeyboard();
+bindAngloButtons();
+
+
+function parseLegacyLayout(layout) {
+    let newLayout = [];
+    let buttonCount = 0;
+    while (layout.length > 0) {
+        let x;
+        let push;
+        let pull;
+        let newRow = false;
+        if (layout[0] == "_"){
+            x = layout.substring(1, layout.indexOf('_', 1));
+            push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
+            pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
+            if (buttonCount % 14 === 0 && buttonCount != 0) {
+                newRow = true;
+            }
+            newLayout.push({push, pull, x, newRow});
+            buttonCount++;
+            layout = layout.slice(layout.indexOf('_', 1) + 3);
+        } else if (layout[0] == ".") {
+            buttonCount++;
+            layout = layout.slice(2);
+        } else {
+            x = 0;
+            push = noteCodes[layout[0]];
+            pull = noteCodes[layout[1]];
+            if (buttonCount % 14 === 0 && buttonCount != 0) {
+                newRow = true;
+            }
+            newLayout.push({push, pull, x, newRow});
+            buttonCount++;
+            layout = layout.slice(2);
+        }
+    }
+    buttons.length = 0;
+    newLayout.forEach((button) => {buttons.push(button)});
+    // angloKeyboard.html("");
+    angloKeyboard.empty();
+    renderAngloKeyboard();
+    bindAngloButtons();
 }
 
 
@@ -308,14 +359,16 @@ $('#keyboard button').on('click', (e) => {
 });
 // $('#keyboard button').on('mouseup', () => oscillator.stop());
 
-$('#anglo-keyboard button').on('click', (e) => {
-    if (!selection.includes(e.target.dataset.note)) {
-        playNote(e.target.dataset.note);
-    }
-    currentIndex = activeNotes.indexOf(e.target.dataset.note);
-    deselectChordButtons();
-    updateNoteSelection(e.target.dataset.note);
-});
+function bindAngloButtons() {
+    $('#anglo-keyboard button').on('click', (e) => {
+        if (!selection.includes(e.target.dataset.note)) {
+            playNote(e.target.dataset.note);
+        }
+        currentIndex = activeNotes.indexOf(e.target.dataset.note);
+        deselectChordButtons();
+        updateNoteSelection(e.target.dataset.note);
+    });
+}
 
 document.addEventListener('keydown', function(e) {
     // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {
