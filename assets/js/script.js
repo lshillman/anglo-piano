@@ -168,7 +168,7 @@ function parseLegacyLayout(layout) {
             x = layout.substring(1, layout.indexOf('_', 1));
             push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
             pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
-            if (buttonCount % 14 === 0) {
+            if (buttonCount % 14 === 0 && buttonCount != 0) {
                 newRow = true;
             }
             newLayout.push({push, pull, x, newRow});
@@ -181,7 +181,7 @@ function parseLegacyLayout(layout) {
             x = 0;
             push = noteCodes[layout[0]];
             pull = noteCodes[layout[1]];
-            if (buttonCount % 14 === 0) {
+            if (buttonCount % 14 === 0 && buttonCount != 0) {
                 newRow = true;
             }
             newLayout.push({push, pull, x, newRow});
