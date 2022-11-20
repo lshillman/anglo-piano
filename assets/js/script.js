@@ -16,6 +16,8 @@ const min7 = document.getElementById("minor7");
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+let customFromURL = window.location.href.split('?')[1];
+
 
 // note frequencies in HZ
 const notes = {
@@ -152,8 +154,12 @@ function renderAngloKeyboard() {
     }
 }
 
-renderAngloKeyboard();
-bindAngloButtons();
+if (customFromURL) {
+    parseLegacyLayout(customFromURL);
+} else {
+    renderAngloKeyboard();
+    bindAngloButtons();
+}
 
 
 function parseLegacyLayout(layout) {
