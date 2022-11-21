@@ -97,8 +97,8 @@ const noteInfo = [{code: "6", defaultName: "D2", altName: "", index: 1},
 {code: "4", defaultName: "D7", altName: "", index: 61}];
 
 // legacy url-encoded layouts
-const cgWheatstone30 = "_30_eFHhJKNMmn...._50_PQTSstVWZX...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x";
-const cgJeffries30 = "_30_eFHhJKNMmn...._50_QPPQsSVtZv...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x";
+const cgWheatstone30 = "_30_eFHhJKNMmn...._50_PQTSstVWZX...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x...._270_ii";
+const cgJeffries30 = "_30_eFHhJKNMmn...._50_QPPQsSVtZv...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x...._270_ii";
 const cgWheatstone40 = "_30_eFHhJKNMmnlJ_50_rPPQTSstVWZX2v.._15_cGGIijkLMNnP_80_RMoOqpSRuTwU....IHjlMNOopqLm_110_tsSrUTvuYw1x...._330_ii_160_QN_55_pq";
 const cgJeffries38 = "_30_eFHhJKNMmn.._160_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX";
 const gdWheatstone30 = "_30_CceFghkjKL...._50_mnqpQRstwu...._15_AddfGHIijk...._80_MlONpoSqUr....feHJjklMNO...._110_pPrqTSvUxV...._270_GG";
@@ -164,6 +164,7 @@ const buttons = [
     { push: 'D6', pull: 'C6', x: 0 },
     { push: 'G6', pull: 'E6', x: 0 },
     { push: 'B6', pull: 'F#6', x: 0 },
+    { push: 'C4', pull: 'C4', x: 270, newRow: true, drone: true }
 ]
 
 function renderAngloKeyboard() {
@@ -223,6 +224,7 @@ function parseLegacyLayout(layout) {
     angloKeyboard.empty();
     renderAngloKeyboard();
     bindAngloButtons();
+    selectConcertinaButtons();
 }
 
 
