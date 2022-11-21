@@ -251,6 +251,27 @@ function selectConcertinaButtons() {
     }
 }
 
+function togglePushView() {
+    for (button of angloKeyboard.children()) {
+        button.classList.remove("pull-only");
+        button.classList.add("push-only");
+    }
+}
+
+function togglePullView() {
+    for (button of angloKeyboard.children()) {
+        button.classList.remove("push-only");
+        button.classList.add("pull-only");
+    }
+}
+
+function resetView() {
+    for (button of angloKeyboard.children()) {
+        button.classList.remove("push-only");
+        button.classList.remove("pull-only");
+    }
+}
+
 
 function updateNoteSelection(note) {
     if (!selection.includes(note) && (multiselect.checked == true || selection.length == 0)) {
@@ -453,6 +474,23 @@ switch (layout.value) {
             break;
     }
 });
+
+
+const opt_pushpull = document.getElementById("pushpull");
+const opt_push = document.getElementById("push");
+const opt_pull = document.getElementById("pull");
+
+opt_pushpull.addEventListener("change", ()=> {
+    resetView();
+});
+opt_push.addEventListener("change", ()=> {
+    togglePushView();
+});
+opt_pull.addEventListener("change", ()=> {
+    togglePullView();
+});
+
+
 
 document.addEventListener('keydown', function(e) {
     // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {

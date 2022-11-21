@@ -199,3 +199,23 @@ button {
    background-color: #A30014;
    color: white;
 }
+
+.button.push-only .top {
+   height: 50px;
+   border-radius: 25px;
+   border: 1px solid #767676;
+}
+
+.button.push-only .bottom {
+   display: none;
+}
+
+.button.pull-only .bottom {
+   height: 50px;
+   border-radius: 25px;
+   border: 1px solid #767676;
+}
+
+.button.pull-only .top {
+   display: none;
+}
