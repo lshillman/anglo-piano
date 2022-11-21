@@ -20,6 +20,8 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 let customFromURL = window.location.href.split('?')[1];
 
+let opt_bellows = "";
+
 
 // note frequencies in HZ
 const notes = {
@@ -170,9 +172,9 @@ const buttons = [
 function renderAngloKeyboard() {
     for (button of buttons) {
         if (!button.newRow) {
-            angloKeyboard.append(`<div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+            angloKeyboard.append(`<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
         } else {
-            angloKeyboard.append(`<br><div class="button" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+            angloKeyboard.append(`<br><div class="button ${opt_bellows}" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
         }
     }
 }
@@ -258,6 +260,7 @@ function togglePushView() {
         button.classList.remove("pull-only");
         button.classList.add("push-only");
     }
+    opt_bellows = "push-only";
 }
 
 function togglePullView() {
@@ -265,6 +268,7 @@ function togglePullView() {
         button.classList.remove("push-only");
         button.classList.add("pull-only");
     }
+    opt_bellows = "pull-only";
 }
 
 function resetView() {
@@ -272,6 +276,7 @@ function resetView() {
         button.classList.remove("push-only");
         button.classList.remove("pull-only");
     }
+    opt_bellows = "";
 }
 
 
