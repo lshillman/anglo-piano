@@ -6,7 +6,7 @@ As of Nov. 20, 2022, I've just implemented a feature to parse layout strings gen
 ````
 _30_eFHhJKNMmn.._160_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX
 ````
-To load it, just drop it into the url preceded by a question mark, [like so](https://github.com/lshillman/anglo-piano/?_30_eFHhJKNMmn.._160_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX). _This is a temporary band-aid to allow you to use the tool while I work on improving the UX._
+To load it, just drop it into the url preceded by a question mark, [like so](https://lshillman.github.io/anglo-piano/?_30_eFHhJKNMmn.._160_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX). _This is a temporary band-aid to allow you to use the tool while I work on improving the UX._
 
 ## Features, bugs, etc.
 
