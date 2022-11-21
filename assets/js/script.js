@@ -13,6 +13,8 @@ const sev = document.getElementById("seventh");
 const maj7 = document.getElementById("major7");
 const min7 = document.getElementById("minor7");
 
+const layout = document.getElementById("layout");
+
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -93,6 +95,12 @@ const noteInfo = [{code: "6", defaultName: "D2", altName: "", index: 1},
 {code: "2", defaultName: "C7", altName: "", index: 59},
 {code: "3", defaultName: "C#7", altName: "Db7", index: 60},
 {code: "4", defaultName: "D7", altName: "", index: 61}];
+
+// legacy url-encoded layouts
+const cgWheatstone30 = "_30_eFHhJKNMmn...._50_PQTSstVWZX...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x"
+const cgJeffries30 = "_30_eFHhJKNMmn...._50_QPPQsSVtZv...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x"
+const cgWheatstone40 = "_30_eFHhJKNMmnlJ_50_rPPQTSstVWZX2v.._15_cGGIijkLMNnP_80_RMoOqpSRuTwU....IHjlMNOopqLm_110_tsSrUTvuYw1x...._330_ii_160_QN_55_pq"
+const cgJeffries38 = "_30_eFHhJKNMmn.._160_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX"
 
 const activeNotes = [];
 
@@ -375,6 +383,18 @@ function bindAngloButtons() {
         updateNoteSelection(e.target.dataset.note);
     });
 }
+
+layout.addEventListener("change", () => {
+    if (layout.value == "cgWheatstone30") {
+        parseLegacyLayout(cgWheatstone30);
+    } else if (layout.value == "cgJeffries30") {
+        parseLegacyLayout(cgJeffries30);
+    } else if (layout.value == "cgJeffries38") {
+        parseLegacyLayout(cgJeffries38);
+    } else if (layout.value == "cgWheatstone40") {
+        parseLegacyLayout(cgWheatstone40);
+    }
+});
 
 document.addEventListener('keydown', function(e) {
     // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {
