@@ -26,14 +26,47 @@
     </div>
 
     <div id="options">
-        <select id="wavetype">
-            <option value="triangle">triangle</option>
-            <option value="sine">sine</option>
-            <option value="square">square</option>
-            <option value="sawtooth">sawtooth</option>
-        </select>
-        <input type="checkbox" id="multiselect" name="multiselect" value="false">
-        <label for="multiselect"> Select multiple notes [shift]</label>
+        <div>
+            <select id="layout">
+                <option value="cg-wheatstone-30">CG Wheatstone 30</option>
+                <option value="cg-jeffries-30">CG Jeffries 30</option>
+                <option value="cg-wheatstone-40">CG Wheatstone 40</option>
+                <option value="cg-jeffries-38">CG Jeffries 38</option>
+            </select>
+            <div>
+                <button>Edit layout</button>
+                <button>Get link</button>
+            </div>
+        </div>
+        <div>
+            <div>
+                <input type="radio" id="pushpull" name="bellows" value="pushpull" checked>
+                <label for="pushpull">push or pull</label>
+            </div>
+            <div>
+                <input type="radio" id="push" name="bellows" value="push">
+                <label for="push">push only</label>
+            </div>
+            <div>
+                <input type="radio" id="pull" name="bellows" value="pull">
+                <label for="pull">pull only</label>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <input type="checkbox" id="matchoctave" name="matchoctave" checked="checked">
+                <label for="matchoctave"> Match octave</label>
+            </div>
+            <div>
+                <input type="checkbox" id="coloroctave" name="coloroctave" value="false">
+                <label for="coloroctave"> Color octaves</label>
+            </div>
+            <div>
+                <input type="checkbox" id="multiselect" name="multiselect" value="false">
+                <label for="multiselect"> Select multiple notes [shift]</label>
+            </div>
+        </div>
     </div>
     
     

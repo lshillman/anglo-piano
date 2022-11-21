@@ -17,9 +17,6 @@ button {
    color: #fff;
 } */
 
-#wavetype {
-   display: none;
-}
 
 .natural, .sharp, .top, .bottom, #chords button {
    font-size: 0.875rem;
@@ -122,7 +119,16 @@ button {
 }
 
 #options {
-   margin-top: 2rem;
+   display: flex;
+   justify-content: center;
+   text-align: left;
+   max-width: 700px;
+   margin: 2rem auto;
+}
+
+#options div {
+   flex-basis: 33.33%;
+   padding: 0 1rem;
 }
 
 #anglo-keyboard {
