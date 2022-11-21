@@ -13,6 +13,8 @@ const sev = document.getElementById("seventh");
 const maj7 = document.getElementById("major7");
 const min7 = document.getElementById("minor7");
 
+const layout = document.getElementById("layout");
+
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -93,6 +95,26 @@ const noteInfo = [{code: "6", defaultName: "D2", altName: "", index: 1},
 {code: "2", defaultName: "C7", altName: "", index: 59},
 {code: "3", defaultName: "C#7", altName: "Db7", index: 60},
 {code: "4", defaultName: "D7", altName: "", index: 61}];
+
+// legacy url-encoded layouts
+const cgWheatstone30 = "_30_eFHhJKNMmn...._50_PQTSstVWZX...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x";
+const cgJeffries30 = "_30_eFHhJKNMmn...._50_QPPQsSVtZv...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x";
+const cgWheatstone40 = "_30_eFHhJKNMmnlJ_50_rPPQTSstVWZX2v.._15_cGGIijkLMNnP_80_RMoOqpSRuTwU....IHjlMNOopqLm_110_tsSrUTvuYw1x...._330_ii_160_QN_55_pq";
+const cgJeffries38 = "_30_eFHhJKNMmn.._160_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX";
+const gdWheatstone30 = "_30_CceFghkjKL...._50_mnqpQRstwu...._15_AddfGHIijk...._80_MlONpoSqUr....feHJjklMNO...._110_pPrqTSvUxV...._270_GG";
+const gdJeffries30 = "_30_CceFghkjKL...._50_nmmnQpsRtT...._15_AddfGHIijk...._80_MlONpoSqUr....feHJjklMNO...._110_pPrqTSvUxV...._270_GG";
+const gdWheatstone40 = "_30_CceFghkjKLJg_50_PmmnqpQRstwuYT.._15_AddfGHIijkLm_80_ojMlONpoSqUr....feHJjklMNOiK_110_RQpPrqTSvUxV...._330_GG_160_nk_55_NO";
+const gdJeffries38 = "_30_CceFghkjKL.._160_nmmnQpsRtT......_15_AddfGHIijkLF_80_PkMlONpoSqUroO..feHJjklMNOPQ_110_RKpPrqTSvURQ...._145_hI_125_GG_220_Vu";
+const bbfWheatstone30 = "_30_dEGgIJMLlm...._50_OPSRrsUVYW...._15_bFFHhijKLM...._80_nNpoRQtSvT....HGikLMNnop...._110_RqTSutXvZw...._270_hh";
+const bbfJeffries30 = "_30_dEGgIJMLlm...._50_POOPrRUsVu...._15_bFFHhijKLM...._80_nNpoRQtSvT....HGikLMNnop...._110_RqTSutXvZw...._270_hh";
+const bbfWheatstone40 = "_30_dEGgIJMLlmkI_50_qOOPSRrsUVYWzu.._15_bFFHhijKLMmO_80_QLnNpoRQtSvT....HGikLMNnopKl_110_srRqTSutXvZw...._330_hh_160_PM_55_op";
+const bbfJeffries38 = "_30_dEGgIJMLlm.._160_POOPrRUsVu......_15_bFFHhijKLMmg_80_qMnNpoRQtSvTQp..HGikLMNnopqr_110_onRqTSutXvZw...._145_Jj_125_hh_220_wW";
+const jones = "_30_eFHHghJJKKmmnn_70_TSPPQQssttVVWvhicGGIijkLMNNM_70_rroOqpSRuTwU2X_30_IjjlMNOopqLkll_70_RRSrUTvuYw1xyZ";
+const cg20 = "_20_cGGIijkLMN...._70_oOqpSRuTwU....GjjlMNOopq...._110_SrUTvuYw1x";
+const gd20 = "_20_AddfGHIijk...._70_MlONpoSqUr....dHHJjklMNO...._110_pPrqTSvUxV";
+const da20 = "_20_dHHJjklMNO...._70_pPrqTSvUxV....HkkmNOPpqr...._110_TsVUwvZx3y";
+const squashbox = "_20_7bbdEFGghi...._70_jKLMmnoppS....FbHFihKjML...._110_nNpoRQtSvT";
+
 
 const activeNotes = [];
 
@@ -226,6 +248,27 @@ function selectConcertinaButtons() {
                 note.classList.remove("selected");
             }
         }
+    }
+}
+
+function togglePushView() {
+    for (button of angloKeyboard.children()) {
+        button.classList.remove("pull-only");
+        button.classList.add("push-only");
+    }
+}
+
+function togglePullView() {
+    for (button of angloKeyboard.children()) {
+        button.classList.remove("push-only");
+        button.classList.add("pull-only");
+    }
+}
+
+function resetView() {
+    for (button of angloKeyboard.children()) {
+        button.classList.remove("push-only");
+        button.classList.remove("pull-only");
     }
 }
 
@@ -375,6 +418,79 @@ function bindAngloButtons() {
         updateNoteSelection(e.target.dataset.note);
     });
 }
+
+layout.addEventListener("change", () => {
+switch (layout.value) {
+        case "cgWheatstone30":
+            parseLegacyLayout(cgWheatstone30);
+            break;
+        case "cgJeffries30":
+            parseLegacyLayout(cgJeffries30);
+            break;
+        case "cgWheatstone40":
+            parseLegacyLayout(cgWheatstone40);
+            break;
+        case "cgJeffries38":
+            parseLegacyLayout(cgJeffries38);
+            break;
+        case "gdWheatstone30":
+            parseLegacyLayout(gdWheatstone30);
+            break;
+        case "gdJeffries30":
+            parseLegacyLayout(gdJeffries30);
+            break;
+        case "gdWheatstone40":
+            parseLegacyLayout(gdWheatstone40);
+            break;
+        case "gdJeffries38":
+            parseLegacyLayout(gdJeffries38);
+            break;
+        case "bbfWheatstone30":
+            parseLegacyLayout(bbfWheatstone30);
+            break;
+        case "bbfJeffries30":
+            parseLegacyLayout(bbfJeffries30);
+            break;
+        case "bbfWheatstone40":
+            parseLegacyLayout(bbfWheatstone40);
+            break;
+        case "bbfJeffries38":
+            parseLegacyLayout(bbfJeffries38);
+            break;
+        case "jones":
+            parseLegacyLayout(jones);
+            break;
+        case "cg20":
+            parseLegacyLayout(cg20);
+            break;
+        case "gd20":
+            parseLegacyLayout(gd20);
+            break;
+        case "da20":
+            parseLegacyLayout(da20);
+            break;
+        case "squashbox":
+            parseLegacyLayout(squashbox);
+            break;
+    }
+});
+
+
+const opt_pushpull = document.getElementById("pushpull");
+const opt_push = document.getElementById("push");
+const opt_pull = document.getElementById("pull");
+
+opt_pushpull.addEventListener("change", ()=> {
+    resetView();
+});
+opt_push.addEventListener("change", ()=> {
+    togglePushView();
+});
+opt_pull.addEventListener("change", ()=> {
+    togglePullView();
+});
+
+
 
 document.addEventListener('keydown', function(e) {
     // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {
