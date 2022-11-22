@@ -1,6 +1,5 @@
-console.log("I'm a JavaScript file linked to this page!");
 
-const wavetypeEl = $('#wavetype');
+const keyboardContainer = document.getElementById("keyboard-container");
 const keyboard = $('#keyboard');
 const angloContainer = document.getElementById("anglo-container");
 const angloKeyboard = $('#anglo-keyboard');
@@ -133,7 +132,7 @@ for (note in notes) {
     if (note.includes("#")) {
         keyboard.append(`<button id="${note}" data-note="${note}" class="sharp">${note}</button>`)
     } else {
-        keyboard.append(`<button id="${note}" data-note="${note}" class="natural">${note}</button>`)
+        keyboard.append(`<button id="${note}" data-note="${note}" class="natural ${"o" + note.substr(-1)}">${note}</button>`)
     }
 }
 
@@ -275,8 +274,10 @@ function selectConcertinaButtons() {
 function colorOctaves() {
     if (opt_coloroctave.checked) {
     angloContainer.classList.add("pretty");
+    keyboardContainer.classList.add("pretty");
     } else {
         angloContainer.classList.remove("pretty");
+        keyboardContainer.classList.remove("pretty");
     }
 }
 
@@ -339,7 +340,7 @@ function playNote(note) {
     }
     // console.debug(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
-    oscillator.type = "sine";// wavetypeEl.val(); // triangle wave by default
+    oscillator.type = "sine";
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
     oscillator.connect(gainNode); // connect the volume control to the oscillator
@@ -438,7 +439,6 @@ $('#keyboard button').on('click', (e) => {
     deselectChordButtons();
     updateNoteSelection(e.target.dataset.note);
 });
-// $('#keyboard button').on('mouseup', () => oscillator.stop());
 
 function bindAngloButtons() {
     $('#anglo-keyboard button').on('click', (e) => {
@@ -527,9 +527,6 @@ opt_coloroctave.addEventListener("change", () => {
 });
 
 document.addEventListener('keydown', function(e) {
-    // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {
-    //   alert('Undo!')
-    // }
     console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
