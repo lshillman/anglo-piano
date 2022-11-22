@@ -282,25 +282,25 @@ button {
 
 
 #keyboard-container.pretty .o2 {
-   border-top: 1rem solid #FACD91;
+   box-shadow: 0 16px 0 0 #FACD91 inset;
 }
 
 #keyboard-container.pretty .o3 {
-   border-top: 1rem solid #FFFF80;
+   box-shadow: 0 16px 0 0 #FFFF80 inset;
 }
 
 #keyboard-container.pretty .o4 {
-   border-top: 1rem solid #CAF982;
+   box-shadow: 0 16px 0 0 #CAF982 inset;
 }
 
 #keyboard-container.pretty .o5 {
-   border-top: 1rem solid #80FFFF;
+   box-shadow: 0 16px 0 0 #80FFFF inset;
 }
 
 #keyboard-container.pretty .o6 {
-   border-top: 1rem solid #81D3F8;
+   box-shadow: 0 16px 0 0 #81D3F8 inset;
 }
 
 #keyboard-container.pretty .o7 {
-   border-top: 1rem solid #8080FF;
+   box-shadow: 0 16px 0 0 #8080FF inset;
 }

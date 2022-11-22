@@ -1,6 +1,4 @@
-console.log("I'm a JavaScript file linked to this page!");
 
-const wavetypeEl = $('#wavetype');
 const keyboardContainer = document.getElementById("keyboard-container");
 const keyboard = $('#keyboard');
 const angloContainer = document.getElementById("anglo-container");
@@ -342,7 +340,7 @@ function playNote(note) {
     }
     // console.debug(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
-    oscillator.type = "sine";// wavetypeEl.val(); // triangle wave by default
+    oscillator.type = "sine";
     oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
     oscillator.connect(audioCtx.destination);
     oscillator.connect(gainNode); // connect the volume control to the oscillator
@@ -441,7 +439,6 @@ $('#keyboard button').on('click', (e) => {
     deselectChordButtons();
     updateNoteSelection(e.target.dataset.note);
 });
-// $('#keyboard button').on('mouseup', () => oscillator.stop());
 
 function bindAngloButtons() {
     $('#anglo-keyboard button').on('click', (e) => {
@@ -530,9 +527,6 @@ opt_coloroctave.addEventListener("change", () => {
 });
 
 document.addEventListener('keydown', function(e) {
-    // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {
-    //   alert('Undo!')
-    // }
     console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
