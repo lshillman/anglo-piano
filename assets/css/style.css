@@ -254,27 +254,53 @@ button {
 	margin: 0 0 -30px -5px;
 }
 
-.pretty .o2 {
+#anglo-container.pretty .o2 {
    background-color: #FACD91;
 }
 
-.pretty .o3 {
+#anglo-container.pretty .o3 {
    background-color: #FFFF80;
 }
 
-.pretty .o4 {
+#anglo-container.pretty .o4 {
    background-color: #CAF982;
 }
 
-.pretty .o5 {
+#anglo-container.pretty .o5 {
    background-color: #80FFFF;
 }
 
-.pretty .o6 {
+#anglo-container.pretty .o6 {
    background-color: #81D3F8;
 }
 
-.pretty .o7 {
+#anglo-container.pretty .o7 {
    background-color: #8080FF;
 }
 
+
+
+
+#keyboard-container.pretty .o2 {
+   border-top: 1rem solid #FACD91;
+}
+
+#keyboard-container.pretty .o3 {
+   border-top: 1rem solid #FFFF80;
+}
+
+#keyboard-container.pretty .o4 {
+   border-top: 1rem solid #CAF982;
+}
+
+#keyboard-container.pretty .o5 {
+   border-top: 1rem solid #80FFFF;
+}
+
+#keyboard-container.pretty .o6 {
+   border-top: 1rem solid #81D3F8;
+}
+
+#keyboard-container.pretty .o7 {
+   border-top: 1rem solid #8080FF;
+}

@@ -1,6 +1,7 @@
 console.log("I'm a JavaScript file linked to this page!");
 
 const wavetypeEl = $('#wavetype');
+const keyboardContainer = document.getElementById("keyboard-container");
 const keyboard = $('#keyboard');
 const angloContainer = document.getElementById("anglo-container");
 const angloKeyboard = $('#anglo-keyboard');
@@ -133,7 +134,7 @@ for (note in notes) {
     if (note.includes("#")) {
         keyboard.append(`<button id="${note}" data-note="${note}" class="sharp">${note}</button>`)
     } else {
-        keyboard.append(`<button id="${note}" data-note="${note}" class="natural">${note}</button>`)
+        keyboard.append(`<button id="${note}" data-note="${note}" class="natural ${"o" + note.substr(-1)}">${note}</button>`)
     }
 }
 
@@ -275,8 +276,10 @@ function selectConcertinaButtons() {
 function colorOctaves() {
     if (opt_coloroctave.checked) {
     angloContainer.classList.add("pretty");
+    keyboardContainer.classList.add("pretty");
     } else {
         angloContainer.classList.remove("pretty");
+        keyboardContainer.classList.remove("pretty");
     }
 }
 
