@@ -139,14 +139,21 @@ button {
 
 .button {
    display: inline-block;
-   width: 50px;
-   height: 50px;
-   padding: 5px;
+   width: 60px;
+   height: 60px;
    white-space: normal;
    /* background-color: pink; */
 }
 
-.button .top {
+.top {
+	padding: 5px 5px 0 5px;
+}
+
+.bottom {
+	padding: 0 5px 5px 5px;
+}
+
+.button .top button {
    position: relative;
    width: 50px;
    height: 25px;
@@ -157,13 +164,13 @@ button {
    cursor: pointer;
 }
 
-.button .top:hover,
-.button .bottom:hover,
+.button .top button:hover,
+.button .bottom button:hover,
 .natural:hover {
    background-color: #eee;
 }
 
-.button .bottom {
+.button .bottom button {
    position: relative;
    width: 50px;
    height: 25px;
@@ -188,19 +195,24 @@ button {
    border-right-color: #fff;
 }
 
-.top.selected,
-.top.selected:hover {
+.top button.selected,
+.top button.selected:hover {
    background-color: #0000FF;
    color: white;
 }
 
-.bottom.selected,
-.bottom.selected:hover {
+.bottom button.selected,
+.bottom button.selected:hover {
    background-color: #A30014;
    color: white;
 }
 
-.button.push-only .top {
+.button.push-only .top,
+.button.pull-only .bottom {
+   padding: 5px;
+}
+
+.button.push-only .top button {
    height: 50px;
    border-radius: 25px;
    border: 1px solid #767676;
@@ -210,7 +222,7 @@ button {
    display: none;
 }
 
-.button.pull-only .bottom {
+.button.pull-only .bottom button {
    height: 50px;
    border-radius: 25px;
    border: 1px solid #767676;
@@ -219,3 +231,50 @@ button {
 .button.pull-only .top {
    display: none;
 }
+
+
+
+
+
+/*===== OCTAVE COLORS =====*/
+
+.octave-top {
+      height: 30px;
+      width: 60px;
+      z-index: 0;
+      position: relative;
+      margin: 0 0 -25px -5px;
+}
+
+.octave-bottom {
+	height: 30px;
+	width: 60px;
+	z-index: 0;
+	position: relative;
+	margin: 0 0 -30px -5px;
+}
+
+.pretty .o2 {
+   background-color: #FACD91;
+}
+
+.pretty .o3 {
+   background-color: #FFFF80;
+}
+
+.pretty .o4 {
+   background-color: #CAF982;
+}
+
+.pretty .o5 {
+   background-color: #80FFFF;
+}
+
+.pretty .o6 {
+   background-color: #81D3F8;
+}
+
+.pretty .o7 {
+   background-color: #8080FF;
+}
+
