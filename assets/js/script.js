@@ -2,6 +2,7 @@ console.log("I'm a JavaScript file linked to this page!");
 
 const wavetypeEl = $('#wavetype');
 const keyboard = $('#keyboard');
+const angloContainer = document.getElementById("anglo-container");
 const angloKeyboard = $('#anglo-keyboard');
 const multiselect = document.getElementById("multiselect");
 const chordBar = document.getElementById("chords");
@@ -21,6 +22,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let customFromURL = window.location.href.split('?')[1];
 
 let opt_bellows = "";
+let opt_coloroctave = document.getElementById("coloroctave");
 
 
 // note frequencies in HZ
@@ -102,15 +104,15 @@ const noteInfo = [{code: "6", defaultName: "D2", altName: "", index: 1},
 const cgWheatstone30 = "_30_eFHhJKNMmn...._50_PQTSstVWZX...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x...._270_ii";
 const cgJeffries30 = "_30_eFHhJKNMmn...._50_QPPQsSVtZv...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x...._270_ii";
 const cgWheatstone40 = "_30_eFHhJKNMmnlJ_50_rPPQTSstVWZX2v.._15_cGGIijkLMNnP_80_RMoOqpSRuTwU....IHjlMNOopqLm_110_tsSrUTvuYw1x...._330_ii_160_QN_55_pq";
-const cgJeffries38 = "_30_eFHhJKNMmn.._160_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX";
+const cgJeffries38 = "_30_eFHhJKNMmn.._170_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX";
 const gdWheatstone30 = "_30_CceFghkjKL...._50_mnqpQRstwu...._15_AddfGHIijk...._80_MlONpoSqUr....feHJjklMNO...._110_pPrqTSvUxV...._270_GG";
 const gdJeffries30 = "_30_CceFghkjKL...._50_nmmnQpsRtT...._15_AddfGHIijk...._80_MlONpoSqUr....feHJjklMNO...._110_pPrqTSvUxV...._270_GG";
 const gdWheatstone40 = "_30_CceFghkjKLJg_50_PmmnqpQRstwuYT.._15_AddfGHIijkLm_80_ojMlONpoSqUr....feHJjklMNOiK_110_RQpPrqTSvUxV...._330_GG_160_nk_55_NO";
-const gdJeffries38 = "_30_CceFghkjKL.._160_nmmnQpsRtT......_15_AddfGHIijkLF_80_PkMlONpoSqUroO..feHJjklMNOPQ_110_RKpPrqTSvURQ...._145_hI_125_GG_220_Vu";
+const gdJeffries38 = "_30_CceFghkjKL.._170_nmmnQpsRtT......_15_AddfGHIijkLF_80_PkMlONpoSqUroO..feHJjklMNOPQ_110_RKpPrqTSvURQ...._145_hI_125_GG_220_Vu";
 const bbfWheatstone30 = "_30_dEGgIJMLlm...._50_OPSRrsUVYW...._15_bFFHhijKLM...._80_nNpoRQtSvT....HGikLMNnop...._110_RqTSutXvZw...._270_hh";
 const bbfJeffries30 = "_30_dEGgIJMLlm...._50_POOPrRUsVu...._15_bFFHhijKLM...._80_nNpoRQtSvT....HGikLMNnop...._110_RqTSutXvZw...._270_hh";
 const bbfWheatstone40 = "_30_dEGgIJMLlmkI_50_qOOPSRrsUVYWzu.._15_bFFHhijKLMmO_80_QLnNpoRQtSvT....HGikLMNnopKl_110_srRqTSutXvZw...._330_hh_160_PM_55_op";
-const bbfJeffries38 = "_30_dEGgIJMLlm.._160_POOPrRUsVu......_15_bFFHhijKLMmg_80_qMnNpoRQtSvTQp..HGikLMNnopqr_110_onRqTSutXvZw...._145_Jj_125_hh_220_wW";
+const bbfJeffries38 = "_30_dEGgIJMLlm.._170_POOPrRUsVu......_15_bFFHhijKLMmg_80_qMnNpoRQtSvTQp..HGikLMNnopqr_110_onRqTSutXvZw...._145_Jj_125_hh_220_wW";
 const jones = "_30_eFHHghJJKKmmnn_70_TSPPQQssttVVWvhicGGIijkLMNNM_70_rroOqpSRuTwU2X_30_IjjlMNOopqLkll_70_RRSrUTvuYw1xyZ";
 const cg20 = "_20_cGGIijkLMN...._70_oOqpSRuTwU....GjjlMNOopq...._110_SrUTvuYw1x";
 const gd20 = "_20_AddfGHIijk...._70_MlONpoSqUr....dHHJjklMNO...._110_pPrqTSvUxV";
@@ -169,15 +171,28 @@ const buttons = [
     { push: 'C4', pull: 'C4', x: 270, newRow: true, drone: true }
 ]
 
+// function renderAngloKeyboard() {
+//     for (button of buttons) {
+//         if (!button.newRow) {
+//             angloKeyboard.append(`<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="octave-top ${"o" + noteNames[button.push].substr(-1)}"></div><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><div class="octave-bottom ${"o" + noteNames[button.pull].substr(-1)}"></div><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+//         } else {
+//             angloKeyboard.append(`<br><div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="octave-top ${"o" + noteNames[button.push].substr(-1)}"></div><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><div class="octave-bottom ${"o" + noteNames[button.pull].substr(-1)}"></div><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+//         }
+//     }
+// }
+
+
 function renderAngloKeyboard() {
     for (button of buttons) {
         if (!button.newRow) {
-            angloKeyboard.append(`<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+            angloKeyboard.append(`<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`)
         } else {
-            angloKeyboard.append(`<br><div class="button ${opt_bellows}" style="margin-left:${button.x}px"><button class="top" data-note="${noteNames[button.push]}">${button.push}</button><button class="bottom" data-note="${noteNames[button.pull]}">${button.pull}</button></div>`)
+            angloKeyboard.append(`<br><div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`)
         }
     }
 }
+
+
 
 if (customFromURL) {
     parseLegacyLayout(customFromURL);
@@ -245,13 +260,23 @@ function selectPianoKey() {
 
 function selectConcertinaButtons() {
     for (button of angloKeyboard.children()) {
-        for (note of button.children) {
-            if (selection.includes(note.dataset.note)) {
-                note.classList.add("selected");
-            } else {
-                note.classList.remove("selected");
+        for (div of button.children) {
+            for (note of div.children) {
+                if (selection.includes(note.dataset.note)) {
+                    note.classList.add("selected");
+                } else {
+                    note.classList.remove("selected");
+                }
             }
         }
+    }
+}
+
+function colorOctaves() {
+    if (opt_coloroctave.checked) {
+    angloContainer.classList.add("pretty");
+    } else {
+        angloContainer.classList.remove("pretty");
     }
 }
 
@@ -497,7 +522,9 @@ opt_pull.addEventListener("change", ()=> {
     togglePullView();
 });
 
-
+opt_coloroctave.addEventListener("change", () => {
+    colorOctaves();
+});
 
 document.addEventListener('keydown', function(e) {
     // if(e.code == 'KeyZ' && (e.ctrlKey || e.metaKey)) {
