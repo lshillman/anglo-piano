@@ -440,16 +440,31 @@ $('#keyboard button').on('click', (e) => {
     updateNoteSelection(e.target.dataset.note);
 });
 
+// function bindAngloButtons() {
+//     $('#anglo-keyboard button').on('click', (e) => {
+//         if (!selection.includes(e.target.dataset.note)) {
+//             playNote(e.target.dataset.note);
+//         }
+//         currentIndex = activeNotes.indexOf(e.target.dataset.note);
+//         deselectChordButtons();
+//         updateNoteSelection(e.target.dataset.note);
+//     });
+// }
+
+
 function bindAngloButtons() {
-    $('#anglo-keyboard button').on('click', (e) => {
+    let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+    allbuttons.forEach((button) => button.addEventListener('click', (e) => {
         if (!selection.includes(e.target.dataset.note)) {
             playNote(e.target.dataset.note);
         }
         currentIndex = activeNotes.indexOf(e.target.dataset.note);
         deselectChordButtons();
         updateNoteSelection(e.target.dataset.note);
-    });
+    }));
 }
+
+
 
 layout.addEventListener("change", () => {
 switch (layout.value) {
