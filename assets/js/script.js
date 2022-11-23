@@ -1,8 +1,8 @@
 
 const keyboardContainer = document.getElementById("keyboard-container");
-const keyboard = $('#keyboard');
+const keyboard = document.getElementById("keyboard");
 const angloContainer = document.getElementById("anglo-container");
-const angloKeyboard = $('#anglo-keyboard');
+const angloKeyboard = document.getElementById("anglo-keyboard");
 const multiselect = document.getElementById("multiselect");
 const chordBar = document.getElementById("chords");
 
@@ -127,13 +127,16 @@ const selection = [];
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
-for (note in notes) {
-    activeNotes.push(note);
-    if (note.includes("#")) {
-        keyboard.append(`<button id="${note}" data-note="${note}" class="sharp">${note}</button>`)
-    } else {
-        keyboard.append(`<button id="${note}" data-note="${note}" class="natural ${"o" + note.substr(-1)}">${note}</button>`)
+function renderPianoKeyboard(){
+    for (note in notes) {
+        activeNotes.push(note);
+        if (note.includes("#")) {
+            keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="sharp">${note}</button>`;
+        } else {
+            keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="natural ${"o" + note.substr(-1)}">${note}</button>`;
+        }
     }
+    bindPianoKeys();
 }
 
 const buttons = [
@@ -184,9 +187,9 @@ const buttons = [
 function renderAngloKeyboard() {
     for (button of buttons) {
         if (!button.newRow) {
-            angloKeyboard.append(`<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`)
+            angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`;
         } else {
-            angloKeyboard.append(`<br><div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`)
+            angloKeyboard.innerHTML += `<br><div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`;
         }
     }
 }
@@ -198,6 +201,7 @@ if (customFromURL) {
 } else {
     renderAngloKeyboard();
     bindAngloButtons();
+    renderPianoKeyboard();
 }
 
 
@@ -236,8 +240,7 @@ function parseLegacyLayout(layout) {
     }
     buttons.length = 0;
     newLayout.forEach((button) => {buttons.push(button)});
-    // angloKeyboard.html("");
-    angloKeyboard.empty();
+    angloKeyboard.innerHTML = "";
     renderAngloKeyboard();
     bindAngloButtons();
     selectConcertinaButtons();
@@ -246,7 +249,7 @@ function parseLegacyLayout(layout) {
 
 
 function selectPianoKey() {
-    for (key of keyboard.children()) {
+    for (key of keyboard.children) {
             if (selection.includes(key.dataset.note)) {
                 key.classList.add("selected");
                 // console.log(key);
@@ -258,7 +261,7 @@ function selectPianoKey() {
 
 
 function selectConcertinaButtons() {
-    for (button of angloKeyboard.children()) {
+    for (button of angloKeyboard.children) {
         for (div of button.children) {
             for (note of div.children) {
                 if (selection.includes(note.dataset.note)) {
@@ -282,7 +285,7 @@ function colorOctaves() {
 }
 
 function togglePushView() {
-    for (button of angloKeyboard.children()) {
+    for (button of angloKeyboard.children) {
         button.classList.remove("pull-only");
         button.classList.add("push-only");
     }
@@ -290,7 +293,7 @@ function togglePushView() {
 }
 
 function togglePullView() {
-    for (button of angloKeyboard.children()) {
+    for (button of angloKeyboard.children) {
         button.classList.remove("push-only");
         button.classList.add("pull-only");
     }
@@ -298,7 +301,7 @@ function togglePullView() {
 }
 
 function resetView() {
-    for (button of angloKeyboard.children()) {
+    for (button of angloKeyboard.children) {
         button.classList.remove("push-only");
         button.classList.remove("pull-only");
     }
@@ -431,25 +434,53 @@ function findChord(chord) {
     playSelection();
 }
 
-$('#keyboard button').on('click', (e) => {
-    if (!selection.includes(e.target.dataset.note)) {
-        playNote(e.target.dataset.note);
-    }
-    currentIndex = activeNotes.indexOf(e.target.dataset.note)
-    deselectChordButtons();
-    updateNoteSelection(e.target.dataset.note);
-});
+// $('#keyboard button').on('click', (e) => {
+//     if (!selection.includes(e.target.dataset.note)) {
+//         playNote(e.target.dataset.note);
+//     }
+//     currentIndex = activeNotes.indexOf(e.target.dataset.note)
+//     deselectChordButtons();
+//     updateNoteSelection(e.target.dataset.note);
+// });
+
+
+function bindPianoKeys() {
+    let allkeys = document.querySelectorAll("#keyboard button");
+    allkeys.forEach((key) => key.addEventListener('click', (e) => {
+        if (!selection.includes(e.target.dataset.note)) {
+            playNote(e.target.dataset.note);
+        }
+        currentIndex = activeNotes.indexOf(e.target.dataset.note)
+        deselectChordButtons();
+        updateNoteSelection(e.target.dataset.note);
+    }));
+}
+
+// function bindAngloButtons() {
+//     $('#anglo-keyboard button').on('click', (e) => {
+//         if (!selection.includes(e.target.dataset.note)) {
+//             playNote(e.target.dataset.note);
+//         }
+//         currentIndex = activeNotes.indexOf(e.target.dataset.note);
+//         deselectChordButtons();
+//         updateNoteSelection(e.target.dataset.note);
+//     });
+// }
+
 
 function bindAngloButtons() {
-    $('#anglo-keyboard button').on('click', (e) => {
+    let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+    allbuttons.forEach((button) => button.addEventListener('click', (e) => {
         if (!selection.includes(e.target.dataset.note)) {
             playNote(e.target.dataset.note);
         }
         currentIndex = activeNotes.indexOf(e.target.dataset.note);
         deselectChordButtons();
         updateNoteSelection(e.target.dataset.note);
-    });
+    }));
 }
+
+
 
 layout.addEventListener("change", () => {
 switch (layout.value) {
