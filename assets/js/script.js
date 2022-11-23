@@ -51,14 +51,15 @@ function renderAngloKeyboard() {
     droneDiv.style.visibility = 'hidden';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
+        let droneclass = "";
         if (button.drone) {
             droneDiv.style.visibility = 'visible';
+            droneclass = "drone";
         }
-        if (!button.newRow) {
-            angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`;
-        } else {
-            angloKeyboard.innerHTML += `<br><div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`;
+        if (button.newRow) {
+            angloKeyboard.innerHTML += `<br>`;
         }
+        angloKeyboard.innerHTML += `<div class="button ${opt_bellows} ${droneclass}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`;
     }
     bindAngloButtons();
 }
@@ -420,6 +421,14 @@ opt_pull.addEventListener("change", ()=> {
 
 opt_coloroctave.addEventListener("change", () => {
     colorOctaves();
+});
+
+opt_drone.addEventListener("change", () => {
+    if (!opt_drone.checked) {
+        document.getElementsByClassName("drone")[0].style.visibility = 'hidden';
+    } else {
+        document.getElementsByClassName("drone")[0].style.visibility = 'visible';
+    }
 });
 
 document.addEventListener('keydown', function(e) {
