@@ -590,3 +590,24 @@ const squashbox = [
     { "push": "Bb5", "pull": "G5", "x": 0, "newRow": false },
     { "push": "D6", "pull": "A5", "x": 0, "newRow": false }
 ];
+
+
+
+// legacy url-encoded layouts
+// const cgWheatstone30 = "_30_eFHhJKNMmn...._50_PQTSstVWZX...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x...._270_ii";
+// const cgJeffries30 = "_30_eFHhJKNMmn...._50_QPPQsSVtZv...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x...._270_ii";
+// const cgWheatstone40 = "_30_eFHhJKNMmnlJ_50_rPPQTSstVWZX2v.._15_cGGIijkLMNnP_80_RMoOqpSRuTwU....IHjlMNOopqLm_110_tsSrUTvuYw1x...._330_ii_160_QN_55_pq";
+// const cgJeffries38 = "_30_eFHhJKNMmn.._170_QPPQsSVtWv......_15_cGGIijkLMNnh_80_rNoOqpSRuTwURq..IHjlMNOopqrs_110_poSrUTvuYw1x...._145_Kk_125_ii_220_xX";
+// const gdWheatstone30 = "_30_CceFghkjKL...._50_mnqpQRstwu...._15_AddfGHIijk...._80_MlONpoSqUr....feHJjklMNO...._110_pPrqTSvUxV...._270_GG";
+// const gdJeffries30 = "_30_CceFghkjKL...._50_nmmnQpsRtT...._15_AddfGHIijk...._80_MlONpoSqUr....feHJjklMNO...._110_pPrqTSvUxV...._270_GG";
+// const gdWheatstone40 = "_30_CceFghkjKLJg_50_PmmnqpQRstwuYT.._15_AddfGHIijkLm_80_ojMlONpoSqUr....feHJjklMNOiK_110_RQpPrqTSvUxV...._330_GG_160_nk_55_NO";
+// const gdJeffries38 = "_30_CceFghkjKL.._170_nmmnQpsRtT......_15_AddfGHIijkLF_80_PkMlONpoSqUroO..feHJjklMNOPQ_110_RKpPrqTSvURQ...._145_hI_125_GG_220_Vu";
+// const bbfWheatstone30 = "_30_dEGgIJMLlm...._50_OPSRrsUVYW...._15_bFFHhijKLM...._80_nNpoRQtSvT....HGikLMNnop...._110_RqTSutXvZw...._270_hh";
+// const bbfJeffries30 = "_30_dEGgIJMLlm...._50_POOPrRUsVu...._15_bFFHhijKLM...._80_nNpoRQtSvT....HGikLMNnop...._110_RqTSutXvZw...._270_hh";
+// const bbfWheatstone40 = "_30_dEGgIJMLlmkI_50_qOOPSRrsUVYWzu.._15_bFFHhijKLMmO_80_QLnNpoRQtSvT....HGikLMNnopKl_110_srRqTSutXvZw...._330_hh_160_PM_55_op";
+// const bbfJeffries38 = "_30_dEGgIJMLlm.._170_POOPrRUsVu......_15_bFFHhijKLMmg_80_qMnNpoRQtSvTQp..HGikLMNnopqr_110_onRqTSutXvZw...._145_Jj_125_hh_220_wW";
+// const jones = "_30_eFHHghJJKKmmnn_70_TSPPQQssttVVWvhicGGIijkLMNNM_70_rroOqpSRuTwU2X_30_IjjlMNOopqLkll_70_RRSrUTvuYw1xyZ";
+// const cg20 = "_20_cGGIijkLMN...._70_oOqpSRuTwU....GjjlMNOopq...._110_SrUTvuYw1x";
+// const gd20 = "_20_AddfGHIijk...._70_MlONpoSqUr....dHHJjklMNO...._110_pPrqTSvUxV";
+// const da20 = "_20_dHHJjklMNO...._70_pPrqTSvUxV....HkkmNOPpqr...._110_TsVUwvZx3y";
+// const squashbox = "_20_7bbdEFGghi...._70_jKLMmnoppS....FbHFihKjML...._110_nNpoRQtSvT";
