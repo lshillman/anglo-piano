@@ -132,7 +132,9 @@ button {
    border-top: none;
    border-radius: 0 0 8px 8px;
    width: fit-content;
-   overflow: hidden;
+   overflow-x: scroll;
+   max-width: 100%;
+   white-space: nowrap;
    margin: 0 auto;
    visibility: hidden;
 }
