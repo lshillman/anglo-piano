@@ -38,14 +38,17 @@ const selection = [];
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
-function renderPianoKeyboard(){
-    for (note in notes) {
+function renderPianoKeyboard(min, max){
+    keyboard.innerHTML = "";
+    let allnotes = Object.keys(notes); // get an array of notes from the note object
+    for (let i = min; i < max; i++) {
+        let note = allnotes[i];
         activeNotes.push(note);
-        if (note.includes("#")) {
-            keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="sharp">${note}</button>`;
-        } else {
-            keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="natural ${"o" + note.substr(-1)}">${note}</button>`;
+        let noteclass = "natural";
+        if (note.includes("#") || note.includes("b")) {
+            noteclass = "sharp";
         }
+        keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclass} ${"o" + note.substr(-1)}">${note}</button>`;
     }
     bindPianoKeys();
 }
@@ -54,9 +57,14 @@ let buttons = cgWheatstone30;
 
 
 function renderAngloKeyboard() {
+    let layoutnotes = [];
+    let allnotes = Object.keys(notes);
+
     droneDiv.style.visibility = 'hidden';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
+        layoutnotes.push(button.push);
+        layoutnotes.push(button.pull);
         let droneclass = "";
         if (button.drone) {
             droneDiv.style.visibility = 'visible';
@@ -68,6 +76,18 @@ function renderAngloKeyboard() {
         angloKeyboard.innerHTML += `<div class="button ${opt_bellows} ${droneclass}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`;
     }
     bindAngloButtons();
+
+    let min = allnotes.indexOf(layoutnotes[0]);
+    let max = allnotes.indexOf(layoutnotes[0]);
+    for (let i=1; i < layoutnotes.length; i++) {
+        if (allnotes.indexOf(noteNames[layoutnotes[i]]) < min) {
+            min = allnotes.indexOf(noteNames[layoutnotes[i]]);
+        } else if (allnotes.indexOf(noteNames[layoutnotes[i]]) > max) {
+            max = allnotes.indexOf(noteNames[layoutnotes[i]]);
+        }
+    }
+    console.log(`Low: ${allnotes[min]}. High: ${allnotes[max]}.`)
+    renderPianoKeyboard(min, max+1);
 }
 
 
@@ -76,7 +96,7 @@ if (customFromURL) {
     parseLegacyLayout(customFromURL);
 } else {
     renderAngloKeyboard();
-    renderPianoKeyboard();
+    // renderPianoKeyboard();
 }
 
 
@@ -438,7 +458,7 @@ opt_drone.addEventListener("change", () => {
 });
 
 document.addEventListener('keydown', function(e) {
-    console.log(e.code);
+    // console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
     } else if (e.code == "ArrowRight") {

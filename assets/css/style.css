@@ -338,27 +338,27 @@ button {
 
 
 
-#keyboard-container.pretty .o2 {
+#keyboard-container.pretty .natural.o2 {
    box-shadow: 0 16px 0 0 #FACD91 inset;
 }
 
-#keyboard-container.pretty .o3 {
+#keyboard-container.pretty .natural.o3 {
    box-shadow: 0 16px 0 0 #FFFF80 inset;
 }
 
-#keyboard-container.pretty .o4 {
+#keyboard-container.pretty .natural.o4 {
    box-shadow: 0 16px 0 0 #CAF982 inset;
 }
 
-#keyboard-container.pretty .o5 {
+#keyboard-container.pretty .natural.o5 {
    box-shadow: 0 16px 0 0 #80FFFF inset;
 }
 
-#keyboard-container.pretty .o6 {
+#keyboard-container.pretty .natural.o6 {
    box-shadow: 0 16px 0 0 #81D3F8 inset;
 }
 
-#keyboard-container.pretty .o7 {
+#keyboard-container.pretty .natural.o7 {
    box-shadow: 0 16px 0 0 #8080FF inset;
 }
 
@@ -366,29 +366,28 @@ button {
 
 /*===== ABOUT MODAL =====*/
 
-/* The Modal (background) */
+/* overlay */
 .modal {
    display: none; /* Hidden by default */
    position: fixed; /* Stay in place */
-   z-index: 100; /* Sit on top */
-   padding-top: 100px; /* Location of the box */
+   z-index: 100;
    left: 0;
    top: 0;
-   width: 100%; /* Full width */
-   height: 100%; /* Full height */
-   overflow: auto; /* Enable scroll if needed */
+   width: 100%;
+   height: 100%;
+   overflow: auto;
    background-color: rgb(47, 79, 79); /* Fallback color */
    background-color: rgba(47, 79, 79, 0.6);
  }
  
- /* Modal Content */
+ /* modal content */
  .modal-content {
    background-color: #fff;
    margin-left: auto;
    margin-right: auto;
    position: relative;
    top: 50%;
-   transform: translateY(-80%);
+   transform: translateY(-50%);
    padding: 1.5rem;
    border: 1px solid #888;
    width: 80%;
@@ -397,7 +396,7 @@ button {
    border-radius: 8px;
  }
  
- /* The Close Button */
+ /* close button */
  .close {
    color: #aaaaaa;
    float: right;
