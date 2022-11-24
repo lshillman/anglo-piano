@@ -1,3 +1,9 @@
+const aboutLink = document.getElementById("about");
+var aboutModal = document.getElementById("about-modal");
+var closeModalBtn = document.getElementsByClassName("close")[0];
+
+
+
 const keyboardContainer = document.getElementById("keyboard-container");
 const keyboard = document.getElementById("keyboard");
 const angloContainer = document.getElementById("anglo-container");
@@ -441,6 +447,8 @@ document.addEventListener('keydown', function(e) {
     } else if (e.code == "ArrowLeft") {
         deselectChordButtons();
         moveLeft();
+    } else if (e.code == "Escape") {
+        aboutModal.style.display = "none";
     }
   })
 
@@ -448,4 +456,20 @@ document.addEventListener('keydown', function(e) {
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = false;
     }
-  })
+  });
+
+
+  // about modal
+  about.onclick = function() {
+    aboutModal.style.display = "block";
+  }
+
+  closeModalBtn.onclick = function() {
+    aboutModal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == aboutModal) {
+      aboutModal.style.display = "none";
+    }
+  }
