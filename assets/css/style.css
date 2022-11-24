@@ -132,7 +132,7 @@ button {
    border-top: none;
    border-radius: 0 0 8px 8px;
    width: fit-content;
-   overflow-x: scroll;
+   overflow-x: auto;
    max-width: 100%;
    white-space: nowrap;
    margin: 0 auto;
