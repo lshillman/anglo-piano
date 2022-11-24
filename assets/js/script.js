@@ -38,14 +38,17 @@ const selection = [];
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
-function renderPianoKeyboard(){
-    for (note in notes) {
+function renderPianoKeyboard(min, max){
+    keyboard.innerHTML = "";
+    let allnotes = Object.keys(notes); // get an array of notes from the note object
+    for (let i = min; i < max; i++) {
+        let note = allnotes[i];
         activeNotes.push(note);
-        if (note.includes("#")) {
-            keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="sharp">${note}</button>`;
-        } else {
-            keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="natural ${"o" + note.substr(-1)}">${note}</button>`;
+        let noteclass = "natural";
+        if (note.includes("#") || note.includes("b")) {
+            noteclass = "sharp";
         }
+        keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclass} ${"o" + note.substr(-1)}">${note}</button>`;
     }
     bindPianoKeys();
 }
@@ -84,6 +87,7 @@ function renderAngloKeyboard() {
         }
     }
     console.log(`Low: ${allnotes[min]}. High: ${allnotes[max]}.`)
+    renderPianoKeyboard(min, max+1);
 }
 
 
@@ -92,7 +96,7 @@ if (customFromURL) {
     parseLegacyLayout(customFromURL);
 } else {
     renderAngloKeyboard();
-    renderPianoKeyboard();
+    // renderPianoKeyboard();
 }
 
 
