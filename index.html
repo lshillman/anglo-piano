@@ -10,6 +10,15 @@
     <title>Anglo Piano</title>
 </head>
 <body>
+    <header>
+        <div>
+            <image id="logo" src="./assets/images/logo.svg"/>
+            <h1>Anglo Piano</h1>
+        </div>
+        <div>
+            <a href="#" id="about">About</a>
+        </div>
+    </header>
     <div id="keyboard-container">
         <div id="keyboard">
             <!-- piano keys -->
@@ -85,6 +94,21 @@
             </div>
         </div>
     </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Hi, I’m Luke.</h2>
+            <p>I made Anglo Piano to help myself transcribe things and puzzle out chords without excessive hunting-and-pecking. It works pretty well for me as someone who is mostly illiterate and plays by ear. Your mileage may vary.</p>
+            <p>If you find this tool helpful, I’d love to know! Contact me via <a href="https://www.concertina.net/forums/index.php?/topic/24636-anglo-piano-webapp/" target="_blank" rel="noreferrer noopener">concertina.net</a>, <a rel="me noreferrer noopener" href="https://wandering.shop/@luke" target="_blank">mastodon</a>, <a href="https://www.youtube.com/lshillman" target="_blank" rel="noreferrer noopener">youtube</a>, or email to ‘hi’ at this domain.</p>
+            <p>If you feel like it, you can <a href="https://ko-fi.com/luuke" target="_blank" rel="noreferrer noopener">buy me a coffee</a>.</p>
+        </div>
+
+    </div>
+
     <script src="./assets/js/notes.js"></script>
     <script src="./assets/js/layouts.js"></script>
     <script src="./assets/js/script.js"></script>
