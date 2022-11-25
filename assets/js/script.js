@@ -40,6 +40,7 @@ let currentIndex = 1;
 
 function renderPianoKeyboard(min, max){
     keyboard.innerHTML = "";
+    activeNotes.length = 0;
     let allnotes = Object.keys(notes); // get an array of notes from the note object
     for (let i = min; i < max; i++) {
         let note = allnotes[i];
