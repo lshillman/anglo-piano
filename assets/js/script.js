@@ -18,7 +18,7 @@ const sev = document.getElementById("seventh");
 const maj7 = document.getElementById("major7");
 const min7 = document.getElementById("minor7");
 
-const layout = document.getElementById("layout");
+const opt_layout = document.getElementById("layout");
 
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -29,7 +29,14 @@ let opt_bellows = "";
 let opt_coloroctave = document.getElementById("coloroctave");
 let opt_drone = document.getElementById("drone");
 let droneDiv = document.getElementById("drone-option");
+const opt_pushpull = document.getElementById("pushpull");
+const opt_push = document.getElementById("push");
+const opt_pull = document.getElementById("pull");
 
+// an object that contains all currently-displayed concertina buttons
+let buttons = cgWheatstone30;
+
+// an array to keep track of all currently-displayed piano notes. Required for arrow key navigation.
 const activeNotes = [];
 
 // an array to hold the currently selected notes
@@ -38,8 +45,9 @@ const selection = [];
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
-function renderPianoKeyboard(min, max){
+function renderPianoKeyboard(min, max) {
     keyboard.innerHTML = "";
+    activeNotes.length = 0;
     let allnotes = Object.keys(notes); // get an array of notes from the note object
     for (let i = min; i < max; i++) {
         let note = allnotes[i];
@@ -51,9 +59,10 @@ function renderPianoKeyboard(min, max){
         keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclass} ${"o" + note.substr(-1)}">${note}</button>`;
     }
     bindPianoKeys();
+    selectConcertinaButtons();
+    selectPianoKey();
 }
 
-let buttons = cgWheatstone30;
 
 
 function renderAngloKeyboard() {
@@ -77,26 +86,20 @@ function renderAngloKeyboard() {
     }
     bindAngloButtons();
 
+    // find the lowest and highest notes for the piano keyboard
     let min = allnotes.indexOf(layoutnotes[0]);
     let max = allnotes.indexOf(layoutnotes[0]);
-    for (let i=1; i < layoutnotes.length; i++) {
+    for (let i = 1; i < layoutnotes.length; i++) {
         if (allnotes.indexOf(noteNames[layoutnotes[i]]) < min) {
             min = allnotes.indexOf(noteNames[layoutnotes[i]]);
         } else if (allnotes.indexOf(noteNames[layoutnotes[i]]) > max) {
             max = allnotes.indexOf(noteNames[layoutnotes[i]]);
         }
     }
-    console.log(`Low: ${allnotes[min]}. High: ${allnotes[max]}.`)
-    renderPianoKeyboard(min, max+1);
-}
-
-
-
-if (customFromURL) {
-    parseLegacyLayout(customFromURL);
-} else {
-    renderAngloKeyboard();
-    // renderPianoKeyboard();
+    
+    selectDrone();
+    colorOctaves();
+    renderPianoKeyboard(min, max + 1);
 }
 
 
@@ -108,14 +111,14 @@ function parseLegacyLayout(layout) {
         let push;
         let pull;
         let newRow = false;
-        if (layout[0] == "_"){
+        if (layout[0] == "_") {
             x = layout.substring(1, layout.indexOf('_', 1));
             push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
             pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
             if (buttonCount % 14 === 0 && buttonCount != 0) {
                 newRow = true;
             }
-            newLayout.push({push, pull, x, newRow});
+            newLayout.push({ push, pull, x, newRow });
             buttonCount++;
             layout = layout.slice(layout.indexOf('_', 1) + 3);
         } else if (layout[0] == ".") {
@@ -128,13 +131,13 @@ function parseLegacyLayout(layout) {
             if (buttonCount % 14 === 0 && buttonCount != 0) {
                 newRow = true;
             }
-            newLayout.push({push, pull, x, newRow});
+            newLayout.push({ push, pull, x, newRow });
             buttonCount++;
             layout = layout.slice(2);
         }
     }
     buttons.length = 0;
-    newLayout.forEach((button) => {buttons.push(button)});
+    newLayout.forEach((button) => { buttons.push(button) });
     angloKeyboard.innerHTML = "";
     renderAngloKeyboard();
     selectConcertinaButtons();
@@ -144,12 +147,12 @@ function parseLegacyLayout(layout) {
 
 function selectPianoKey() {
     for (key of keyboard.children) {
-            if (selection.includes(key.dataset.note)) {
-                key.classList.add("selected");
-                // console.log(key);
-            } else {
-                key.classList.remove("selected")
-            }
+        if (selection.includes(key.dataset.note)) {
+            key.classList.add("selected");
+            // console.log(key);
+        } else {
+            key.classList.remove("selected")
+        }
     }
 }
 
@@ -170,8 +173,8 @@ function selectConcertinaButtons() {
 
 function colorOctaves() {
     if (opt_coloroctave.checked) {
-    angloContainer.classList.add("pretty");
-    keyboardContainer.classList.add("pretty");
+        angloContainer.classList.add("pretty");
+        keyboardContainer.classList.add("pretty");
     } else {
         angloContainer.classList.remove("pretty");
         keyboardContainer.classList.remove("pretty");
@@ -202,11 +205,19 @@ function resetView() {
     opt_bellows = "";
 }
 
+function selectDrone() {
+    if (!opt_drone.checked && document.getElementsByClassName("drone")[0]) {
+        document.getElementsByClassName("drone")[0].style.visibility = 'hidden';
+    } else if (document.getElementsByClassName("drone")[0]) {
+        document.getElementsByClassName("drone")[0].style.visibility = 'visible';
+    }
+}
+
 
 function updateNoteSelection(note) {
     if (!selection.includes(note) && (multiselect.checked == true || selection.length == 0)) {
         selection.push(note);
-    } else if(!selection.includes(note)) {
+    } else if (!selection.includes(note)) {
         selection.length = 0;
         selection.push(note);
     } else {
@@ -233,7 +244,7 @@ function playNote(note) {
     let freq = notes[note];
     let fullVolume = 0;
     if (selection.length) {
-        fullVolume = -1 + 1/selection.length // avoid the utter cracklefest on webkit and mobile browsers
+        fullVolume = -1 + 1 / selection.length // avoid the utter cracklefest on webkit and mobile browsers
     }
     // console.debug(note + " (" + freq + " Hz)");
     oscillator = audioCtx.createOscillator(); // create Oscillator node
@@ -242,7 +253,7 @@ function playNote(note) {
     oscillator.connect(audioCtx.destination);
     oscillator.connect(gainNode); // connect the volume control to the oscillator
     gainNode.connect(audioCtx.destination);
-    gainNode.gain.setValueAtTime(-1, audioCtx.currentTime); // set the volume to zero when the note first starts playing
+    gainNode.gain.setValueAtTime(-1, audioCtx.currentTime); // set the volume to -1 when the note first starts playing
     gainNode.gain.linearRampToValueAtTime(fullVolume, audioCtx.currentTime + 0.01); // linearly increase to full volume in 0.1 seconds
     gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
     oscillator.start(audioCtx.currentTime);
@@ -265,7 +276,7 @@ function moveLeft() {
 }
 
 function moveRight() {
-    if (currentIndex < activeNotes.length-1) {
+    if (currentIndex < activeNotes.length - 1) {
         currentIndex++;
         selection.length = 0;
         updateNoteSelection(activeNotes[currentIndex]);
@@ -356,9 +367,8 @@ function bindAngloButtons() {
 }
 
 
-
-layout.addEventListener("change", () => {
-switch (layout.value) {
+function selectLayout() {
+    switch (opt_layout.value) {
         case "cgWheatstone30":
             buttons = cgWheatstone30;
             renderAngloKeyboard();
@@ -428,20 +438,20 @@ switch (layout.value) {
             renderAngloKeyboard();
             break;
     }
+}
+
+
+opt_layout.addEventListener("change", () => {
+    selectLayout();
 });
 
-
-const opt_pushpull = document.getElementById("pushpull");
-const opt_push = document.getElementById("push");
-const opt_pull = document.getElementById("pull");
-
-opt_pushpull.addEventListener("change", ()=> {
+opt_pushpull.addEventListener("change", () => {
     resetView();
 });
-opt_push.addEventListener("change", ()=> {
+opt_push.addEventListener("change", () => {
     togglePushView();
 });
-opt_pull.addEventListener("change", ()=> {
+opt_pull.addEventListener("change", () => {
     togglePullView();
 });
 
@@ -450,14 +460,10 @@ opt_coloroctave.addEventListener("change", () => {
 });
 
 opt_drone.addEventListener("change", () => {
-    if (!opt_drone.checked) {
-        document.getElementsByClassName("drone")[0].style.visibility = 'hidden';
-    } else {
-        document.getElementsByClassName("drone")[0].style.visibility = 'visible';
-    }
+    selectDrone();
 });
 
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     // console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
@@ -470,26 +476,38 @@ document.addEventListener('keydown', function(e) {
     } else if (e.code == "Escape") {
         aboutModal.style.display = "none";
     }
-  })
+})
 
-  document.addEventListener('keyup', function(e) {
+document.addEventListener('keyup', function (e) {
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = false;
     }
-  });
+});
 
 
-  // about modal
-  about.onclick = function() {
+// about modal
+about.onclick = function () {
     aboutModal.style.display = "block";
-  }
+}
 
-  closeModalBtn.onclick = function() {
+closeModalBtn.onclick = function () {
     aboutModal.style.display = "none";
-  }
+}
 
-  window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target == aboutModal) {
-      aboutModal.style.display = "none";
+        aboutModal.style.display = "none";
     }
-  }
+}
+
+// stuff to do when the page is loaded
+function init() {
+    opt_pushpull.checked = true;
+    if (customFromURL) {
+        parseLegacyLayout(customFromURL);
+    } else {
+        selectLayout();
+    }
+}
+
+init();

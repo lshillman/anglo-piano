@@ -78,6 +78,15 @@ button {
 
 }
 
+.natural:first-child {
+   border-left: 1px solid #767676;
+}
+
+.sharp:first-child + .natural {
+   margin-left: 0;
+   border-left: 1px solid #767676;
+}
+
 .sharp {
    border: 1px solid #fff;
    border-top: none;
@@ -90,6 +99,11 @@ button {
    z-index: 50;
    word-break: break-all;
    cursor: pointer;
+}
+
+.sharp:first-child {
+   margin-left: 0;
+   margin-right: -12.5px;
 }
 
 .sharp:hover {
@@ -123,16 +137,12 @@ button {
    /* white-space: nowrap; */
 }
 
-#keyboard:first-child {
-   border-left: 1px solid #767676;
-}
-
 #chords {
    border: 1px solid #767676;
    border-top: none;
    border-radius: 0 0 8px 8px;
    width: fit-content;
-   overflow-x: scroll;
+   overflow-x: auto;
    max-width: 100%;
    white-space: nowrap;
    margin: 0 auto;
