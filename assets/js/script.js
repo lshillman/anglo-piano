@@ -34,6 +34,7 @@ const opt_pull = document.getElementById("pull");
 let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
 const opt_concertinaLabels = document.getElementById("concertina-labels");
 const opt_pianoLabels = document.getElementById("piano-labels");
+const opt_accidentals = document.getElementById("accidentals");
 
 // an object that contains all currently-displayed concertina buttons
 let buttons = cgWheatstone30;
@@ -54,6 +55,9 @@ function renderPianoKeyboard(min, max) {
     for (let i = min; i < max; i++) {
         let note = allnotes[i];
         let label = note;
+        if (opt_accidentals.checked) {
+            label = altNoteNames[note];
+        }
         if (!opt_pianoLabels.checked) {
             label = "";
         }
@@ -82,6 +86,10 @@ function renderAngloKeyboard() {
         layoutnotes.push(button.pull);
         let pushLabel = button.push;
         let pullLabel = button.pull;
+        if (opt_accidentals.checked) {
+            pushLabel = altNoteNames[button.push];
+            pullLabel = altNoteNames[button.pull];
+        }
         if (!opt_concertinaLabels.checked) {
             pushLabel = "";
             pullLabel = "";
@@ -480,6 +488,10 @@ opt_concertinaLabels.addEventListener("change", () => {
 });
 
 opt_pianoLabels.addEventListener("change", () => {
+    renderAngloKeyboard();
+});
+
+opt_accidentals.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 
