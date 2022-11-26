@@ -11,6 +11,7 @@ const angloKeyboard = document.getElementById("anglo-keyboard");
 const multiselect = document.getElementById("multiselect");
 const chordBar = document.getElementById("chords");
 
+// chord bar
 const maj = document.getElementById("major");
 const min = document.getElementById("minor");
 const dim = document.getElementById("diminished");
@@ -37,7 +38,7 @@ const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 
 // an object that contains all currently-displayed concertina buttons
-let buttons = cgWheatstone30;
+let buttons = [];
 
 // an array to keep track of all currently-displayed piano notes. Required for arrow key navigation.
 const activeNotes = [];
@@ -389,8 +390,13 @@ function bindAngloButtons() {
 
 function selectLayout() {
     switch (opt_layout.value) {
+        case "customFromURL":
+            parseLegacyLayout(customFromURL);
+            break;
         case "cgWheatstone30":
+            console.log("Switched to Wheatstone 30. Now attempting to write buttons...")
             buttons = cgWheatstone30;
+            console.log("Attempt complete");
             renderAngloKeyboard();
             break;
         case "cgJeffries30":
@@ -537,6 +543,11 @@ window.onclick = function (event) {
 function init() {
     opt_pushpull.checked = true;
     if (customFromURL) {
+        let newOption = document.createElement("option");
+        newOption.value = "customFromURL";
+        newOption.text = "Custom layout";
+        opt_layout.insertBefore(newOption, opt_layout.firstChild);
+        opt_layout.value = "customFromURL";    
         parseLegacyLayout(customFromURL);
     } else {
         selectLayout();
