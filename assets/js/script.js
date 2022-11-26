@@ -25,13 +25,15 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 let customFromURL = window.location.href.split('?')[1];
 
-let opt_bellows = "";
-let opt_coloroctave = document.getElementById("coloroctave");
-let opt_drone = document.getElementById("drone");
-let droneDiv = document.getElementById("drone-option");
+const opt_coloroctave = document.getElementById("coloroctave");
+const opt_drone = document.getElementById("drone");
+const droneDiv = document.getElementById("drone-option");
 const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
+let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
+const opt_concertinaLabels = document.getElementById("concertina-labels");
+const opt_pianoLabels = document.getElementById("piano-labels");
 
 // an object that contains all currently-displayed concertina buttons
 let buttons = cgWheatstone30;
@@ -51,12 +53,16 @@ function renderPianoKeyboard(min, max) {
     let allnotes = Object.keys(notes); // get an array of notes from the note object
     for (let i = min; i < max; i++) {
         let note = allnotes[i];
+        let label = note;
+        if (!opt_pianoLabels.checked) {
+            label = "";
+        }
         activeNotes.push(note);
         let noteclass = "natural";
         if (note.includes("#") || note.includes("b")) {
             noteclass = "sharp";
         }
-        keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclass} ${"o" + note.substr(-1)}">${note}</button>`;
+        keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclass} ${"o" + note.substr(-1)}">${label}</button>`;
     }
     bindPianoKeys();
     selectConcertinaButtons();
@@ -74,6 +80,12 @@ function renderAngloKeyboard() {
     for (button of buttons) {
         layoutnotes.push(button.push);
         layoutnotes.push(button.pull);
+        let pushLabel = button.push;
+        let pullLabel = button.pull;
+        if (!opt_concertinaLabels.checked) {
+            pushLabel = "";
+            pullLabel = "";
+        }
         let droneclass = "";
         if (button.drone) {
             droneDiv.style.visibility = 'visible';
@@ -82,7 +94,7 @@ function renderAngloKeyboard() {
         if (button.newRow) {
             angloKeyboard.innerHTML += `<br>`;
         }
-        angloKeyboard.innerHTML += `<div class="button ${opt_bellows} ${droneclass}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${button.push}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${button.pull}</button></div></div>`;
+        angloKeyboard.innerHTML += `<div class="button ${opt_bellows} ${droneclass}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
     }
     bindAngloButtons();
 
@@ -462,6 +474,15 @@ opt_coloroctave.addEventListener("change", () => {
 opt_drone.addEventListener("change", () => {
     selectDrone();
 });
+
+opt_concertinaLabels.addEventListener("change", () => {
+    renderAngloKeyboard();
+});
+
+opt_pianoLabels.addEventListener("change", () => {
+    renderAngloKeyboard();
+});
+
 
 document.addEventListener('keydown', function (e) {
     // console.log(e.code);
