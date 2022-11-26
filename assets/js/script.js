@@ -1,17 +1,17 @@
-const aboutLink = document.getElementById("about");
-var aboutModal = document.getElementById("about-modal");
-var closeModalBtn = document.getElementsByClassName("close")[0];
+// create web audio api context
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+// store a custom layout passed in via the URL
+let customFromURL = window.location.href.split('?')[1];
 
-
+// keyboards
 const keyboardContainer = document.getElementById("keyboard-container");
 const keyboard = document.getElementById("keyboard");
 const angloContainer = document.getElementById("anglo-container");
 const angloKeyboard = document.getElementById("anglo-keyboard");
-const multiselect = document.getElementById("multiselect");
-const chordBar = document.getElementById("chords");
 
 // chord bar
+const chordBar = document.getElementById("chords");
 const maj = document.getElementById("major");
 const min = document.getElementById("minor");
 const dim = document.getElementById("diminished");
@@ -19,23 +19,24 @@ const sev = document.getElementById("seventh");
 const maj7 = document.getElementById("major7");
 const min7 = document.getElementById("minor7");
 
+// user-defined display options
 const opt_layout = document.getElementById("layout");
-
-// create web audio api context
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-let customFromURL = window.location.href.split('?')[1];
-
-const opt_coloroctave = document.getElementById("coloroctave");
 const opt_drone = document.getElementById("drone");
 const droneDiv = document.getElementById("drone-option");
 const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
 let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
+const multiselect = document.getElementById("multiselect");
+const opt_coloroctave = document.getElementById("coloroctave");
 const opt_concertinaLabels = document.getElementById("concertina-labels");
 const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
+
+// the 'about' modal
+const aboutLink = document.getElementById("about");
+var aboutModal = document.getElementById("about-modal");
+var closeModalBtn = document.getElementsByClassName("close")[0];
 
 // an object that contains all currently-displayed concertina buttons
 let buttons = [];
@@ -49,6 +50,7 @@ const selection = [];
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
+// anglo keyboard calculates min / max and must be rendered first
 function renderPianoKeyboard(min, max) {
     keyboard.innerHTML = "";
     activeNotes.length = 0;
@@ -73,7 +75,6 @@ function renderPianoKeyboard(min, max) {
     selectConcertinaButtons();
     selectPianoKey();
 }
-
 
 
 function renderAngloKeyboard() {
@@ -123,7 +124,7 @@ function renderAngloKeyboard() {
     renderPianoKeyboard(min, max + 1);
 }
 
-
+// to render layouts from the old Anglo Piano that assumed a 14-column grid
 function parseLegacyLayout(layout) {
     let newLayout = [];
     let buttonCount = 0;
@@ -163,7 +164,6 @@ function parseLegacyLayout(layout) {
     renderAngloKeyboard();
     selectConcertinaButtons();
 }
-
 
 
 function selectPianoKey() {
@@ -394,9 +394,7 @@ function selectLayout() {
             parseLegacyLayout(customFromURL);
             break;
         case "cgWheatstone30":
-            console.log("Switched to Wheatstone 30. Now attempting to write buttons...")
             buttons = cgWheatstone30;
-            console.log("Attempt complete");
             renderAngloKeyboard();
             break;
         case "cgJeffries30":
