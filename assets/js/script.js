@@ -166,6 +166,26 @@ function parseLegacyLayout(layout) {
 }
 
 
+function encodeLayout() {
+    let encodedLayout = "";
+    for (element of angloKeyboard.children) {
+        if (element.nodeName != "BR") {
+            if (element.style.marginLeft != "0px") {
+                encodedLayout += `_${element.style.marginLeft.replace("px", "")}_`
+            }
+            for (div of element.children) {
+                for (button of div.children) {
+                    encodedLayout += encoder[button.dataset.note]
+                }
+            }
+        } else {
+            encodedLayout += "~";
+        }
+    }
+    return encodedLayout;
+}
+
+
 function selectPianoKey() {
     for (key of keyboard.children) {
         if (selection.includes(key.dataset.note)) {
