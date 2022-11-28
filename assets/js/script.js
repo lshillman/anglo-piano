@@ -32,6 +32,7 @@ const opt_coloroctave = document.getElementById("coloroctave");
 const opt_concertinaLabels = document.getElementById("concertina-labels");
 const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
+const opt_absentNotes = document.getElementById("absent-notes");
 
 // the 'about' modal
 const aboutLink = document.getElementById("about");
@@ -70,7 +71,7 @@ function renderPianoKeyboard(min, max, layoutnotes) {
             noteclasses = "sharp";
         }
         noteclasses += ` o${note.substr(-1)}`
-        if (!layoutnotes.includes(note)) {
+        if (opt_absentNotes.checked && !layoutnotes.includes(note)) {
             noteclasses += " absent"
         }
         keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclasses}">${label}</button>`;
@@ -520,6 +521,10 @@ opt_pianoLabels.addEventListener("change", () => {
 });
 
 opt_accidentals.addEventListener("change", () => {
+    renderAngloKeyboard();
+});
+
+opt_absentNotes.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 
