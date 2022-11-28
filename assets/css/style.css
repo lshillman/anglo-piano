@@ -114,6 +114,26 @@ button {
    margin-left: -12.5px;
 }
 
+#keyboard .absent {
+   background-color: #ccc;
+   color: #555;
+}
+
+#keyboard .sharp.absent {
+   border: 1px solid #767676;
+}
+
+#keyboard .sharp.absent.selected {
+   border-top: 1px solid #767676;
+   border-left: 1px solid #fff;
+   border-right: 1px solid #fff;
+   border-bottom: 1px solid #fff;
+}
+
+#keyboard .absent.selected, #keyboard .absent.selected:hover {
+   background-color: #c588ff;
+}
+
 #keyboard-container {
    margin-top: 70px;
 }

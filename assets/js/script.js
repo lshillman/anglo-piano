@@ -51,7 +51,7 @@ const selection = [];
 let currentIndex = 1;
 
 // anglo keyboard calculates min / max and must be rendered first
-function renderPianoKeyboard(min, max) {
+function renderPianoKeyboard(min, max, layoutnotes) {
     keyboard.innerHTML = "";
     activeNotes.length = 0;
     let allnotes = Object.keys(notes); // get an array of notes from the note object
@@ -65,11 +65,15 @@ function renderPianoKeyboard(min, max) {
             label = "";
         }
         activeNotes.push(note);
-        let noteclass = "natural";
+        let noteclasses = "natural";
         if (note.includes("#") || note.includes("b")) {
-            noteclass = "sharp";
+            noteclasses = "sharp";
         }
-        keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclass} ${"o" + note.substr(-1)}">${label}</button>`;
+        noteclasses += ` o${note.substr(-1)}`
+        if (!layoutnotes.includes(note)) {
+            noteclasses += " absent"
+        }
+        keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclasses}">${label}</button>`;
     }
     bindPianoKeys();
     selectConcertinaButtons();
@@ -121,7 +125,7 @@ function renderAngloKeyboard() {
     
     selectDrone();
     colorOctaves();
-    renderPianoKeyboard(min, max + 1);
+    renderPianoKeyboard(min, max + 1, layoutnotes);
 }
 
 // to render layouts from the old Anglo Piano that assumed a 14-column grid
