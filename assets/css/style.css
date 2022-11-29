@@ -219,7 +219,8 @@ button {
    margin-bottom: 0.5rem;
 }
 
-#anglo-keyboard {
+#anglo-keyboard,
+#editor {
    text-align: left;
    width: fit-content;
    white-space: nowrap;
@@ -394,8 +395,47 @@ button {
 }
 
 
+/* ===== EDITOR ===== */
 
-/*===== ABOUT MODAL =====*/
+#editor-container {
+   display: none;
+}
+
+.editor-button {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	white-space: normal;
+	/* background-color: pink; */
+}
+
+.editor-button .top {
+   padding-bottom: 1px;
+}
+
+.editor-button .bottom {
+   padding-top: 1px;
+}
+ 
+ .editor-button input[type=text] {
+   width: 50px;
+   height: 24px;
+   padding: 0;
+   box-sizing: border-box;
+   text-align: center;
+   border: 1px solid #767676;
+   font-family: monospace;
+ }
+ 
+ .editor-button .top input {
+   border-radius: 6px 6px 0 0;
+ }
+ 
+ .editor-button .bottom input {
+   border-radius: 0 0 6px 6px;
+ }
+
+/* ===== ABOUT MODAL ===== */
 
 /* overlay */
 .modal {
