@@ -3,6 +3,9 @@ const editorContainer = document.getElementById("editor-container");
 const editor = document.getElementById("editor");
 const editLayoutBtn = document.getElementById("editLayoutBtn");
 
+let validNotes = Object.keys(noteNames);
+
+
 
 
 
@@ -26,18 +29,29 @@ function renderEditor() {
 }
 
 
-
+function isValid(note) {
+    if (validNotes.includes(note)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 
 
 function bindInputs() {
     let allfields = document.querySelectorAll(".editor-button input");
     allfields.forEach((field) => field.addEventListener('input', (e) => {
-        console.log(e.target.value);
+        if (isValid(e.target.value)) {
+            e.target.classList.remove("invalid");
+        }
     }
     ));
     allfields.forEach((field) => field.addEventListener('blur', (e) => {
         console.log("Now validating " + e.target.value);
+        if (!isValid(e.target.value)) {
+            e.target.classList.add("invalid");
+        }
     }));
 }
 
