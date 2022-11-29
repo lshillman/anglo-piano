@@ -399,6 +399,7 @@ button {
 
 #editor-container {
    display: none;
+   margin-top: 5rem;
 }
 
 .editor-button {
