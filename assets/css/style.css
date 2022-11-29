@@ -139,7 +139,8 @@ button {
 }
 
 #keyboard-container,
-#anglo-container {
+#anglo-container,
+#editor-container {
    margin-left: auto;
    margin-right: auto;
    width: fit-content;
