@@ -3,10 +3,13 @@ const editorSection = document.getElementById("editor");
 const editorContainer = document.getElementById("editor-anglo-container");
 const editorKeyboard = document.getElementById("editor-anglo-keyboard");
 const editLayoutBtn = document.getElementById("editLayoutBtn");
-
+const moveRightBtn = document.getElementById("moveRightBtn");
+const moveLeftBtn = document.getElementById("moveLeftBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 
 let validNotes = Object.keys(editorNotes);
+let currentButton;
+let currentField;
 
 
 
@@ -71,6 +74,10 @@ function bindInputs() {
         }
     }
     ));
+    allfields.forEach((field) => field.addEventListener('focus', (e) => {
+        currentField = e.target;
+        currentButton = e.target.parentNode.parentNode;
+    }));
     allfields.forEach((field) => field.addEventListener('focusout', (e) => {
         e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
         console.log(document.activeElement);
@@ -102,12 +109,31 @@ function bindInputs() {
 }
 
 
+function moveButton(direction) {
+    currentField.focus();
+    let margin = currentButton.style.marginLeft.slice(0,-2)*1;
+    if (direction == "left") {
+        if (margin - 10 >= 0) {
+            currentButton.style.marginLeft = `${margin - 10}px`;
+        } else if (margin != 0) {
+            currentButton.style.marginLeft = '0px';
+        }
+    } else if (direction == "right") {
+        currentButton.style.marginLeft = `${margin + 10}px`;
+    }
+}
 
 
 
 
 
+moveRightBtn.addEventListener("click", () => {
+    moveButton("right");
+});
 
+moveLeftBtn.addEventListener("click", () => {
+    moveButton("left");
+});
 
 editLayoutBtn.addEventListener("click", () => {
     renderEditor();
