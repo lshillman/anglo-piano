@@ -25,7 +25,7 @@ function renderEditor() {
         if (button.newRow) {
             editorKeyboard.innerHTML += `<br>`;
         }
-        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text value="${pushLabel}"></div><div class="bottom"><input type=text value="${pullLabel}"></div></div>`;
+        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" value="${pushLabel}"></div><div class="bottom"><input type=text maxlength="3" value="${pullLabel}"></div></div>`;
     }
     bindInputs();
 
@@ -51,13 +51,15 @@ function isValid(note) {
 function bindInputs() {
     let allfields = document.querySelectorAll(".editor-button input");
     allfields.forEach((field) => field.addEventListener('input', (e) => {
-        if (isValid(e.target.value)) {
+        if (isValid(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase())) {
             e.target.classList.remove("invalid");
+            playNote(noteNames[e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()]);
         }
     }
     ));
     allfields.forEach((field) => field.addEventListener('blur', (e) => {
         console.log("Now validating " + e.target.value);
+        e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
         if (!isValid(e.target.value)) {
             e.target.classList.add("invalid");
         }
