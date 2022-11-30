@@ -449,6 +449,11 @@ button {
    border-width: 2px;
  }
 
+ .editor-button.deleted {
+   width: 0;
+   opacity: 0;
+ }
+
 #editor-options {
    display: flex;
    text-align: left;

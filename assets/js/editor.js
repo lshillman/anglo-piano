@@ -41,7 +41,17 @@ function isValid(note) {
 }
 
 
-
+function deleteButton(button) {
+    // immediately start fading the button. After button faded, set the width and the left margin to 0. Finally, set display:none.
+    button.style.cssText += "transition:margin-left 0.2s ease 0.2s, width 0.2s ease 0.2s, opacity 0.2s;"
+    button.style.marginLeft = 0;
+    button.style.width = 0;
+    button.style.opacity = 0;
+    setTimeout(() => {
+        button.style.display = "none";
+      }, "400")
+      
+}
 
 
 
@@ -57,11 +67,14 @@ function bindInputs() {
         }
     }
     ));
-    allfields.forEach((field) => field.addEventListener('blur', (e) => {
-        console.log("Now validating " + e.target.value);
+    allfields.forEach((field) => field.addEventListener('focusout', (e) => {
         e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
+        console.log(document.activeElement);
         if (!isValid(e.target.value)) {
             e.target.classList.add("invalid");
+        }
+        if (!e.target.parentNode.parentNode.firstChild.firstChild.value && !e.target.parentNode.parentNode.lastChild.firstChild.value && !e.target.parentNode.parentNode.contains(e.relatedTarget)) {
+            deleteButton(e.target.parentNode.parentNode);
         }
     }));
     allfields.forEach((field) => field.addEventListener('keydown', (e) => {
