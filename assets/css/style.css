@@ -34,11 +34,19 @@ header h1 {
    display: inline-block;
 }
 
-header a {
+#about {
    line-height: 50px;
+   background-color: transparent;
    color: #fff;
+   border: none;
+   padding: 0 1rem;
    text-decoration: none;
-   font-size: 1rem;;
+   font-size: 1rem;
+   cursor: pointer;
+}
+
+#about:hover {
+   background-color: #555;
 }
 
 body {
@@ -140,7 +148,7 @@ button {
 
 #keyboard-container,
 #anglo-container,
-#editor-container {
+#editor-anglo-container {
    margin-left: auto;
    margin-right: auto;
    width: fit-content;
@@ -195,7 +203,7 @@ button {
    border-left: none !important;
 }
 
-#options {
+#viewer-options {
    display: flex;
    text-align: left;
    max-width: fit-content;
@@ -204,23 +212,23 @@ button {
    flex-wrap: wrap;
 }
 
-#options div {
+#viewer-options div {
    padding: 0;
    white-space: nowrap;
 }
 
-#options div div {
+#viewer-options div div {
    display:flex;
    align-items: baseline;
    gap: 0.3rem;
 }
 
-#options select {
+#viewer-options select {
    margin-bottom: 0.5rem;
 }
 
 #anglo-keyboard,
-#editor {
+#editor-anglo-keyboard {
    text-align: left;
    width: fit-content;
    white-space: nowrap;
@@ -397,7 +405,7 @@ button {
 
 /* ===== EDITOR ===== */
 
-#editor-container {
+#editor {
    display: none;
    margin-top: 5rem;
 }
@@ -440,6 +448,20 @@ button {
    border-color: red;
    border-width: 2px;
  }
+
+#editor-options {
+   display: flex;
+   text-align: left;
+   max-width: fit-content;
+   margin: 2rem auto;
+   gap: 2rem;
+   flex-wrap: wrap;
+}
+
+#editor-options div {
+   padding: 0;
+   white-space: nowrap;
+}
 
 /* ===== ABOUT MODAL ===== */
 
