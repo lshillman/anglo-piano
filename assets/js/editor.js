@@ -5,6 +5,7 @@ const editorKeyboard = document.getElementById("editor-anglo-keyboard");
 const editLayoutBtn = document.getElementById("editLayoutBtn");
 const moveRightBtn = document.getElementById("moveRightBtn");
 const moveLeftBtn = document.getElementById("moveLeftBtn");
+const deleteBtn = document.getElementById("deleteBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 
 let validNotes = Object.keys(editorNotes);
@@ -134,6 +135,10 @@ moveRightBtn.addEventListener("click", () => {
 moveLeftBtn.addEventListener("click", () => {
     moveButton("left");
 });
+
+deleteBtn.addEventListener("click", () => {
+    deleteButton(currentButton);
+})
 
 editLayoutBtn.addEventListener("click", () => {
     renderEditor();
