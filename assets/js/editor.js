@@ -42,15 +42,19 @@ function isValid(note) {
 
 
 function deleteButton(button) {
-    // immediately start fading the button. After button faded, set the width and the left margin to 0. Finally, set display:none.
+    // immediately start fading the button. After button faded, set the width and the left margin to 0. Finally, if the button is the last in its row, remove the next line break, and then remove the button.
     button.style.cssText += "transition:margin-left 0.2s ease 0.2s, width 0.2s ease 0.2s, opacity 0.2s;"
     button.style.marginLeft = 0;
     button.style.width = 0;
     button.style.opacity = 0;
     setTimeout(() => {
-        button.style.display = "none";
-      }, "400")
-      
+        if (button.nextSibling && button.nextSibling.nodeName == "BR" && button.parentNode.firstChild == button) {
+            button.nextSibling.remove();
+        } else if (button.nextSibling && button.previousSibling && button.nextSibling.nodeName == "BR" && button.previousSibling.nodeName == "BR") {
+            button.nextSibling.remove();
+        }
+        button.remove();
+      }, "400")      
 }
 
 
