@@ -117,4 +117,5 @@ cancelBtn.addEventListener("click", () => {
     editorKeyboard.innerHTML = "";
     editorSection.style.display = "none";
     viewerSection.style.display = "block";
+    currentMode = "view"
 })
