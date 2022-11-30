@@ -90,7 +90,7 @@ function renderAngloKeyboard() {
     let layoutnotes = [];
     let allnotes = Object.keys(notes);
 
-    droneDiv.style.visibility = 'hidden';
+    droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
         layoutnotes.push(button.push);
@@ -107,7 +107,7 @@ function renderAngloKeyboard() {
         }
         let droneclass = "";
         if (button.drone) {
-            droneDiv.style.visibility = 'visible';
+            droneDiv.style.display = 'block';
             droneclass = "drone";
         }
         if (button.newRow) {
