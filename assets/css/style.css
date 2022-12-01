@@ -34,11 +34,19 @@ header h1 {
    display: inline-block;
 }
 
-header a {
+#about {
    line-height: 50px;
+   background-color: transparent;
    color: #fff;
+   border: none;
+   padding: 0 1rem;
    text-decoration: none;
-   font-size: 1rem;;
+   font-size: 1rem;
+   cursor: pointer;
+}
+
+#about:hover {
+   background-color: #555;
 }
 
 body {
@@ -139,7 +147,8 @@ button {
 }
 
 #keyboard-container,
-#anglo-container {
+#anglo-container,
+#editor-anglo-container {
    margin-left: auto;
    margin-right: auto;
    width: fit-content;
@@ -194,7 +203,7 @@ button {
    border-left: none !important;
 }
 
-#options {
+#viewer-options {
    display: flex;
    text-align: left;
    max-width: fit-content;
@@ -203,22 +212,44 @@ button {
    flex-wrap: wrap;
 }
 
-#options div {
+#viewer-options div {
    padding: 0;
    white-space: nowrap;
 }
 
-#options div div {
+#viewer-options div div {
    display:flex;
    align-items: baseline;
    gap: 0.3rem;
 }
 
-#options select {
+#viewer-options select {
    margin-bottom: 0.5rem;
 }
 
-#anglo-keyboard {
+#viewer-options button,
+#editor-options button,
+#editor-header button {
+   height: 30px;
+   padding-left: 0.5rem;
+   padding-right: 0.5rem;
+   border: 1px solid #767676;
+   border-radius: 6px;
+}
+
+#viewer-options button:hover,
+#editor-options button:hover {
+   background-color: #eee;
+}
+
+#viewer-options button:active,
+#editor-options button:active {
+   background-color: #333;
+   color: #fff;
+}
+
+#anglo-keyboard,
+#editor-anglo-keyboard {
    text-align: left;
    width: fit-content;
    white-space: nowrap;
@@ -319,11 +350,12 @@ button {
    display: none;
 }
 
+/* ===== VIEWER OPTIONS ===== */
 
 
 
 
-/*===== OCTAVE COLORS =====*/
+/* ===== OCTAVE COLORS ===== */
 
 .octave-top {
       height: 30px;
@@ -365,9 +397,6 @@ button {
    background-color: #8080FF;
 }
 
-
-
-
 #keyboard-container.pretty .natural.o2 {
    box-shadow: 0 16px 0 0 #FACD91 inset;
 }
@@ -393,8 +422,104 @@ button {
 }
 
 
+/* ===== EDITOR ===== */
 
-/*===== ABOUT MODAL =====*/
+#editor {
+   display: none;
+   margin-top: 5rem;
+}
+
+#editor-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 0 2rem 2rem 2rem;
+}
+
+.editor-button {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	white-space: normal;
+	/* background-color: pink; */
+}
+
+.editor-button.selected {
+   background-color: #e6ccff;
+   border-radius: 8px;
+}
+
+.editor-button .top {
+   padding-bottom: 1px;
+}
+
+.editor-button .bottom {
+   padding-top: 1px;
+}
+ 
+ .editor-button input[type=text] {
+   width: 50px;
+   height: 24px;
+   padding: 0;
+   box-sizing: border-box;
+   text-align: center;
+   border: 1px solid #767676;
+   font-family: monospace;
+ }
+
+ .editor-button input[type=text]:focus {
+   outline: none;
+ }
+ 
+ .editor-button .top input {
+   border-radius: 6px 6px 0 0;
+ }
+
+ .editor-button .top input:focus {
+   border: 2px solid #0000FF;
+ }
+
+ .editor-button .top input:hover {
+   background-color: #E9E9FF;
+ }
+ 
+ .editor-button .bottom input {
+   border-radius: 0 0 6px 6px;
+ }
+
+ .editor-button .bottom input:focus {
+   border: 2px solid #A30014;
+ }
+
+ .editor-button .bottom input:hover {
+   background-color: #FFE7EA;
+ }
+
+ .editor-button input.invalid {
+   border-color: red;
+   border-width: 2px;
+ }
+
+ .editor-button.deleted {
+   width: 0;
+   opacity: 0;
+ }
+
+#editor-options {
+   display: flex;
+   text-align: left;
+   max-width: fit-content;
+   margin: 2rem auto;
+   gap: 2rem;
+   flex-wrap: wrap;
+}
+
+#editor-options div {
+   padding: 0;
+   white-space: nowrap;
+}
+
+/* ===== ABOUT MODAL ===== */
 
 /* overlay */
 .modal {

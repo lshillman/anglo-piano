@@ -51,6 +51,9 @@ const selection = [];
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
+// are we viewing or editing?
+let currentMode;
+
 // anglo keyboard calculates min / max and must be rendered first
 function renderPianoKeyboard(min, max, layoutnotes) {
     keyboard.innerHTML = "";
@@ -76,6 +79,7 @@ function renderPianoKeyboard(min, max, layoutnotes) {
         }
         keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclasses}">${label}</button>`;
     }
+    currentMode = "view";
     bindPianoKeys();
     selectConcertinaButtons();
     selectPianoKey();
@@ -86,7 +90,7 @@ function renderAngloKeyboard() {
     let layoutnotes = [];
     let allnotes = Object.keys(notes);
 
-    droneDiv.style.visibility = 'hidden';
+    droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
         layoutnotes.push(button.push);
@@ -103,7 +107,7 @@ function renderAngloKeyboard() {
         }
         let droneclass = "";
         if (button.drone) {
-            droneDiv.style.visibility = 'visible';
+            droneDiv.style.display = 'block';
             droneclass = "drone";
         }
         if (button.newRow) {
@@ -313,7 +317,7 @@ function playSelection() {
 }
 
 function moveLeft() {
-    if (currentIndex > 0) {
+    if (currentIndex > 0 && currentMode == "view") {
         currentIndex--;
         selection.length = 0;
         updateNoteSelection(activeNotes[currentIndex]);
@@ -322,7 +326,7 @@ function moveLeft() {
 }
 
 function moveRight() {
-    if (currentIndex < activeNotes.length - 1) {
+    if (currentIndex < activeNotes.length - 1 && currentMode == "view") {
         currentIndex++;
         selection.length = 0;
         updateNoteSelection(activeNotes[currentIndex]);

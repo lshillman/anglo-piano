@@ -16,9 +16,10 @@
             <h1>Anglo Piano</h1>
         </div>
         <div>
-            <a href="#" id="about">About</a>
+            <button id="about">About</a>
         </div>
     </header>
+    <div id="viewer">
     <div id="keyboard-container">
         <div id="keyboard">
             <!-- piano keys -->
@@ -34,7 +35,7 @@
         </div>
     </div>
 
-    <div id="options">
+    <div id="viewer-options">
         <div>
             <select id="layout">
                 <option value="cgWheatstone30">CG Wheatstone 30</option>
@@ -59,10 +60,10 @@
                 <input type="checkbox" id="drone" name="drone" checked="checked">
                 <label for="drone"> Drone key</label>
             </div>
-            <!-- <div>
-                <button>Edit layout</button>
-                <button>Get link</button>
-            </div> -->
+            <div>
+                <button id="editLayoutBtn">Edit layout</button>
+                <!-- <button>Get link</button> -->
+            </div>
         </div>
         <div>
             <div>
@@ -110,6 +111,41 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <div id="editor">
+        <div id="editor-anglo-container">
+            <div id="editor-header">
+                <h2>Editing layout</h2>
+                <div id="editor-actions">
+                    <button id="cancelBtn">Cancel</button>
+                    <button id="finishedBtn">Finished</button>
+                </div>
+            </div>
+            <div id="editor-anglo-keyboard">
+                <!-- button text inputs -->
+            </div>
+        </div>
+
+        <div id="editor-options">
+            <div>
+                <p>Note:</p>
+                <button id="noteUp">▲</button>
+                <button id="noteDown">▼</button>
+            </div>
+            <div>
+                <p>Button:</p>
+                <button id="moveLeftBtn">⭠</button>
+                <button id="moveRightBtn">⭢</button>
+                <button id="deleteBtn">Delete</button>
+            </div>
+            <div>
+                <p>Entire layout:</p>
+                <button id="layoutUp">▲</button>
+                <button id="layoutDown">▼</button>
+            </div>
+        </div>
+    </div>
 
     <!-- About Modal -->
     <div id="about-modal" class="modal">
@@ -118,7 +154,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Hi, I’m Luke.</h2>
-            <p>I made Anglo Piano to help myself transcribe things and puzzle out chords without excessive hunting-and-pecking. It works pretty well for me as someone who is mostly illiterate and plays by ear. Your mileage may vary.</p>
+            <p>I made Anglo Piano to help myself transcribe things, puzzle out chords, and explore different keyboard layouts.</p>
             <p>If you find this tool helpful, I’d love to know! Contact me via <a href="https://www.concertina.net/forums/index.php?/topic/24636-anglo-piano-webapp/" target="_blank" rel="noreferrer noopener">concertina.net</a>, <a rel="me noreferrer noopener" href="https://wandering.shop/@luke" target="_blank">mastodon</a>, <a href="https://www.youtube.com/lshillman" target="_blank" rel="noreferrer noopener">youtube</a>, or email to ‘hi’ at this domain.</p>
             <p>If you feel like it, you can <a href="https://ko-fi.com/luuke" target="_blank" rel="noreferrer noopener">buy me a coffee</a>.</p>
         </div>
@@ -128,5 +164,6 @@
     <script src="./assets/js/notes.js"></script>
     <script src="./assets/js/layouts.js"></script>
     <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/editor.js"></script>
 </body>
 </html>
