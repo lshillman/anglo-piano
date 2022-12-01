@@ -228,7 +228,8 @@ button {
 }
 
 #viewer-options button,
-#editor-options button {
+#editor-options button,
+#editor-header button {
    height: 30px;
    padding-left: 0.5rem;
    padding-right: 0.5rem;
@@ -426,6 +427,13 @@ button {
 #editor {
    display: none;
    margin-top: 5rem;
+}
+
+#editor-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 0 2rem 2rem 2rem;
 }
 
 .editor-button {

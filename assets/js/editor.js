@@ -8,7 +8,7 @@ const noteUpBtn = document.getElementById("noteUp")
 const noteDownBtn = document.getElementById("noteDown")
 
 const layoutUpBtn = document.getElementById("layoutUp")
-const layoutDownBtn = document.getElementById("noteDown")
+const layoutDownBtn = document.getElementById("layoutDown")
 
 const moveRightBtn = document.getElementById("moveRightBtn");
 const moveLeftBtn = document.getElementById("moveLeftBtn");
@@ -202,6 +202,14 @@ function moveButton(direction) {
 }
 
 
+
+layoutUpBtn.addEventListener("click", () => {
+    transposeLayout("up");
+});
+
+layoutDownBtn.addEventListener("click", () => {
+    transposeLayout("down");
+});
 
 noteUpBtn.addEventListener("click", () => {
     transposeNote("up");
