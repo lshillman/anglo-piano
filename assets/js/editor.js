@@ -3,6 +3,13 @@ const editorSection = document.getElementById("editor");
 const editorContainer = document.getElementById("editor-anglo-container");
 const editorKeyboard = document.getElementById("editor-anglo-keyboard");
 const editLayoutBtn = document.getElementById("editLayoutBtn");
+
+const noteUpBtn = document.getElementById("noteUp")
+const noteDownBtn = document.getElementById("noteDown")
+
+const layoutUpBtn = document.getElementById("layoutUp")
+const layoutDownBtn = document.getElementById("noteDown")
+
 const moveRightBtn = document.getElementById("moveRightBtn");
 const moveLeftBtn = document.getElementById("moveLeftBtn");
 const deleteBtn = document.getElementById("deleteBtn");
@@ -74,12 +81,31 @@ function deleteButton(button) {
       }, "400")      
 }
 
+
+function transposeNote(direction) {
+    currentField.focus()
+    if (direction == "up") {
+        if (editorNotes[currentField.value].next) {
+            currentField.value = editorNotes[currentField.value].next;
+        }
+        playNote(noteNames[currentField.value]);
+    } else if (direction == "down") {
+        if (editorNotes[currentField.value].prev) {
+            currentField.value = editorNotes[currentField.value].prev;
+        }
+        playNote(noteNames[currentField.value]);
+    }
+
+}
+
+
+
+
 function transposeLayout(direction) {
     let allInputs = document.querySelectorAll("#editor-anglo-keyboard input");
     if (direction == "up") {
         let canTranspose = true;
         for (let i = 0; i < allInputs.length; i++) {
-            // console.log(editorNotes[noteNames[allinputs[i].value]].next)
             if (!editorNotes[noteNames[allInputs[i].value]].next) {
                 canTranspose = false;
                 break;
@@ -87,7 +113,6 @@ function transposeLayout(direction) {
         }
         if (canTranspose) {
             for (let i = 0; i < allInputs.length; i++) {
-                // console.log(editorNotes[noteNames[allinputs[i].value]].next)
                 allInputs[i].value = editorNotes[noteNames[allInputs[i].value]].next;
             }
         }
@@ -178,7 +203,13 @@ function moveButton(direction) {
 
 
 
+noteUpBtn.addEventListener("click", () => {
+    transposeNote("up");
+});
 
+noteDownBtn.addEventListener("click", () => {
+    transposeNote("down");
+});
 
 moveRightBtn.addEventListener("click", () => {
     moveButton("right");
