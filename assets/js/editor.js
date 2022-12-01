@@ -29,7 +29,7 @@ function renderEditor() {
         if (button.newRow) {
             editorKeyboard.innerHTML += `<br>`;
         }
-        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" value="${pushLabel}"></div><div class="bottom"><input type=text maxlength="3" value="${pullLabel}"></div></div>`;
+        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" placeholder="push" value="${pushLabel}"></div><div class="bottom"><input type=text maxlength="3"  placeholder="pull" value="${pullLabel}"></div></div>`;
     }
     bindInputs();
 
@@ -46,6 +46,19 @@ function isValid(note) {
 
 
 function deleteButton(button) {
+    // if the currently active button is the one being deleted, send the focus somewhere useful before deleting
+    if (editorKeyboard.lastChild.nodeName == "BR") {
+        editorKeyboard.lastChild.remove();
+    }
+    if (button == currentButton && button.nextSibling && button.nextSibling.nodeName != "BR") {
+        button.nextSibling.firstChild.firstChild.focus()
+    } else if (button == currentButton && button.nextSibling && button.nextSibling.nodeName == "BR") {
+        button.nextSibling.nextSibling.firstChild.firstChild.focus()
+    } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName != "BR") {
+        button.previousSibling.firstChild.firstChild.focus()
+    } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName == "BR") {
+        button.previousSibling.previousSibling.firstChild.firstChild.focus()
+    }
     // immediately start fading the button. After button faded, set the width and the left margin to 0. Finally, if the button is the last in its row, remove the next line break, and then remove the button.
     button.style.cssText += "transition:margin-left 0.2s ease 0.2s, width 0.2s ease 0.2s, opacity 0.2s;"
     button.style.marginLeft = 0;
@@ -78,10 +91,11 @@ function bindInputs() {
     allfields.forEach((field) => field.addEventListener('focus', (e) => {
         currentField = e.target;
         currentButton = e.target.parentNode.parentNode;
+        document.querySelectorAll(".editor-button").forEach((button) => {button.classList.remove("selected")});
+        currentButton.classList.add("selected");
     }));
     allfields.forEach((field) => field.addEventListener('focusout', (e) => {
         e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
-        console.log(document.activeElement);
         if (!isValid(e.target.value)) {
             e.target.classList.add("invalid");
         }
@@ -91,7 +105,6 @@ function bindInputs() {
     }));
     allfields.forEach((field) => field.addEventListener('keydown', (e) => {
         if (e.code.indexOf('Shift') != -1) {
-            console.log("shift")
         } else if (e.code == "ArrowUp") {
             if (editorNotes[e.target.value].next) {
                 e.target.value = editorNotes[e.target.value].next;
@@ -105,6 +118,12 @@ function bindInputs() {
             playNote(noteNames[e.target.value]);
         } else if (e.code == "Escape") {
             console.log("Esc");
+        } else if (e.code == "ArrowRight" && e.shiftKey) {
+            moveButton("right");
+        } else if (e.code == "ArrowLeft" && e.shiftKey) {
+            moveButton("left");
+        } else if (e.code == "Backspace" && e.shiftKey) {
+            deleteButton(currentButton);
         }
     }));
 }

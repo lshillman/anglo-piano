@@ -418,6 +418,11 @@ button {
 	/* background-color: pink; */
 }
 
+.editor-button.selected {
+   background-color: #e6ccff;
+   border-radius: 8px;
+}
+
 .editor-button .top {
    padding-bottom: 1px;
 }
@@ -435,13 +440,33 @@ button {
    border: 1px solid #767676;
    font-family: monospace;
  }
+
+ .editor-button input[type=text]:focus {
+   outline: none;
+ }
  
  .editor-button .top input {
    border-radius: 6px 6px 0 0;
  }
+
+ .editor-button .top input:focus {
+   border: 2px solid #0000FF;
+ }
+
+ .editor-button .top input:hover {
+   background-color: #E9E9FF;
+ }
  
  .editor-button .bottom input {
    border-radius: 0 0 6px 6px;
+ }
+
+ .editor-button .bottom input:focus {
+   border: 2px solid #A30014;
+ }
+
+ .editor-button .bottom input:hover {
+   background-color: #FFE7EA;
  }
 
  .editor-button input.invalid {
