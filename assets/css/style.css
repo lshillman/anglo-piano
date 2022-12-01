@@ -227,6 +227,26 @@ button {
    margin-bottom: 0.5rem;
 }
 
+#viewer-options button,
+#editor-options button {
+   height: 30px;
+   padding-left: 0.5rem;
+   padding-right: 0.5rem;
+   border: 1px solid #767676;
+   border-radius: 6px;
+}
+
+#viewer-options button:hover,
+#editor-options button:hover {
+   background-color: #eee;
+}
+
+#viewer-options button:active,
+#editor-options button:active {
+   background-color: #333;
+   color: #fff;
+}
+
 #anglo-keyboard,
 #editor-anglo-keyboard {
    text-align: left;
@@ -329,11 +349,12 @@ button {
    display: none;
 }
 
+/* ===== VIEWER OPTIONS ===== */
 
 
 
 
-/*===== OCTAVE COLORS =====*/
+/* ===== OCTAVE COLORS ===== */
 
 .octave-top {
       height: 30px;
@@ -374,9 +395,6 @@ button {
 #anglo-container.pretty .o7 {
    background-color: #8080FF;
 }
-
-
-
 
 #keyboard-container.pretty .natural.o2 {
    box-shadow: 0 16px 0 0 #FACD91 inset;

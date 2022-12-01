@@ -74,6 +74,39 @@ function deleteButton(button) {
       }, "400")      
 }
 
+function transposeLayout(direction) {
+    let allInputs = document.querySelectorAll("#editor-anglo-keyboard input");
+    if (direction == "up") {
+        let canTranspose = true;
+        for (let i = 0; i < allInputs.length; i++) {
+            // console.log(editorNotes[noteNames[allinputs[i].value]].next)
+            if (!editorNotes[noteNames[allInputs[i].value]].next) {
+                canTranspose = false;
+                break;
+            }
+        }
+        if (canTranspose) {
+            for (let i = 0; i < allInputs.length; i++) {
+                // console.log(editorNotes[noteNames[allinputs[i].value]].next)
+                allInputs[i].value = editorNotes[noteNames[allInputs[i].value]].next;
+            }
+        }
+    } else if (direction == "down") {
+        let canTranspose = true;
+        for (let i = 0; i < allInputs.length; i++) {
+            if (!editorNotes[noteNames[allInputs[i].value]].prev) {
+                canTranspose = false;
+                break;
+            }
+        }
+        if (canTranspose) {
+            for (let i = 0; i < allInputs.length; i++) {
+                allInputs[i].value = editorNotes[noteNames[allInputs[i].value]].prev;
+            }
+        }
+    }
+}
+
 
 
 
