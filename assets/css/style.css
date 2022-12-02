@@ -16,7 +16,6 @@ header {
 }
 
 header div {
-   padding: 0 0.5rem;
    display:flex;
    gap: 0.5rem;
 }
@@ -25,6 +24,7 @@ header div {
    display: inline-block;
    width: 40px;
    height: 50px;
+   margin-left: 0.5rem;
 }
 
 header h1 {
@@ -148,7 +148,8 @@ button {
 
 #keyboard-container,
 #anglo-container,
-#editor-anglo-container {
+#editor-anglo-container,
+#editor-options-container {
    margin-left: auto;
    margin-right: auto;
    width: fit-content;
@@ -228,8 +229,7 @@ button {
 }
 
 #viewer-options button,
-#editor-options button,
-#editor-header button {
+#editor-options button {
    height: 30px;
    padding-left: 0.5rem;
    padding-right: 0.5rem;
@@ -246,6 +246,10 @@ button {
 #editor-options button:active {
    background-color: #333;
    color: #fff;
+}
+
+#drone-option {
+   margin-bottom: 0.5rem;
 }
 
 #anglo-keyboard,
@@ -433,7 +437,30 @@ button {
    display: flex;
    align-items: center;
    justify-content: space-between;
-   padding: 0 2rem 2rem 2rem;
+   margin: 0 auto 2rem auto;
+   max-width: 700px;
+}
+
+#cancelBtn {
+   height: 30px;
+   padding-left: 0.5rem;
+   padding-right: 0.5rem;
+   border: 1px solid #767676;
+   border-radius: 6px;
+}
+
+#finishedBtn {
+   height: 30px;
+   padding-left: 0.5rem;
+   padding-right: 0.5rem;
+   border: none;
+   background-color: #6CAC04;
+   color: #fff;
+   border-radius: 6px;
+}
+
+#finishedBtn:hover {
+   background-color: #578609;
 }
 
 .editor-button {
@@ -505,18 +532,31 @@ button {
    opacity: 0;
  }
 
+#editor-options-container {
+   overflow-x: auto;
+   margin: 2rem auto 0 auto;
+   max-width: 100%;
+}
+
 #editor-options {
    display: flex;
    text-align: left;
-   max-width: fit-content;
-   margin: 2rem auto;
+   padding: 1rem 0;
    gap: 2rem;
-   flex-wrap: wrap;
+   width: fit-content;
 }
 
 #editor-options div {
    padding: 0;
    white-space: nowrap;
+}
+
+#editor-options span {
+   display:block;
+}
+
+#editor-options button {
+   margin-top: 0.5rem;
 }
 
 /* ===== ABOUT MODAL ===== */
@@ -564,4 +604,70 @@ button {
    color: #000;
    text-decoration: none;
    cursor: pointer;
+ }
+
+
+ /* ===== ARROWS ===== */
+
+ .arrow::before {
+	border-top: 3px solid #555;
+   border-right: 3px solid #555;
+	content: '';
+	display: inline-block;
+	height: 8px;
+   width: 8px;
+	left: 1px;
+	position: relative;
+	top: 1px;
+	transform: rotate(-45deg);
+	vertical-align: top;
+}
+
+.arrow.up:before {
+   top: 3px;
+}
+
+.arrow.right:before {
+	left: -2px;
+	transform: rotate(45deg);
+}
+
+.arrow.down:before {
+	top: 0;
+	transform: rotate(135deg);
+}
+
+.arrow.left:before {
+	left: 2px;
+	transform: rotate(-135deg);
+}
+
+
+
+
+@media only screen and (max-width: 600px) {
+   #editor-anglo-container {
+      padding-bottom: 8rem;
+   }
+
+   #editor-options-container {
+      position: fixed;
+      bottom:0;
+      left: 0;
+      width: 100%;
+      background-color: #fafafa;
+      border-top: 1px solid #767676;
+   }
+
+   #editor-options {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      margin-left: auto;
+      margin-right: auto;
+   }
+
+   #editor-options button {
+      height: 50px;
+      min-width: 50px;
+   }
  }

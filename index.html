@@ -114,36 +114,38 @@
     </div>
 
     <div id="editor">
-        <div id="editor-anglo-container">
-            <div id="editor-header">
-                <h2>Editing layout</h2>
-                <div id="editor-actions">
-                    <button id="cancelBtn">Cancel</button>
-                    <button id="finishedBtn">Finished</button>
-                </div>
+        <div id="editor-header">
+            <h2>Edit layout</h2>
+            <div id="editor-actions">
+                <button id="cancelBtn">Cancel</button>
+                <button id="finishedBtn">Finished</button>
             </div>
+        </div>
+        <div id="editor-anglo-container">
             <div id="editor-anglo-keyboard">
                 <!-- button text inputs -->
             </div>
         </div>
 
+        <div id ="editor-options-container">
         <div id="editor-options">
             <div>
-                <p>Note:</p>
-                <button id="noteUp">▲</button>
-                <button id="noteDown">▼</button>
+                <span>Note:</span>
+                <button id="noteUp"><span class="arrow up"></button>
+                <button id="noteDown"><span class="arrow down"></span></button>
             </div>
             <div>
-                <p>Button:</p>
-                <button id="moveLeftBtn">⭠</button>
-                <button id="moveRightBtn">⭢</button>
+                <span>Button:</span>
+                <button id="moveLeftBtn"><span class="arrow left"></span></button>
+                <button id="moveRightBtn"><span class="arrow right"></span></button>
                 <button id="deleteBtn">Delete</button>
             </div>
             <div>
-                <p>Entire layout:</p>
-                <button id="layoutUp">▲</button>
-                <button id="layoutDown">▼</button>
+                <span>Layout:</span>
+                <button id="layoutUp"><span class="arrow up"></button>
+                <button id="layoutDown"><span class="arrow down"></span></button>
             </div>
+        </div>
         </div>
     </div>
 

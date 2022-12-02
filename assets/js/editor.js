@@ -39,7 +39,10 @@ function renderEditor() {
         editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" placeholder="push" value="${pushLabel}"></div><div class="bottom"><input type=text maxlength="3"  placeholder="pull" value="${pullLabel}"></div></div>`;
     }
     bindInputs();
-
+    currentField = document.querySelectorAll("#editor-anglo-keyboard input")[0];
+    currentButton = document.querySelectorAll("#editor-anglo-keyboard .editor-button")[0];
+    currentButton.classList.add("selected");
+    !mobileDevice && currentField.focus();
 }
 
 
@@ -53,18 +56,20 @@ function isValid(note) {
 
 
 function deleteButton(button) {
-    // if the currently active button is the one being deleted, send the focus somewhere useful before deleting
     if (editorKeyboard.lastChild.nodeName == "BR") {
         editorKeyboard.lastChild.remove();
     }
-    if (button == currentButton && button.nextSibling && button.nextSibling.nodeName != "BR") {
-        button.nextSibling.firstChild.firstChild.focus()
-    } else if (button == currentButton && button.nextSibling && button.nextSibling.nodeName == "BR") {
-        button.nextSibling.nextSibling.firstChild.firstChild.focus()
-    } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName != "BR") {
-        button.previousSibling.firstChild.firstChild.focus()
-    } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName == "BR") {
-        button.previousSibling.previousSibling.firstChild.firstChild.focus()
+    // if the currently active button is the one being deleted, send the focus somewhere useful before deleting (but not on mobile; the onscreen keyboard gets annoying)
+    if (!mobileDevice) {
+        if (button == currentButton && button.nextSibling && button.nextSibling.nodeName != "BR") {
+            button.nextSibling.firstChild.firstChild.focus()
+        } else if (button == currentButton && button.nextSibling && button.nextSibling.nodeName == "BR") {
+            button.nextSibling.nextSibling.firstChild.firstChild.focus()
+        } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName != "BR") {
+            button.previousSibling.firstChild.firstChild.focus()
+        } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName == "BR") {
+            button.previousSibling.previousSibling.firstChild.firstChild.focus()
+        }
     }
     // immediately start fading the button. After button faded, set the width and the left margin to 0. Finally, if the button is the last in its row, remove the next line break, and then remove the button.
     button.style.cssText += "transition:margin-left 0.2s ease 0.2s, width 0.2s ease 0.2s, opacity 0.2s;"
@@ -157,9 +162,10 @@ function bindInputs() {
         if (!isValid(e.target.value)) {
             e.target.classList.add("invalid");
         }
-        if (!e.target.parentNode.parentNode.firstChild.firstChild.value && !e.target.parentNode.parentNode.lastChild.firstChild.value && !e.target.parentNode.parentNode.contains(e.relatedTarget)) {
-            deleteButton(e.target.parentNode.parentNode);
-        }
+        // this removes a button with no push or pull values. Probably not needed now that we have an explicit 'delete' button.
+        // if (!e.target.parentNode.parentNode.firstChild.firstChild.value && !e.target.parentNode.parentNode.lastChild.firstChild.value && !e.target.parentNode.parentNode.contains(e.relatedTarget)) {
+        //     deleteButton(e.target.parentNode.parentNode);
+        // }
     }));
     allfields.forEach((field) => field.addEventListener('keydown', (e) => {
         if (e.code.indexOf('Shift') != -1) {
@@ -188,7 +194,9 @@ function bindInputs() {
 
 
 function moveButton(direction) {
-    currentField.focus();
+    if (!mobileDevice) {
+        currentField.focus();
+    }
     let margin = currentButton.style.marginLeft.slice(0,-2)*1;
     if (direction == "left") {
         if (margin - 10 >= 0) {

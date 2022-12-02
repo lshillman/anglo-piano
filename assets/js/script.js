@@ -4,6 +4,12 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 // store a custom layout passed in via the URL
 let customFromURL = window.location.href.split('?')[1];
 
+// are we on a mobile device?
+let mobileDevice = false;
+if (navigator.userAgent.toLowerCase().indexOf('mobile') > -1) {
+    mobileDevice = true;
+}
+
 // keyboards
 const keyboardContainer = document.getElementById("keyboard-container");
 const keyboard = document.getElementById("keyboard");
@@ -491,6 +497,7 @@ function selectLayout() {
             renderAngloKeyboard();
             break;
     }
+    opt_layout.blur();
 }
 
 
