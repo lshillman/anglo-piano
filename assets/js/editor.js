@@ -14,6 +14,8 @@ const moveRightBtn = document.getElementById("moveRightBtn");
 const moveLeftBtn = document.getElementById("moveLeftBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 const cancelBtn = document.getElementById("cancelBtn");
+const finishedBtn = document.getElementById("finishedBtn");
+
 
 let validNotes = Object.keys(editorNotes);
 let currentButton;
@@ -44,6 +46,45 @@ function renderEditor() {
     currentButton.classList.add("selected");
     !mobileDevice && currentField.focus();
 }
+
+
+function encodeLayoutFromEditor () {
+
+    //validate all notes
+    let allInputs = document.querySelectorAll("#editor-anglo-keyboard input");
+        let canEncode = true;
+        for (let i = 0; i < allInputs.length; i++) {
+            if (!noteNames[allInputs[i].value]) {
+                canEncode = false;
+                break;
+            }
+        }
+
+    if(canEncode) {
+        let encodedLayout = "";
+        for (element of editorKeyboard.children) {
+            if (element.nodeName != "BR") {
+                if (element.style.marginLeft != "0px") {
+                    encodedLayout += `_${element.style.marginLeft.replace("px", "")}_`
+                }
+                for (div of element.children) {
+                    for (input of div.children) {
+                        encodedLayout += encoder[input.value];
+                    }
+                }
+            } else {
+                encodedLayout += ".";
+            }
+        }
+        document.getElementById("editor-error").style.display = "none";
+        console.log(encodedLayout);
+        window.location = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout;
+    } else {
+        document.getElementById("editor-error").style.display = "block";
+        console.error("Can't encode the layout; please fix errors");
+    }
+}
+
 
 
 function isValid(note) {
@@ -248,4 +289,8 @@ cancelBtn.addEventListener("click", () => {
     editorSection.style.display = "none";
     viewerSection.style.display = "block";
     currentMode = "view"
+});
+
+finishedBtn.addEventListener("click", () => {
+    encodeLayoutFromEditor();
 })

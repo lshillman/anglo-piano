@@ -139,6 +139,37 @@ function renderAngloKeyboard() {
     renderPianoKeyboard(min, max + 1, layoutnotes);
 }
 
+
+
+function parseLayout(layout) {
+    let newLayout = [];
+    while (layout.length > 0) {
+        let x = 0;
+        let push;
+        let pull;
+        let newRow = false;
+        if (layout[0] == ".") {
+            newRow = true;
+            layout = layout.slice(1);
+        }
+        if (layout[0] == "_") {
+            x = layout.substring(1, layout.indexOf('_', 1));
+            layout = layout.slice(layout.indexOf('_', 1) + 1);
+        }
+            push = noteCodes[layout[0]];
+            pull = noteCodes[layout[1]];
+            newLayout.push({ push, pull, x, newRow });
+            layout = layout.slice(2);
+    }
+    buttons.length = 0;
+    newLayout.forEach((button) => { buttons.push(button) });
+    angloKeyboard.innerHTML = "";
+    renderAngloKeyboard();
+    selectConcertinaButtons();
+
+}
+
+
 // to render layouts from the old Anglo Piano that assumed a 14-column grid
 function parseLegacyLayout(layout) {
     let newLayout = [];
@@ -586,7 +617,7 @@ function init() {
         newOption.text = "Custom layout";
         opt_layout.insertBefore(newOption, opt_layout.firstChild);
         opt_layout.value = "customFromURL";    
-        parseLegacyLayout(customFromURL);
+        parseLayout(customFromURL);
     } else {
         selectLayout();
     }
