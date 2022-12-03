@@ -155,16 +155,9 @@ function parseLayout(layout) {
         if (layout[0] == "_") {
             x = layout.substring(1, layout.indexOf('_', 1));
             layout = layout.slice(layout.indexOf('_', 1) + 1);
-
-
-            // push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
-            // pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
-            // newLayout.push({ push, pull, x, newRow });
-
         }
             push = noteCodes[layout[0]];
             pull = noteCodes[layout[1]];
-
             newLayout.push({ push, pull, x, newRow });
             layout = layout.slice(2);
     }
@@ -175,8 +168,6 @@ function parseLayout(layout) {
     selectConcertinaButtons();
 
 }
-
-
 
 
 // to render layouts from the old Anglo Piano that assumed a 14-column grid
@@ -626,7 +617,7 @@ function init() {
         newOption.text = "Custom layout";
         opt_layout.insertBefore(newOption, opt_layout.firstChild);
         opt_layout.value = "customFromURL";    
-        parseLegacyLayout(customFromURL);
+        parseLayout(customFromURL);
     } else {
         selectLayout();
     }
