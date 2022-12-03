@@ -592,6 +592,10 @@ const squashbox = [
 ];
 
 
+const legacyPaths = {
+    "cg-wheatstone-30": "cgWheatstone30", "cg-jeffries-30": "cgJeffries30", "cg-wheatstone-40": "cgWheatstone40", "cg-jeffries-38": "cgJeffries38", "gd-wheatstone-30": "gdWheatstone30", "gd-jeffries-30": "gdJeffries30", "gd-wheatstone-40": "gdWheatstone40", "gd-jeffries-38": "gdJeffries38", "bbf-wheatstone-30": "bbfWheatstone30", "bbf-jeffries-30": "bbfJeffries30", "bbf-wheatstone-40": "bbfWheatstone40", "bbf-jeffries-38": "bbfJeffries38", "jones": "jones", "cg-20": "cg20", "gd-20": "gd20", "da-20": "da20", "squashbox": "squashbox"
+}
+
 
 // legacy url-encoded layouts
 // const cgWheatstone30 = "_30_eFHhJKNMmn...._50_PQTSstVWZX...._15_cGGIijkLMN...._80_oOqpSRuTwU....IHjlMNOopq...._110_SrUTvuYw1x...._270_ii";

@@ -532,6 +532,26 @@ function selectLayout() {
 }
 
 
+
+// TODO: put custom legacy layout into dropdown, add handler for new layouts
+function getUrlParams() {
+    if (window.location.href.includes("#layout=")) {
+        let legacyParam = window.location.href.split("#layout=")[1];
+        if (legacyParam && legacyPaths[legacyParam]) {
+            opt_layout.value = legacyPaths[legacyParam];
+            selectLayout();
+            console.log("selecting a hard-coded layout from legacy param");
+        } else if (legacyParam) {
+            console.log("parsing custom legacy layout...");
+            parseLegacyLayout(legacyParam);
+        } else {
+            console.log("empty param; proceeding with default");
+            selectLayout();
+        }
+    }
+}
+
+
 opt_layout.addEventListener("change", () => {
     selectLayout();
 });
@@ -611,13 +631,14 @@ window.onclick = function (event) {
 // stuff to do when the page is loaded
 function init() {
     opt_pushpull.checked = true;
-    if (customFromURL) {
-        let newOption = document.createElement("option");
-        newOption.value = "customFromURL";
-        newOption.text = "Custom layout";
-        opt_layout.insertBefore(newOption, opt_layout.firstChild);
-        opt_layout.value = "customFromURL";    
-        parseLayout(customFromURL);
+    if (window.location.href.includes("#") || window.location.href.includes("?")) {
+        getUrlParams();
+        // let newOption = document.createElement("option");
+        // newOption.value = "customFromURL";
+        // newOption.text = "Custom layout";
+        // opt_layout.insertBefore(newOption, opt_layout.firstChild);
+        // opt_layout.value = "customFromURL";    
+        // parseLayout(customFromURL);
     } else {
         selectLayout();
     }
