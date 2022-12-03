@@ -103,7 +103,7 @@ button {
    background-color: #000;
    color: #fff;
    margin-left: -12.5px;
-   border-radius: 0 0 6px 6px;
+   border-radius: 0 0 5px 5px;
    z-index: 50;
    word-break: break-all;
    cursor: pointer;
@@ -234,7 +234,7 @@ button {
    padding-left: 0.5rem;
    padding-right: 0.5rem;
    border: 1px solid #767676;
-   border-radius: 6px;
+   border-radius: 5px;
 }
 
 #viewer-options button:hover,
@@ -437,30 +437,34 @@ button {
    display: flex;
    align-items: center;
    justify-content: space-between;
-   margin: 0 auto 2rem auto;
+   margin: 0 auto;
    max-width: 700px;
 }
 
 #cancelBtn {
-   height: 30px;
-   padding-left: 0.5rem;
-   padding-right: 0.5rem;
+   height: 44px;
+   padding-left: 1rem;
+   padding-right: 1rem;
    border: 1px solid #767676;
-   border-radius: 6px;
+   border-radius: 5px;
 }
 
 #finishedBtn {
-   height: 30px;
-   padding-left: 0.5rem;
-   padding-right: 0.5rem;
+   height: 44px;
+   padding-left: 1rem;
+   padding-right: 1rem;
    border: none;
    background-color: #6CAC04;
    color: #fff;
-   border-radius: 6px;
+   border-radius: 5px;
 }
 
 #finishedBtn:hover {
    background-color: #578609;
+}
+
+#editor-anglo-container {
+   margin-top: 1.5rem;
 }
 
 .editor-button {
@@ -499,7 +503,7 @@ button {
  }
  
  .editor-button .top input {
-   border-radius: 6px 6px 0 0;
+   border-radius: 5px 5px 0 0;
  }
 
  .editor-button .top input:focus {
@@ -511,7 +515,7 @@ button {
  }
  
  .editor-button .bottom input {
-   border-radius: 0 0 6px 6px;
+   border-radius: 0 0 5px 5px;
  }
 
  .editor-button .bottom input:focus {
@@ -557,6 +561,22 @@ button {
 
 #editor-options button {
    margin-top: 0.5rem;
+}
+
+#editor-error {
+	max-width: 700px;
+	margin: 0 auto 1rem auto;
+	text-align: left;
+	display: none;
+}
+
+.error-text {
+      color: #A30014;
+      display: block;
+      border: 1px solid #A30014;
+      padding: 0.25rem;
+      font-size: .825rem;
+      margin-left: auto;
 }
 
 /* ===== ABOUT MODAL ===== */
@@ -667,7 +687,8 @@ button {
    }
 
    #editor-options button {
-      height: 50px;
-      min-width: 50px;
+      height: 44px;
+      min-width: 44px;
+      margin-right: 4px;
    }
  }

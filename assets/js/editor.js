@@ -76,10 +76,12 @@ function encodeLayoutFromEditor () {
                 encodedLayout += ".";
             }
         }
+        document.getElementById("editor-error").style.display = "none";
         console.log(encodedLayout);
         console.log (window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout)
         return encodedLayout;
     } else {
+        document.getElementById("editor-error").style.display = "block";
         console.error("Can't encode the layout; please fix errors");
     }
 }
