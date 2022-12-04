@@ -675,13 +675,12 @@ button {
       bottom:0;
       left: 0;
       width: 100%;
-      background-color: #fafafa;
-      border-top: 1px solid #767676;
+      background-color: #efefef;
+      border-top: 1px solid #ccc;
    }
 
    #editor-options {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
+      padding: 0.5rem;
       margin-left: auto;
       margin-right: auto;
    }
