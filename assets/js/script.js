@@ -2,7 +2,10 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 // store a custom layout passed in via the URL
-let customFromURL = window.location.href.split('?')[1];
+let customLegacyLayoutFromURL;
+let customLayoutFromURL;
+let customTitleFromURL;
+let parsedLayoutFromURL = [];
 
 // are we on a mobile device?
 let mobileDevice = false;
@@ -45,7 +48,7 @@ const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
 var closeModalBtn = document.getElementsByClassName("close")[0];
 
-// an object that contains all currently-displayed concertina buttons
+// an array that contains all currently-displayed concertina buttons
 let buttons = [];
 
 // an array to keep track of all currently-displayed piano notes. Required for arrow key navigation.
@@ -108,8 +111,8 @@ function renderAngloKeyboard() {
             pullLabel = altNoteNames[button.pull];
         }
         if (!opt_concertinaLabels.checked) {
-            pushLabel = "";
-            pullLabel = "";
+            pushLabel = "&nbsp;"; // for some reason, empty string results in layout issues on non-mac browsers
+            pullLabel = "&nbsp;";
         }
         let droneclass = "";
         if (button.drone) {
@@ -141,7 +144,9 @@ function renderAngloKeyboard() {
 
 
 
-function parseLayout(layout) {
+function parseLayout() {
+    let layout = customLayoutFromURL;
+    let title = customTitleFromURL;
     let newLayout = [];
     while (layout.length > 0) {
         let x = 0;
@@ -161,8 +166,9 @@ function parseLayout(layout) {
             newLayout.push({ push, pull, x, newRow });
             layout = layout.slice(2);
     }
-    buttons.length = 0;
-    newLayout.forEach((button) => { buttons.push(button) });
+
+    parsedLayoutFromURL = newLayout;
+    buttons = parsedLayoutFromURL;
     angloKeyboard.innerHTML = "";
     renderAngloKeyboard();
     selectConcertinaButtons();
@@ -171,7 +177,8 @@ function parseLayout(layout) {
 
 
 // to render layouts from the old Anglo Piano that assumed a 14-column grid
-function parseLegacyLayout(layout) {
+function parseLegacyLayout() {
+    let layout = customLegacyLayoutFromURL;
     let newLayout = [];
     let buttonCount = 0;
     while (layout.length > 0) {
@@ -456,9 +463,6 @@ function bindAngloButtons() {
 
 function selectLayout() {
     switch (opt_layout.value) {
-        case "customFromURL":
-            parseLegacyLayout(customFromURL);
-            break;
         case "cgWheatstone30":
             buttons = cgWheatstone30;
             renderAngloKeyboard();
@@ -527,6 +531,9 @@ function selectLayout() {
             buttons = squashbox;
             renderAngloKeyboard();
             break;
+        default:
+            buttons = parsedLayoutFromURL;
+            renderAngloKeyboard();
     }
     opt_layout.blur();
 }
@@ -542,13 +549,51 @@ function getUrlParams() {
             selectLayout();
             console.log("selecting a hard-coded layout from legacy param");
         } else if (legacyParam) {
+            customLegacyLayoutFromURL = legacyParam;
             console.log("parsing custom legacy layout...");
-            parseLegacyLayout(legacyParam);
+            addToDropdown("customFromURL", "Custom layout");
+            parseLegacyLayout();
+            opt_layout.value = "customFromURL";
+        } else {
+            console.log("empty param; proceeding with default");
+            selectLayout();
+        }
+    } else if (window.location.href.includes("?")) {
+        let urlParam = window.location.href.split("?")[1];
+        if (urlParam && legacyPaths[urlParam]) {
+            opt_layout.value = legacyPaths[urlParam];
+            selectLayout();
+            console.log("selecting a hard-coded layout from new param");
+        } else if (urlParam && urlParam.includes("&title=")) {
+            customLayoutFromURL = urlParam.split("&title=")[0];
+            customTitleFromURL = urlParam.split("&title=")[1];
+            if (customTitleFromURL) {
+                addToDropdown("customFromURL", decodeURI(customTitleFromURL));
+            } else {
+                addToDropdown("customFromURL", "Custom layout");
+            }
+            parseLayout()
+            opt_layout.value = "customFromURL";
+        } else if (urlParam) {
+            customLayoutFromURL = urlParam;
+            console.log("parsing custom new layout...");
+            addToDropdown("customFromURL", "Custom layout");
+            parseLayout();
+            opt_layout.value = "customFromURL";
         } else {
             console.log("empty param; proceeding with default");
             selectLayout();
         }
     }
+}
+
+function addToDropdown(value, title) {
+        let newOption = document.createElement("option");
+        // TODO logic to make sure title isn't a duplicate of a hard-coded title or one from localStorage
+        newOption.value = value;
+        newOption.text = title;
+        opt_layout.insertBefore(newOption, opt_layout.firstChild);
+        // opt_layout.value = "customFromURL";    
 }
 
 
@@ -633,12 +678,6 @@ function init() {
     opt_pushpull.checked = true;
     if (window.location.href.includes("#") || window.location.href.includes("?")) {
         getUrlParams();
-        // let newOption = document.createElement("option");
-        // newOption.value = "customFromURL";
-        // newOption.text = "Custom layout";
-        // opt_layout.insertBefore(newOption, opt_layout.firstChild);
-        // opt_layout.value = "customFromURL";    
-        // parseLayout(customFromURL);
     } else {
         selectLayout();
     }
