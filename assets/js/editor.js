@@ -61,7 +61,7 @@ function encodeLayoutFromEditor () {
         for (let i = 0; i < allInputs.length; i++) {
             if (!noteNames[allInputs[i].value]) {
                 canEncode = false;
-                break;
+                allInputs[i].classList.add("invalid");
             }
         }
 
@@ -261,16 +261,20 @@ function moveButton(direction) {
 }
 
 function insertButton(where) {
-    let position;
     let newButton = `<div class="editor-button newbutton" style="margin-left:0px"><div class="top"><input type=text maxlength="3" placeholder="push" value=""></div><div class="bottom"><input type=text maxlength="3" placeholder="pull" value=""></div></div>`;
     if (where == "left") {
         currentButton.insertAdjacentHTML("beforebegin", newButton);
+        bindInputs("new");
+        currentButton.previousSibling.firstChild.firstChild.focus();
     } else if (where == "right") {
         currentButton.insertAdjacentHTML("afterend", newButton);
+        bindInputs("new");
+        currentButton.nextSibling.firstChild.firstChild.focus();
     } else if (where == "newRow") {
         editorKeyboard.lastChild.insertAdjacentHTML("afterend", "<br>" + newButton);
+        bindInputs("new");
+        editorKeyboard.lastChild.firstChild.firstChild.focus();
     }
-    bindInputs("new");
 }
 
 
