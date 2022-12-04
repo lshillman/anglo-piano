@@ -210,8 +210,8 @@ function parseLegacyLayout() {
             layout = layout.slice(2);
         }
     }
-    buttons.length = 0;
-    newLayout.forEach((button) => { buttons.push(button) });
+    parsedLayoutFromURL = newLayout;
+    buttons = parsedLayoutFromURL;
     angloKeyboard.innerHTML = "";
     renderAngloKeyboard();
     selectConcertinaButtons();
