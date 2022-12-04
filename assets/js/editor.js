@@ -72,7 +72,7 @@ function encodeLayoutFromEditor () {
                         encodedLayout += encoder[input.value];
                     }
                 }
-            } else {
+            } else if (element != editorKeyboard.lastChild){
                 encodedLayout += ".";
             }
         }
