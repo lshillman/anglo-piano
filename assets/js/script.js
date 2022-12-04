@@ -2,7 +2,6 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 // store a custom layout passed in via the URL
-let customLegacyLayoutFromURL;
 let customLayoutFromURL;
 let customTitleFromURL;
 let parsedLayoutFromURL = [];
@@ -178,7 +177,7 @@ function parseLayout() {
 
 // to render layouts from the old Anglo Piano that assumed a 14-column grid
 function parseLegacyLayout() {
-    let layout = customLegacyLayoutFromURL;
+    let layout = customLayoutFromURL;
     let newLayout = [];
     let buttonCount = 0;
     while (layout.length > 0) {
@@ -549,7 +548,7 @@ function getUrlParams() {
             selectLayout();
             console.log("selecting a hard-coded layout from legacy param");
         } else if (legacyParam) {
-            customLegacyLayoutFromURL = legacyParam;
+            customLayoutFromURL = legacyParam;
             console.log("parsing custom legacy layout...");
             addToDropdown("customFromURL", "Custom layout");
             parseLegacyLayout();
