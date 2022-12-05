@@ -105,6 +105,12 @@ function deleteButton(button) {
     if (editorKeyboard.lastChild.nodeName == "BR") {
         editorKeyboard.lastChild.remove();
     }
+    if (document.querySelectorAll(".editor-button").length == 1) {
+        button.firstChild.firstChild.value = "";
+        button.lastChild.firstChild.value = "";
+        button.firstChild.firstChild.focus();
+        return;
+    }
     // if the currently active button is the one being deleted, send the focus somewhere useful before deleting (but not on mobile; the onscreen keyboard gets annoying)
     if (!mobileDevice) {
         if (button == currentButton && button.nextSibling && button.nextSibling.nodeName != "BR") {
