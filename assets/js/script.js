@@ -143,9 +143,16 @@ function renderAngloKeyboard() {
 
 
 
-function parseLayout() {
-    let layout = customLayoutFromURL;
-    let title = customTitleFromURL;
+function parseLayout(origin) {
+    let layout;
+    let title;
+    if (origin == "url") {
+        layout = customLayoutFromURL;
+        title = customTitleFromURL;
+    } else if (origin == "editor") {
+        layout = customLayoutFromEditor;
+        title = customTitleFromEditor;
+    }
     let newLayout = [];
     while (layout.length > 0) {
         let x = 0;
@@ -461,79 +468,12 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    switch (opt_layout.value) {
-        case "cgWheatstone30":
-            buttons = cgWheatstone30;
-            renderAngloKeyboard();
-            break;
-        case "cgJeffries30":
-            buttons = cgJeffries30;
-            renderAngloKeyboard();
-            break;
-        case "cgWheatstone40":
-            buttons = cgWheatstone40;
-            renderAngloKeyboard();
-            break;
-        case "cgJeffries38":
-            buttons = cgJeffries38;
-            renderAngloKeyboard();
-            break;
-        case "gdWheatstone30":
-            buttons = gdWheatstone30;
-            renderAngloKeyboard();
-            break;
-        case "gdJeffries30":
-            buttons = gdJeffries30;
-            renderAngloKeyboard();
-            break;
-        case "gdWheatstone40":
-            buttons = gdWheatstone40;
-            renderAngloKeyboard();
-            break;
-        case "gdJeffries38":
-            buttons = gdJeffries38;
-            renderAngloKeyboard();
-            break;
-        case "bbfWheatstone30":
-            buttons = bbfWheatstone30;
-            renderAngloKeyboard();
-            break;
-        case "bbfJeffries30":
-            buttons = bbfJeffries30;
-            renderAngloKeyboard();
-            break;
-        case "bbfWheatstone40":
-            buttons = bbfWheatstone40;
-            renderAngloKeyboard();
-            break;
-        case "bbfJeffries38":
-            buttons = bbfJeffries38;
-            renderAngloKeyboard();
-            break;
-        case "jones":
-            buttons = jones;
-            renderAngloKeyboard();
-            break;
-        case "cg20":
-            buttons = cg20;
-            renderAngloKeyboard();
-            break;
-        case "gd20":
-            buttons = gd20;
-            renderAngloKeyboard();
-            break;
-        case "da20":
-            buttons = da20;
-            renderAngloKeyboard();
-            break;
-        case "squashbox":
-            buttons = squashbox;
-            renderAngloKeyboard();
-            break;
-        default:
-            buttons = parsedLayoutFromURL;
-            renderAngloKeyboard();
+    if (LAYOUTS[opt_layout.value]) {
+        buttons = LAYOUTS[opt_layout.value].layout;
+    } else {
+        buttons = parsedLayoutFromURL;
     }
+    renderAngloKeyboard();
     opt_layout.blur();
 }
 
@@ -550,7 +490,7 @@ function getUrlParams() {
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
             console.log("parsing custom legacy layout...");
-            addToDropdown("customFromURL", "Custom layout");
+            addToDropdown("customFromURL", "Custom layout", "url");
             parseLegacyLayout();
             opt_layout.value = "customFromURL";
         } else {
@@ -567,17 +507,17 @@ function getUrlParams() {
             customLayoutFromURL = urlParam.split("&title=")[0];
             customTitleFromURL = urlParam.split("&title=")[1];
             if (customTitleFromURL) {
-                addToDropdown("customFromURL", decodeURI(customTitleFromURL));
+                addToDropdown("customFromURL", decodeURI(customTitleFromURL), "url");
             } else {
-                addToDropdown("customFromURL", "Custom layout");
+                addToDropdown("customFromURL", "Custom layout", "url");
             }
-            parseLayout()
+            parseLayout("url")
             opt_layout.value = "customFromURL";
         } else if (urlParam) {
             customLayoutFromURL = urlParam;
             console.log("parsing custom new layout...");
-            addToDropdown("customFromURL", "Custom layout");
-            parseLayout();
+            addToDropdown("customFromURL", "Custom layout", "url");
+            parseLayout("url");
             opt_layout.value = "customFromURL";
         } else {
             console.log("empty param; proceeding with default");
@@ -586,13 +526,16 @@ function getUrlParams() {
     }
 }
 
-function addToDropdown(value, title) {
+function addToDropdown(value, title, origin) {
         let newOption = document.createElement("option");
         // TODO logic to make sure title isn't a duplicate of a hard-coded title or one from localStorage
         newOption.value = value;
         newOption.text = title;
-        opt_layout.insertBefore(newOption, opt_layout.firstChild);
-        // opt_layout.value = "customFromURL";    
+        if (origin == "LAYOUTS") {
+            opt_layout.appendChild(newOption);
+        } else if (origin == "url" || origin == "editor") {
+            opt_layout.insertBefore(newOption, opt_layout.firstChild);
+        }
 }
 
 
@@ -675,6 +618,9 @@ window.onclick = function (event) {
 // stuff to do when the page is loaded
 function init() {
     opt_pushpull.checked = true;
+    for (layout of Object.keys(LAYOUTS)) {
+        addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+    }
     if (window.location.href.includes("#") || window.location.href.includes("?")) {
         getUrlParams();
     } else {
