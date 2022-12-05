@@ -143,9 +143,16 @@ function renderAngloKeyboard() {
 
 
 
-function parseLayout() {
-    let layout = customLayoutFromURL;
-    let title = customTitleFromURL;
+function parseLayout(origin) {
+    let layout;
+    let title;
+    if (origin == "url") {
+        layout = customLayoutFromURL;
+        title = customTitleFromURL;
+    } else if (origin == "editor") {
+        layout = customLayoutFromEditor;
+        title = customTitleFromEditor;
+    }
     let newLayout = [];
     while (layout.length > 0) {
         let x = 0;
@@ -461,79 +468,82 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    switch (opt_layout.value) {
-        case "cgWheatstone30":
-            buttons = cgWheatstone30;
-            renderAngloKeyboard();
-            break;
-        case "cgJeffries30":
-            buttons = cgJeffries30;
-            renderAngloKeyboard();
-            break;
-        case "cgWheatstone40":
-            buttons = cgWheatstone40;
-            renderAngloKeyboard();
-            break;
-        case "cgJeffries38":
-            buttons = cgJeffries38;
-            renderAngloKeyboard();
-            break;
-        case "gdWheatstone30":
-            buttons = gdWheatstone30;
-            renderAngloKeyboard();
-            break;
-        case "gdJeffries30":
-            buttons = gdJeffries30;
-            renderAngloKeyboard();
-            break;
-        case "gdWheatstone40":
-            buttons = gdWheatstone40;
-            renderAngloKeyboard();
-            break;
-        case "gdJeffries38":
-            buttons = gdJeffries38;
-            renderAngloKeyboard();
-            break;
-        case "bbfWheatstone30":
-            buttons = bbfWheatstone30;
-            renderAngloKeyboard();
-            break;
-        case "bbfJeffries30":
-            buttons = bbfJeffries30;
-            renderAngloKeyboard();
-            break;
-        case "bbfWheatstone40":
-            buttons = bbfWheatstone40;
-            renderAngloKeyboard();
-            break;
-        case "bbfJeffries38":
-            buttons = bbfJeffries38;
-            renderAngloKeyboard();
-            break;
-        case "jones":
-            buttons = jones;
-            renderAngloKeyboard();
-            break;
-        case "cg20":
-            buttons = cg20;
-            renderAngloKeyboard();
-            break;
-        case "gd20":
-            buttons = gd20;
-            renderAngloKeyboard();
-            break;
-        case "da20":
-            buttons = da20;
-            renderAngloKeyboard();
-            break;
-        case "squashbox":
-            buttons = squashbox;
-            renderAngloKeyboard();
-            break;
-        default:
-            buttons = parsedLayoutFromURL;
-            renderAngloKeyboard();
-    }
+    buttons = LAYOUTS[opt_layout.value].layout;
+    renderAngloKeyboard();
+
+    // switch (opt_layout.value) {
+    //     case "cgWheatstone30":
+    //         buttons = cgWheatstone30;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "cgJeffries30":
+    //         buttons = cgJeffries30;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "cgWheatstone40":
+    //         buttons = cgWheatstone40;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "cgJeffries38":
+    //         buttons = cgJeffries38;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "gdWheatstone30":
+    //         buttons = gdWheatstone30;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "gdJeffries30":
+    //         buttons = gdJeffries30;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "gdWheatstone40":
+    //         buttons = gdWheatstone40;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "gdJeffries38":
+    //         buttons = gdJeffries38;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "bbfWheatstone30":
+    //         buttons = bbfWheatstone30;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "bbfJeffries30":
+    //         buttons = bbfJeffries30;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "bbfWheatstone40":
+    //         buttons = bbfWheatstone40;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "bbfJeffries38":
+    //         buttons = bbfJeffries38;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "jones":
+    //         buttons = jones;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "cg20":
+    //         buttons = cg20;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "gd20":
+    //         buttons = gd20;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "da20":
+    //         buttons = da20;
+    //         renderAngloKeyboard();
+    //         break;
+    //     case "squashbox":
+    //         buttons = squashbox;
+    //         renderAngloKeyboard();
+    //         break;
+    //     default:
+    //         buttons = parsedLayoutFromURL;
+    //         renderAngloKeyboard();
+    // }
     opt_layout.blur();
 }
 
@@ -571,13 +581,13 @@ function getUrlParams() {
             } else {
                 addToDropdown("customFromURL", "Custom layout");
             }
-            parseLayout()
+            parseLayout("url")
             opt_layout.value = "customFromURL";
         } else if (urlParam) {
             customLayoutFromURL = urlParam;
             console.log("parsing custom new layout...");
             addToDropdown("customFromURL", "Custom layout");
-            parseLayout();
+            parseLayout("url");
             opt_layout.value = "customFromURL";
         } else {
             console.log("empty param; proceeding with default");
@@ -675,6 +685,11 @@ window.onclick = function (event) {
 // stuff to do when the page is loaded
 function init() {
     opt_pushpull.checked = true;
+    for (layout in LAYOUTS) {
+        addToDropdown(layout, LAYOUTS[layout].title);
+    }
+
+
     if (window.location.href.includes("#") || window.location.href.includes("?")) {
         getUrlParams();
     } else {
