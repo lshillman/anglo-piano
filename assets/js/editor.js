@@ -26,6 +26,10 @@ let validNotes = Object.keys(editorNotes);
 let currentButton;
 let currentField;
 
+let customLayoutFromEditor;
+let parsedLayoutFromEditor;
+let customTitleFromEditor;
+
 
 
 
@@ -83,7 +87,14 @@ function encodeLayoutFromEditor () {
         }
         document.getElementById("editor-error").style.display = "none";
         console.log(encodedLayout);
-        window.location = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout;
+        customLayoutFromEditor = encodedLayout;
+        let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout };
+        history.pushState(stateObj, stateObj.Title, stateObj.Url);
+        editorKeyboard.innerHTML = "";
+        editorSection.style.display = "none";
+        viewerSection.style.display = "block";
+        currentMode = "view";
+        parseLayout("editor");
     } else {
         document.getElementById("editor-error").style.display = "block";
         console.error("Can't encode the layout; please fix errors");
