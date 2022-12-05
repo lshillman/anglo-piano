@@ -468,7 +468,11 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    buttons = LAYOUTS[opt_layout.value].layout;
+    if (LAYOUTS[opt_layout.value]) {
+        buttons = LAYOUTS[opt_layout.value].layout;
+    } else {
+        buttons = parsedLayoutFromURL;
+    }
     renderAngloKeyboard();
     opt_layout.blur();
 }
