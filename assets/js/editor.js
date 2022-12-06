@@ -215,6 +215,7 @@ function bindInputs(fields) {
     allfields.forEach((field) => field.addEventListener('input', (e) => {
         if (isValid(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase())) {
             e.target.classList.remove("invalid");
+            e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
             playNote(noteNames[e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()]);
         }
     }
