@@ -97,10 +97,7 @@ function encodeLayoutFromEditor () {
         }
         let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout + encodedTitle};
         history.pushState(stateObj, stateObj.Title, stateObj.Url);
-        editorKeyboard.innerHTML = "";
-        editorSection.style.display = "none";
-        viewerSection.style.display = "block";
-        currentMode = "view";
+        cleanUpEditor();
         parseLayout("editor");
     } else {
         document.getElementById("editor-error").style.display = "block";
@@ -302,6 +299,15 @@ function insertButton(where) {
     }
 }
 
+function cleanUpEditor() {
+    editorKeyboard.innerHTML = "";
+    layoutTitle.value = "";
+    document.getElementById("editor-error").style.display = "none";
+    editorSection.style.display = "none";
+    viewerSection.style.display = "block";
+    currentMode = "view";
+}
+
 
 
 layoutUpBtn.addEventListener("click", () => {
@@ -349,10 +355,7 @@ editLayoutBtn.addEventListener("click", () => {
 });
 
 cancelBtn.addEventListener("click", () => {
-    editorKeyboard.innerHTML = "";
-    editorSection.style.display = "none";
-    viewerSection.style.display = "block";
-    currentMode = "view"
+    cleanUpEditor();
 });
 
 finishedBtn.addEventListener("click", () => {
