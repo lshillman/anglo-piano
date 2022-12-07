@@ -172,9 +172,15 @@ function parseLayout(origin) {
             newLayout.push({ push, pull, x, newRow });
             layout = layout.slice(2);
     }
-
-    parsedLayoutFromURL = newLayout;
-    buttons = parsedLayoutFromURL;
+    if (origin == "editor") {
+        addToDropdown("customFromEditor", customTitleFromEditor, "editor");
+        opt_layout.value = "customFromEditor";
+        parsedLayoutFromEditor = newLayout;
+        buttons = parsedLayoutFromEditor;
+    } else {
+        parsedLayoutFromURL = newLayout;
+        buttons = parsedLayoutFromURL;
+    }
     angloKeyboard.innerHTML = "";
     renderAngloKeyboard();
     selectConcertinaButtons();
@@ -225,6 +231,7 @@ function parseLegacyLayout() {
 }
 
 
+// This encodes the layout displayed in the viewer. Not currently used, but useful for testing
 function encodeLayout() {
     let encodedLayout = "";
     for (element of angloKeyboard.children) {
@@ -238,7 +245,7 @@ function encodeLayout() {
                 }
             }
         } else {
-            encodedLayout += "~";
+            encodedLayout += ".";
         }
     }
     return encodedLayout;
@@ -470,8 +477,10 @@ function bindAngloButtons() {
 function selectLayout() {
     if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
-    } else {
+    } else if (opt_layout.value == "customFromURL") {
         buttons = parsedLayoutFromURL;
+    } else if (opt_layout.value == "customFromEditor") {
+        buttons = parsedLayoutFromEditor;
     }
     renderAngloKeyboard();
     opt_layout.blur();
@@ -614,6 +623,31 @@ window.onclick = function (event) {
         aboutModal.style.display = "none";
     }
 }
+
+
+
+// This needs more thought. Initially I thought to use localStorage to save custom layouts, but this might just overcomplicate things:
+// What happens when I edit a stored layout? Does it create a copy or overwrite the original? What if a URL is a duplicate of something in localStorage? How do I manage stored layouts?
+// function buildLayoutDropdown() {
+//     if (!window.location.href.includes("#") && !window.location.href.includes("?") && !localStorage.getItem("USER_LAYOUTS")) {
+//         for (layout of Object.keys(LAYOUTS)) {
+//             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+//         }
+//         return;
+//     }
+//     if (window.location.href.includes("#") || window.location.href.includes("?")) {
+//         // create optgroup "Shared via URL"
+//     }
+//     if (localStorage.getItem(USER_LAYOUTS)) {
+//         //create optgroup "Your layouts"
+//     }
+//     for (layout of Object.keys(LAYOUTS)) {
+//         addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+//     }
+
+// }
+
+
 
 // stuff to do when the page is loaded
 function init() {

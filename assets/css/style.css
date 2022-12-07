@@ -435,14 +435,34 @@ button {
 
 #editor-header {
    display: flex;
-   align-items: center;
    justify-content: space-between;
    margin: 0 auto;
    max-width: 700px;
+   /* flex-wrap: wrap; */
+}
+
+#editor-header input {
+   height:36px;
+   padding-left: 0.5rem;
+   font-size: 1.25rem;
+   border-top: none;
+   border-bottom: 1px solid #ccc;
+   border-left: none;
+   border-right: none;
+   box-sizing: border-box;
+   background-color: transparent;
+   flex-basis: 66%;
+   max-width: 300px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+#editor-header input:hover {
+   border-bottom: 2px solid #999;
 }
 
 #cancelBtn {
-   height: 44px;
+   height: 36px;
    padding-left: 1rem;
    padding-right: 1rem;
    border: 1px solid #767676;
@@ -450,7 +470,7 @@ button {
 }
 
 #finishedBtn {
-   height: 44px;
+   height: 36px;
    padding-left: 1rem;
    padding-right: 1rem;
    border: none;
@@ -464,7 +484,7 @@ button {
 }
 
 #editor-anglo-container {
-   margin-top: 1.5rem;
+   margin-top: 2rem;
 }
 
 .editor-button {
@@ -565,7 +585,7 @@ button {
 
 #editor-error {
 	max-width: 700px;
-	margin: 0 auto 1rem auto;
+	margin: 1rem auto 1rem auto;
 	text-align: left;
 	display: none;
 }
@@ -666,6 +686,21 @@ button {
 
 
 @media only screen and (max-width: 600px) {
+   #editor-header {
+      flex-direction: column;
+      justify-content: left;
+   }
+
+   #editor-header input {
+      flex-basis: 100%;
+      max-width: 100%;
+   }
+
+   #editor-actions {
+      margin-top: 0.5rem;
+      text-align: right;
+   }
+
    #editor-anglo-container {
       padding-bottom: 8rem;
    }

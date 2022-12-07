@@ -20,6 +20,7 @@ const newRowBtn = document.getElementById("newRowBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const finishedBtn = document.getElementById("finishedBtn");
+const layoutTitle = document.getElementById("layoutTitle");
 
 
 let validNotes = Object.keys(editorNotes);
@@ -88,12 +89,15 @@ function encodeLayoutFromEditor () {
         document.getElementById("editor-error").style.display = "none";
         console.log(encodedLayout);
         customLayoutFromEditor = encodedLayout;
-        let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout };
+        customTitleFromEditor = layoutTitle.value;
+        let encodedTitle = "";
+        if (layoutTitle.value) {
+            encodedTitle = "&title=" + encodeURI(layoutTitle.value);
+            console.log(encodedTitle);
+        }
+        let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout + encodedTitle};
         history.pushState(stateObj, stateObj.Title, stateObj.Url);
-        editorKeyboard.innerHTML = "";
-        editorSection.style.display = "none";
-        viewerSection.style.display = "block";
-        currentMode = "view";
+        cleanUpEditor();
         parseLayout("editor");
     } else {
         document.getElementById("editor-error").style.display = "block";
@@ -215,7 +219,8 @@ function bindInputs(fields) {
     allfields.forEach((field) => field.addEventListener('input', (e) => {
         if (isValid(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase())) {
             e.target.classList.remove("invalid");
-            playNote(noteNames[e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()]);
+            e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
+            playNote(noteNames[e.target.value]);
         }
     }
     ));
@@ -294,6 +299,15 @@ function insertButton(where) {
     }
 }
 
+function cleanUpEditor() {
+    editorKeyboard.innerHTML = "";
+    layoutTitle.value = "";
+    document.getElementById("editor-error").style.display = "none";
+    editorSection.style.display = "none";
+    viewerSection.style.display = "block";
+    currentMode = "view";
+}
+
 
 
 layoutUpBtn.addEventListener("click", () => {
@@ -341,10 +355,7 @@ editLayoutBtn.addEventListener("click", () => {
 });
 
 cancelBtn.addEventListener("click", () => {
-    editorKeyboard.innerHTML = "";
-    editorSection.style.display = "none";
-    viewerSection.style.display = "block";
-    currentMode = "view"
+    cleanUpEditor();
 });
 
 finishedBtn.addEventListener("click", () => {
