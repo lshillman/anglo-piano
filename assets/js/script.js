@@ -101,8 +101,14 @@ function renderAngloKeyboard() {
     droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
-        layoutnotes.push(button.push);
-        layoutnotes.push(button.pull);
+        if (opt_pushpull.checked) {
+            layoutnotes.push(button.push);
+            layoutnotes.push(button.pull);
+        } else if (opt_push.checked) {
+            layoutnotes.push(button.push);
+        } else {
+            layoutnotes.push(button.pull);
+        }
         let pushLabel = button.push;
         let pullLabel = button.pull;
         if (opt_accidentals.checked) {
@@ -289,6 +295,7 @@ function colorOctaves() {
 }
 
 function togglePushView() {
+    renderAngloKeyboard();
     for (button of angloKeyboard.children) {
         button.classList.remove("pull-only");
         button.classList.add("push-only");
@@ -297,6 +304,7 @@ function togglePushView() {
 }
 
 function togglePullView() {
+    renderAngloKeyboard();
     for (button of angloKeyboard.children) {
         button.classList.remove("push-only");
         button.classList.add("pull-only");
@@ -305,6 +313,7 @@ function togglePullView() {
 }
 
 function resetView() {
+    renderAngloKeyboard();
     for (button of angloKeyboard.children) {
         button.classList.remove("push-only");
         button.classList.remove("pull-only");
