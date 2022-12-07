@@ -63,7 +63,7 @@ let currentIndex = 1;
 let currentMode;
 
 // anglo keyboard calculates min / max and must be rendered first
-function renderPianoKeyboard(min, max, layoutnotes) {
+function renderPianoKeyboard(min, max, layoutnotes, pushnotes, pullnotes) {
     keyboard.innerHTML = "";
     activeNotes.length = 0;
     let allnotes = Object.keys(notes); // get an array of notes from the note object
@@ -82,8 +82,14 @@ function renderPianoKeyboard(min, max, layoutnotes) {
             noteclasses = "sharp";
         }
         noteclasses += ` o${note.substr(-1)}`
-        if (opt_absentNotes.checked && !layoutnotes.includes(note)) {
-            noteclasses += " absent"
+        if (opt_absentNotes.checked) {
+            if (opt_pushpull.checked && !layoutnotes.includes(note)) {
+                noteclasses += " absent";
+            } else if (opt_push.checked && !pushnotes.includes(note)) {
+                noteclasses += " absent";
+            } else if (opt_pull.checked && !pullnotes.includes(note)) {
+                noteclasses += " absent";
+            }
         }
         keyboard.innerHTML += `<button id="${note}" data-note="${note}" class="${noteclasses}">${label}</button>`;
     }
@@ -96,19 +102,19 @@ function renderPianoKeyboard(min, max, layoutnotes) {
 
 function renderAngloKeyboard() {
     let layoutnotes = [];
+    let pushnotes = [];
+    let pullnotes = [];
     let allnotes = Object.keys(notes);
 
     droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
-        if (opt_pushpull.checked) {
-            layoutnotes.push(button.push);
-            layoutnotes.push(button.pull);
-        } else if (opt_push.checked) {
-            layoutnotes.push(button.push);
-        } else {
-            layoutnotes.push(button.pull);
-        }
+
+        layoutnotes.push(button.push);
+        layoutnotes.push(button.pull);
+        pushnotes.push(button.push);
+        pullnotes.push(button.pull);
+
         let pushLabel = button.push;
         let pullLabel = button.pull;
         if (opt_accidentals.checked) {
@@ -144,7 +150,7 @@ function renderAngloKeyboard() {
     
     selectDrone();
     colorOctaves();
-    renderPianoKeyboard(min, max + 1, layoutnotes);
+    renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
 }
 
 
