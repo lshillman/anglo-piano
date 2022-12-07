@@ -20,6 +20,7 @@ const newRowBtn = document.getElementById("newRowBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const finishedBtn = document.getElementById("finishedBtn");
+const layoutTitle = document.getElementById("layoutTitle");
 
 
 let validNotes = Object.keys(editorNotes);
@@ -88,7 +89,13 @@ function encodeLayoutFromEditor () {
         document.getElementById("editor-error").style.display = "none";
         console.log(encodedLayout);
         customLayoutFromEditor = encodedLayout;
-        let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout };
+        customTitleFromEditor = layoutTitle.value;
+        let encodedTitle = "";
+        if (layoutTitle.value) {
+            encodedTitle = "&title=" + encodeURI(layoutTitle.value);
+            console.log(encodedTitle);
+        }
+        let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout + encodedTitle};
         history.pushState(stateObj, stateObj.Title, stateObj.Url);
         editorKeyboard.innerHTML = "";
         editorSection.style.display = "none";
@@ -216,7 +223,7 @@ function bindInputs(fields) {
         if (isValid(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase())) {
             e.target.classList.remove("invalid");
             e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
-            playNote(noteNames[e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase()]);
+            playNote(noteNames[e.target.value]);
         }
     }
     ));
