@@ -490,12 +490,14 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    if (LAYOUTS[opt_layout.value]) {
-        buttons = LAYOUTS[opt_layout.value].layout;
-    } else if (opt_layout.value == "customFromURL") {
+    if (opt_layout.value == "customFromURL") {
         buttons = parsedLayoutFromURL;
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
+    } else if (opt_layout.value.includes("USER_LAYOUT_")) {
+        buttons = USER_LAYOUTS[opt_layout.value.slice(12)];
+    } else if (LAYOUTS[opt_layout.value]) {
+        buttons = LAYOUTS[opt_layout.value].layout;
     }
     renderAngloKeyboard();
     opt_layout.blur();
@@ -529,9 +531,9 @@ function getUrlParams() {
             console.log("selecting a hard-coded layout from new param");
         } else if (urlParam && urlParam.includes("&title=")) {
             customLayoutFromURL = urlParam.split("&title=")[0];
-            customTitleFromURL = urlParam.split("&title=")[1];
+            customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
             if (customTitleFromURL) {
-                addToDropdown("customFromURL", decodeURI(customTitleFromURL), "url");
+                addToDropdown("customFromURL", customTitleFromURL, "url");
             } else {
                 addToDropdown("customFromURL", "Custom layout", "url");
             }
@@ -663,9 +665,21 @@ function buildLayoutDropdown() {
         urlGroup.appendChild(urlOption);
 
     }
-    if (localStorage.getItem(USER_LAYOUTS)) {
+    if (localStorage.getItem("USER_LAYOUTS")) {
         //create optgroup "Your layouts"
         console.log("have items in localStorage");
+        USER_LAYOUTS = JSON.parse(localStorage.getItem("USER_LAYOUTS"));
+        let userGroup = document.createElement("optgroup");
+        userGroup.label = "Your layouts";
+        opt_layout.appendChild(userGroup);
+        for (layout of Object.keys(USER_LAYOUTS)) {
+            let usrOption = document.createElement("option");
+            usrOption.value = "USER_LAYOUT_" + layout;
+            usrOption.text = layout;
+            userGroup.appendChild(usrOption);
+            //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+        }
+        
     }
     let standardGroup = document.createElement("optgroup");
     standardGroup.label = "Standard layouts";
