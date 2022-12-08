@@ -643,24 +643,42 @@ window.onclick = function (event) {
 
 // This needs more thought. Initially I thought to use localStorage to save custom layouts, but this might just overcomplicate things:
 // What happens when I edit a stored layout? Does it create a copy or overwrite the original? What if a URL is a duplicate of something in localStorage? How do I manage stored layouts?
-// function buildLayoutDropdown() {
-//     if (!window.location.href.includes("#") && !window.location.href.includes("?") && !localStorage.getItem("USER_LAYOUTS")) {
-//         for (layout of Object.keys(LAYOUTS)) {
-//             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
-//         }
-//         return;
-//     }
-//     if (window.location.href.includes("#") || window.location.href.includes("?")) {
-//         // create optgroup "Shared via URL"
-//     }
-//     if (localStorage.getItem(USER_LAYOUTS)) {
-//         //create optgroup "Your layouts"
-//     }
-//     for (layout of Object.keys(LAYOUTS)) {
-//         addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
-//     }
+function buildLayoutDropdown() {
+    opt_layout.innerHTML = "";
+    if (!window.location.href.includes("#") && !window.location.href.includes("?") && !localStorage.getItem("USER_LAYOUTS")) {
+        for (layout of Object.keys(LAYOUTS)) {
+            addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+        }
+        return;
+    }
+    if (window.location.href.includes("#") || window.location.href.includes("?")) {
+        // create optgroup "Shared via URL"
+        let urlGroup = document.createElement("optgroup");
+        urlGroup.label = "Shared via link";
+        opt_layout.appendChild(urlGroup);
 
-// }
+        let urlOption = document.createElement("option");
+        urlOption.value = "customFromURL";
+        urlOption.text = customTitleFromURL || "Custom layout";
+        urlGroup.appendChild(urlOption);
+
+    }
+    if (localStorage.getItem(USER_LAYOUTS)) {
+        //create optgroup "Your layouts"
+        console.log("have items in localStorage");
+    }
+    let standardGroup = document.createElement("optgroup");
+    standardGroup.label = "Standard layouts";
+    opt_layout.appendChild(standardGroup);
+    for (layout of Object.keys(LAYOUTS)) {
+        let stdOption = document.createElement("option");
+        stdOption.value = layout;
+        stdOption.text = LAYOUTS[layout].title;
+        standardGroup.appendChild(stdOption);
+        //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+    }
+
+}
 
 
 
