@@ -98,7 +98,10 @@ function encodeLayoutFromEditor () {
         let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout + encodedTitle};
         history.pushState(stateObj, stateObj.Title, stateObj.Url);
         cleanUpEditor();
-        parseLayout("editor");
+        USER_LAYOUTS[customTitleFromEditor] = parseLayout("editor");
+        localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+        buildLayoutDropdown();
+        opt_layout.value = "USER_LAYOUT_" + customTitleFromEditor
     } else {
         document.getElementById("editor-error").style.display = "block";
         console.error("Can't encode the layout; please fix errors");

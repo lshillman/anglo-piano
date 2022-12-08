@@ -196,7 +196,7 @@ function parseLayout(origin) {
     angloKeyboard.innerHTML = "";
     renderAngloKeyboard();
     selectConcertinaButtons();
-
+    return newLayout;
 }
 
 
