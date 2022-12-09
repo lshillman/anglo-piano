@@ -329,9 +329,9 @@ function resetView() {
 
 function selectDrone() {
     if (!opt_drone.checked && document.getElementsByClassName("drone")[0]) {
-        document.getElementsByClassName("drone")[0].style.visibility = 'hidden';
+        document.getElementsByClassName("drone")[0].style.display = 'none';
     } else if (document.getElementsByClassName("drone")[0]) {
-        document.getElementsByClassName("drone")[0].style.visibility = 'visible';
+        document.getElementsByClassName("drone")[0].style.display = 'block';
     }
 }
 
@@ -511,43 +511,43 @@ function getUrlParams() {
         let legacyParam = window.location.href.split("#layout=")[1];
         if (legacyParam && legacyPaths[legacyParam]) {
             opt_layout.value = legacyPaths[legacyParam];
-            selectLayout();
+            // selectLayout();
             console.log("selecting a hard-coded layout from legacy param");
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
             console.log("parsing custom legacy layout...");
-            addToDropdown("customFromURL", "Custom layout", "url");
+            // addToDropdown("customFromURL", "Custom layout", "url");
             parseLegacyLayout();
             opt_layout.value = "customFromURL";
         } else {
             console.log("empty param; proceeding with default");
-            selectLayout();
+            // selectLayout();
         }
     } else if (window.location.href.includes("?")) {
         let urlParam = window.location.href.split("?")[1];
         if (urlParam && legacyPaths[urlParam]) {
             opt_layout.value = legacyPaths[urlParam];
-            selectLayout();
+            // selectLayout();
             console.log("selecting a hard-coded layout from new param");
         } else if (urlParam && urlParam.includes("&title=")) {
             customLayoutFromURL = urlParam.split("&title=")[0];
             customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
-            if (customTitleFromURL) {
-                addToDropdown("customFromURL", customTitleFromURL, "url");
-            } else {
-                addToDropdown("customFromURL", "Custom layout", "url");
-            }
+            // if (customTitleFromURL) {
+            //     addToDropdown("customFromURL", customTitleFromURL, "url");
+            // } else {
+            //     addToDropdown("customFromURL", "Custom layout", "url");
+            // }
             parseLayout("url")
             opt_layout.value = "customFromURL";
         } else if (urlParam) {
             customLayoutFromURL = urlParam;
             console.log("parsing custom new layout...");
-            addToDropdown("customFromURL", "Custom layout", "url");
+            // addToDropdown("customFromURL", "Custom layout", "url");
             parseLayout("url");
             opt_layout.value = "customFromURL";
         } else {
             console.log("empty param; proceeding with default");
-            selectLayout();
+            // selectLayout();
         }
     }
 }
@@ -651,10 +651,12 @@ function buildLayoutDropdown() {
         for (layout of Object.keys(LAYOUTS)) {
             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
         }
+        selectLayout();
         return;
     }
     if (window.location.href.includes("#") || window.location.href.includes("?")) {
         // create optgroup "Shared via URL"
+        getUrlParams();
         let urlGroup = document.createElement("optgroup");
         urlGroup.label = "Shared via link";
         opt_layout.appendChild(urlGroup);
@@ -663,7 +665,6 @@ function buildLayoutDropdown() {
         urlOption.value = "customFromURL";
         urlOption.text = customTitleFromURL || "Custom layout";
         urlGroup.appendChild(urlOption);
-
     }
     if (localStorage.getItem("USER_LAYOUTS")) {
         //create optgroup "Your layouts"
@@ -676,7 +677,7 @@ function buildLayoutDropdown() {
             let usrOption = document.createElement("option");
             usrOption.value = "USER_LAYOUT_" + layout;
             usrOption.text = layout;
-            userGroup.appendChild(usrOption);
+            userGroup.insertBefore(usrOption, userGroup.firstChild);
             //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
         }
         
@@ -691,22 +692,23 @@ function buildLayoutDropdown() {
         standardGroup.appendChild(stdOption);
         //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
     }
-
+    selectLayout();
 }
 
 
 
 // stuff to do when the page is loaded
 function init() {
-    opt_pushpull.checked = true;
-    for (layout of Object.keys(LAYOUTS)) {
-        addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
-    }
-    if (window.location.href.includes("#") || window.location.href.includes("?")) {
-        getUrlParams();
-    } else {
-        selectLayout();
-    }
+    // opt_pushpull.checked = true;
+    // for (layout of Object.keys(LAYOUTS)) {
+    //     addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+    // }
+    // if (window.location.href.includes("#") || window.location.href.includes("?")) {
+    //     getUrlParams();
+    // } else {
+    //     selectLayout();
+    // }
+    buildLayoutDropdown();
 }
 
 init();
