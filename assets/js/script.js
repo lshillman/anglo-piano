@@ -495,7 +495,7 @@ function selectLayout() {
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
     } else if (opt_layout.value.includes("USER_LAYOUT_")) {
-        buttons = USER_LAYOUTS[opt_layout.value.slice(12)];
+        buttons = USER_LAYOUTS[opt_layout.value.slice(12)].layout;
     } else if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
     }

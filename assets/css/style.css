@@ -480,6 +480,10 @@ button {
    border-bottom: 2px solid #999;
 }
 
+#editor-header input.invalid {
+   border-color: red;
+}
+
 #cancelBtn {
    height: 36px;
    padding-left: 1rem;
@@ -615,7 +619,7 @@ button {
       border: 1px solid #A30014;
       padding: 0.25rem;
       font-size: .825rem;
-      margin-left: auto;
+      margin-bottom: 0.5rem;
 }
 
 /* ===== ABOUT MODAL ===== */

@@ -64,18 +64,37 @@ function renderEditor() {
 
 
 function encodeLayoutFromEditor () {
+    let errors = "";
+
+    if (!layoutTitle.value) {
+        layoutTitle.classList.add("invalid");
+        errors += `<span class="error-text">Please give the layout a title.</span>`
+    } else if (opt_layout.value.slice(12) != layoutTitle.value && USER_LAYOUTS[layoutTitle.value]) {
+        layoutTitle.classList.add("invalid");
+        errors += `<span class="error-text">You already have a layout with this title. Please choose a different one.</span>`
+    } else {
+        layoutTitle.classList.remove("invalid");
+    }
 
     //validate all notes
     let allInputs = document.querySelectorAll("#editor-anglo-keyboard input");
-        let canEncode = true;
-        for (let i = 0; i < allInputs.length; i++) {
-            if (!noteNames[allInputs[i].value]) {
-                canEncode = false;
-                allInputs[i].classList.add("invalid");
-            }
+    let canEncode = true;
+    for (let i = 0; i < allInputs.length; i++) {
+        if (!noteNames[allInputs[i].value]) {
+            canEncode = false;
+            allInputs[i].classList.add("invalid");
         }
+    }
 
-    if(canEncode) {
+    if (!canEncode) {
+        errors += `<span class="error-text">Please correct the notes outlined in red. Buttons must have a valid push note and pull note in the range of D2 - D7. Notes must include octave numbers. Use ‘b’ for flat and ‘#’ for sharp.</span>`
+    }
+
+    if (errors) {
+        document.getElementById("editor-error").innerHTML = errors;
+        document.getElementById("editor-error").style.display = "block";
+        return;
+    } else if(canEncode) {
         let encodedLayout = "";
         for (element of editorKeyboard.children) {
             if (element.nodeName != "BR") {
@@ -100,16 +119,12 @@ function encodeLayoutFromEditor () {
             encodedTitle = "&title=" + encodeURI(layoutTitle.value);
             console.log(encodedTitle);
         }
-        let stateObj = { Title: "Anglo Piano", Url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout + encodedTitle};
-        history.pushState(stateObj, stateObj.Title, stateObj.Url);
         cleanUpEditor();
-        USER_LAYOUTS[customTitleFromEditor] = parseLayout("editor");
+        USER_LAYOUTS[customTitleFromEditor] = {layout: parseLayout("editor"), url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodedLayout + encodedTitle}
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         buildLayoutDropdown();
-        opt_layout.value = "USER_LAYOUT_" + customTitleFromEditor
-    } else {
-        document.getElementById("editor-error").style.display = "block";
-        console.error("Can't encode the layout; please fix errors");
+        opt_layout.value = "USER_LAYOUT_" + customTitleFromEditor;
+        selectLayout();
     }
 }
 
