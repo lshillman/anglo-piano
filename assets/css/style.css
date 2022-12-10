@@ -248,6 +248,25 @@ button {
    color: #fff;
 }
 
+#layout {
+   height: 30px;
+   background-color: white;
+   border: 1px solid #767676;
+   border-radius:0%;
+}
+
+#layout:hover {
+   background-color: #eee;
+}
+
+#editLayoutBtn {
+   flex-basis: 60%;
+}
+
+#getLinkBtn {
+   flex-basis: 40%;
+}
+
 #drone-option {
    margin-bottom: 0.5rem;
 }

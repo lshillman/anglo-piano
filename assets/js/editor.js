@@ -41,6 +41,11 @@ function renderEditor() {
     currentMode = "edit"
     editorSection.style.display = "block";
     viewerSection.style.display = "none";
+    if (opt_layout.value == "customFromURL" && customTitleFromURL) {
+        layoutTitle.value = customTitleFromURL;
+    } else if (opt_layout.value.includes("USER_LAYOUT")) {
+        layoutTitle.value = opt_layout.value.slice(12);
+    }
     editorKeyboard.innerHTML = "";
     for (button of buttons) {
         let pushLabel = button.push;
