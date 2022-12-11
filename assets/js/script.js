@@ -42,10 +42,13 @@ const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
 
-// the 'about' modal
+// modals
 const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
 var closeModalBtn = document.getElementsByClassName("close")[0];
+
+const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
+const removeFromLayoutsBtn = document.getElementById("removeFromLayoutsBtn");
 
 // an array that contains all currently-displayed concertina buttons
 let buttons = [];
@@ -626,9 +629,23 @@ document.addEventListener('keyup', function (e) {
 });
 
 
+addToLayoutsBtn.onclick = function () {
+    document.getElementById("add-modal").style.display = "block";
+}
+
+removeFromLayoutsBtn.onclick = function () {
+    document.getElementById("remove-modal").style.display = "block";
+}
+
+
 // about modal
 about.onclick = function () {
     aboutModal.style.display = "block";
+}
+
+function closeModal() {
+    console.log("inside closeModal");
+    [...document.getElementsByClassName("modal")].forEach((element) => element.style.display = "none");
 }
 
 closeModalBtn.onclick = function () {
@@ -637,7 +654,6 @@ closeModalBtn.onclick = function () {
 
 window.onclick = function (event) {
     if (event.target.className == "modal") {
-        console.log(event.target);
         event.target.style.display = "none";
     }
 }
