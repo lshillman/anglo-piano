@@ -271,6 +271,27 @@ button {
    margin-bottom: 0.5rem;
 }
 
+button#addToLayoutsBtn,
+button#removeFromLayoutsBtn {
+	display: none;
+	padding: 0;
+	margin-top: 0.5rem;
+	border-color: transparent;
+	background-color: transparent;
+   cursor: pointer;
+}
+
+button#removeFromLayoutsBtn:hover {
+   color:#A30014;
+   background-color: transparent;
+   text-decoration: underline;
+}
+
+button#addToLayoutsBtn:hover {
+   background-color: transparent;
+   text-decoration: underline;
+}
+
 #anglo-keyboard,
 #editor-anglo-keyboard {
    text-align: left;

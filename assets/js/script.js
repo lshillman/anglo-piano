@@ -496,12 +496,18 @@ function bindAngloButtons() {
 function selectLayout() {
     if (opt_layout.value == "customFromURL") {
         buttons = parsedLayoutFromURL;
+        addToLayoutsBtn.style.display = "block";
+        removeFromLayoutsBtn.style.display = "none";
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
     } else if (opt_layout.value.includes("USER_LAYOUT_")) {
         buttons = USER_LAYOUTS[opt_layout.value.slice(12)].layout;
+        addToLayoutsBtn.style.display = "none";
+        removeFromLayoutsBtn.style.display = "block";
     } else if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
+        addToLayoutsBtn.style.display = "none";
+        removeFromLayoutsBtn.style.display = "none";
     }
     renderAngloKeyboard();
     opt_layout.blur();
