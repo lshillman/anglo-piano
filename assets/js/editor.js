@@ -66,7 +66,7 @@ function renderEditor() {
 function encodeLayoutFromEditor () {
     let errors = "";
 
-    if (!layoutTitle.value) {
+    if (!layoutTitle.value.trim()) {
         layoutTitle.classList.add("invalid");
         errors += `<span class="error-text">Please give the layout a title.</span>`
     } else if (opt_layout.value.slice(12) != layoutTitle.value && USER_LAYOUTS[layoutTitle.value]) {
@@ -113,10 +113,10 @@ function encodeLayoutFromEditor () {
         document.getElementById("editor-error").style.display = "none";
         console.log(encodedLayout);
         customLayoutFromEditor = encodedLayout;
-        customTitleFromEditor = layoutTitle.value;
+        customTitleFromEditor = layoutTitle.value.trim();
         let encodedTitle = "";
-        if (layoutTitle.value) {
-            encodedTitle = "&title=" + encodeURI(layoutTitle.value);
+        if (layoutTitle.value.trim()) {
+            encodedTitle = "&title=" + encodeURI(layoutTitle.value.trim());
             console.log(encodedTitle);
         }
         cleanUpEditor();

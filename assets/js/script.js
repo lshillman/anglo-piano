@@ -637,10 +637,16 @@ document.addEventListener('keyup', function (e) {
 
 
 addToLayoutsBtn.onclick = function () {
+    let newLayoutName = document.getElementById("newLayoutName");
+    newLayoutName.value = customTitleFromURL
     document.getElementById("add-modal").style.display = "block";
+    newLayoutName.focus();
+    newLayoutName.select();
+    
 }
 
 removeFromLayoutsBtn.onclick = function () {
+    document.getElementById("confirmRemoveMsg").innerText = `Do you really want to remove "${opt_layout.value.slice(12)}" from your layouts?`
     document.getElementById("remove-modal").style.display = "block";
 }
 
@@ -653,6 +659,7 @@ about.onclick = function () {
 function closeModal() {
     console.log("inside closeModal");
     [...document.getElementsByClassName("modal")].forEach((element) => element.style.display = "none");
+    [...document.querySelectorAll(".modal .error-text")].forEach((element) => element.style.visibility = "hidden");
 }
 
 closeModalBtn.onclick = function () {
@@ -661,7 +668,7 @@ closeModalBtn.onclick = function () {
 
 window.onclick = function (event) {
     if (event.target.className == "modal") {
-        event.target.style.display = "none";
+        closeModal();
     }
 }
 
@@ -729,11 +736,16 @@ function removeUserLayout() {
 // currently, this is only used to add a layout shared via a link to the user's locally-stored layouts. Layouts the user edits handle this a different way.
 function addUserLayout() {
     let newName = document.getElementById("newLayoutName").value;
-    let url = window.location.href.slice(0, window.location.href.lastIndexOf("&")) + "&title=" + encodeURI(newName);
-    USER_LAYOUTS[newName] = {layout: buttons, url};
-    localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
-    closeModal();
-    buildLayoutDropdown();
+    if (newName.trim()) {
+        let url = window.location.href.slice(0, window.location.href.lastIndexOf("&")) + "&title=" + encodeURI(newName.trim());
+        USER_LAYOUTS[newName] = {layout: buttons, url};
+        localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+        document.getElementById("addLayoutError").style.display = "visible";
+        closeModal();
+        buildLayoutDropdown();
+    } else {
+        document.getElementById("addLayoutError").style.visibility = "visible";
+    }
 }
 
 

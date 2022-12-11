@@ -16,7 +16,7 @@ header {
 }
 
 header div {
-   display:flex;
+   display: flex;
    gap: 0.5rem;
 }
 
@@ -65,7 +65,11 @@ button {
 } */
 
 
-.natural, .sharp, .top, .bottom, #chords button {
+.natural,
+.sharp,
+.top,
+.bottom,
+#chords button {
    font-size: 0.875rem;
 }
 
@@ -90,7 +94,7 @@ button {
    border-left: 1px solid #767676;
 }
 
-.sharp:first-child + .natural {
+.sharp:first-child+.natural {
    margin-left: 0;
    border-left: 1px solid #767676;
 }
@@ -138,7 +142,8 @@ button {
    border-bottom: 1px solid #fff;
 }
 
-#keyboard .absent.selected, #keyboard .absent.selected:hover {
+#keyboard .absent.selected,
+#keyboard .absent.selected:hover {
    background-color: #c588ff;
 }
 
@@ -162,7 +167,7 @@ button {
 }
 
 #keyboard {
-   display:flex;
+   display: flex;
    width: fit-content;
    /* white-space: nowrap; */
 }
@@ -219,7 +224,7 @@ button {
 }
 
 #viewer-options div div {
-   display:flex;
+   display: flex;
    align-items: baseline;
    gap: 0.3rem;
 }
@@ -229,16 +234,19 @@ button {
 }
 
 #viewer-options button,
-#editor-options button {
+#editor-options button,
+.modal-actions button {
    height: 30px;
    padding-left: 0.5rem;
    padding-right: 0.5rem;
    border: 1px solid #767676;
    border-radius: 5px;
+   cursor: pointer;
 }
 
 #viewer-options button:hover,
-#editor-options button:hover {
+#editor-options button:hover,
+.modal-actions button:hover {
    background-color: #eee;
 }
 
@@ -252,7 +260,7 @@ button {
    height: 30px;
    background-color: white;
    border: 1px solid #767676;
-   border-radius:0%;
+   border-radius: 0%;
 }
 
 #layout:hover {
@@ -273,23 +281,26 @@ button {
 
 button#addToLayoutsBtn,
 button#removeFromLayoutsBtn {
-	display: none;
-	padding: 0;
-	margin-top: 0.5rem;
-	border-color: transparent;
-	background-color: transparent;
+   display: none;
+   padding: 0;
+   margin-top: 0.5rem;
+   border-color: transparent;
+   background-color: transparent;
    cursor: pointer;
 }
 
-button#removeFromLayoutsBtn:hover {
-   color:#A30014;
+button#removeFromLayoutsBtn:hover,
+button#removeFromLayoutsBtn:active {
+   color: #A30014;
    background-color: transparent;
    text-decoration: underline;
 }
 
-button#addToLayoutsBtn:hover {
+button#addToLayoutsBtn:hover,
+button#addToLayoutsBtn:active {
    background-color: transparent;
    text-decoration: underline;
+   color: #000;
 }
 
 #anglo-keyboard,
@@ -308,11 +319,11 @@ button#addToLayoutsBtn:hover {
 }
 
 .top {
-	padding: 5px 5px 0 5px;
+   padding: 5px 5px 0 5px;
 }
 
 .bottom {
-	padding: 0 5px 5px 5px;
+   padding: 0 5px 5px 5px;
 }
 
 .button .top button {
@@ -402,19 +413,19 @@ button#addToLayoutsBtn:hover {
 /* ===== OCTAVE COLORS ===== */
 
 .octave-top {
-      height: 30px;
-      width: 60px;
-      z-index: 0;
-      position: relative;
-      margin: 0 0 -25px -5px;
+   height: 30px;
+   width: 60px;
+   z-index: 0;
+   position: relative;
+   margin: 0 0 -25px -5px;
 }
 
 .octave-bottom {
-	height: 30px;
-	width: 60px;
-	z-index: 0;
-	position: relative;
-	margin: 0 0 -30px -5px;
+   height: 30px;
+   width: 60px;
+   z-index: 0;
+   position: relative;
+   margin: 0 0 -30px -5px;
 }
 
 #anglo-container.pretty .o2 {
@@ -482,7 +493,7 @@ button#addToLayoutsBtn:hover {
 }
 
 #editor-header input {
-   height:36px;
+   height: 36px;
    padding-left: 0.5rem;
    font-size: 1.25rem;
    border-top: none;
@@ -532,11 +543,11 @@ button#addToLayoutsBtn:hover {
 }
 
 .editor-button {
-	display: inline-block;
-	width: 60px;
-	height: 60px;
-	white-space: normal;
-	/* background-color: pink; */
+   display: inline-block;
+   width: 60px;
+   height: 60px;
+   white-space: normal;
+   /* background-color: pink; */
 }
 
 .editor-button.selected {
@@ -551,8 +562,8 @@ button#addToLayoutsBtn:hover {
 .editor-button .bottom {
    padding-top: 1px;
 }
- 
- .editor-button input[type=text] {
+
+.editor-button input[type=text] {
    width: 50px;
    height: 24px;
    padding: 0;
@@ -560,45 +571,45 @@ button#addToLayoutsBtn:hover {
    text-align: center;
    border: 1px solid #767676;
    font-family: monospace;
- }
+}
 
- .editor-button input[type=text]:focus {
+.editor-button input[type=text]:focus {
    outline: none;
- }
- 
- .editor-button .top input {
+}
+
+.editor-button .top input {
    border-radius: 5px 5px 0 0;
- }
+}
 
- .editor-button .top input:focus {
+.editor-button .top input:focus {
    border: 2px solid #0000FF;
- }
+}
 
- .editor-button .top input:hover {
+.editor-button .top input:hover {
    background-color: #E9E9FF;
- }
- 
- .editor-button .bottom input {
+}
+
+.editor-button .bottom input {
    border-radius: 0 0 5px 5px;
- }
+}
 
- .editor-button .bottom input:focus {
+.editor-button .bottom input:focus {
    border: 2px solid #A30014;
- }
+}
 
- .editor-button .bottom input:hover {
+.editor-button .bottom input:hover {
    background-color: #FFE7EA;
- }
+}
 
- .editor-button input.invalid {
+.editor-button input.invalid {
    border-color: red;
    border-width: 2px;
- }
+}
 
- .editor-button.deleted {
+.editor-button.deleted {
    width: 0;
    opacity: 0;
- }
+}
 
 #editor-options-container {
    overflow-x: auto;
@@ -620,7 +631,7 @@ button#addToLayoutsBtn:hover {
 }
 
 #editor-options span {
-   display:block;
+   display: block;
 }
 
 #editor-options button {
@@ -628,39 +639,42 @@ button#addToLayoutsBtn:hover {
 }
 
 #editor-error {
-	max-width: 700px;
-	margin: 1rem auto 1rem auto;
-	text-align: left;
-	display: none;
+   max-width: 700px;
+   margin: 1rem auto 1rem auto;
+   text-align: left;
+   display: none;
 }
 
 .error-text {
-      color: #A30014;
-      display: block;
-      border: 1px solid #A30014;
-      padding: 0.25rem;
-      font-size: .825rem;
-      margin-bottom: 0.5rem;
+   color: #A30014;
+   display: block;
+   border: 1px solid #A30014;
+   padding: 0.25rem;
+   font-size: .825rem;
+   margin-bottom: 0.5rem;
 }
 
-/* ===== ABOUT MODAL ===== */
+/* ===== MODALS ===== */
 
 /* overlay */
 .modal {
-   display: none; /* Hidden by default */
-   position: fixed; /* Stay in place */
+   display: none;
+   /* Hidden by default */
+   position: fixed;
+   /* Stay in place */
    z-index: 100;
    left: 0;
    top: 0;
    width: 100%;
    height: 100%;
    overflow: auto;
-   background-color: rgb(47, 79, 79); /* Fallback color */
+   background-color: rgb(47, 79, 79);
+   /* Fallback color */
    background-color: rgba(47, 79, 79, 0.6);
- }
- 
- /* modal content */
- .modal-content {
+}
+
+/* modal content */
+.modal-content {
    background-color: #fff;
    margin-left: auto;
    margin-right: auto;
@@ -673,38 +687,80 @@ button#addToLayoutsBtn:hover {
    max-width: 400px;
    text-align: left;
    border-radius: 8px;
- }
- 
- /* close button */
- .close {
+}
+
+.modal-content h2 {
+   margin-top: 0;
+}
+
+.modal-content input[type=text] {
+   display: block;
+   box-sizing: border-box;
+   width: 100%;
+   height: 25px;
+}
+
+.modal-content .error-text {
+   visibility: hidden;
+   border-width: 0;
+}
+
+.modal-actions {
+   display: flex;
+   justify-content: right;
+   gap: 0.5rem;
+}
+
+.modal-actions .destructive {
+   background-color: #eb0000;
+   color: #fff;
+   border: none;
+}
+
+.modal-actions .destructive:hover {
+   background-color: #A30014;
+}
+
+.modal-actions .primary {
+   background-color: #6CAC04;
+   color: #fff;
+   border: none;
+}
+
+.modal-actions .primary:hover {
+   background-color: #578609;
+}
+
+/* close button */
+.close {
    color: #aaaaaa;
    float: right;
    font-size: 28px;
    font-weight: normal;
- }
- 
- .close:hover,
- .close:focus {
+}
+
+.close:hover,
+.close:focus {
    color: #000;
    text-decoration: none;
    cursor: pointer;
- }
+}
 
 
- /* ===== ARROWS ===== */
+/* ===== ARROWS ===== */
 
- .arrow::before {
-	border-top: 3px solid #555;
+.arrow::before {
+   border-top: 3px solid #555;
    border-right: 3px solid #555;
-	content: '';
-	display: inline-block;
-	height: 8px;
+   content: '';
+   display: inline-block;
+   height: 8px;
    width: 8px;
-	left: 1px;
-	position: relative;
-	top: 1px;
-	transform: rotate(-45deg);
-	vertical-align: top;
+   left: 1px;
+   position: relative;
+   top: 1px;
+   transform: rotate(-45deg);
+   vertical-align: top;
 }
 
 .arrow.up:before {
@@ -712,18 +768,18 @@ button#addToLayoutsBtn:hover {
 }
 
 .arrow.right:before {
-	left: -2px;
-	transform: rotate(45deg);
+   left: -2px;
+   transform: rotate(45deg);
 }
 
 .arrow.down:before {
-	top: 0;
-	transform: rotate(135deg);
+   top: 0;
+   transform: rotate(135deg);
 }
 
 .arrow.left:before {
-	left: 2px;
-	transform: rotate(-135deg);
+   left: 2px;
+   transform: rotate(-135deg);
 }
 
 
@@ -751,7 +807,7 @@ button#addToLayoutsBtn:hover {
 
    #editor-options-container {
       position: fixed;
-      bottom:0;
+      bottom: 0;
       left: 0;
       width: 100%;
       background-color: #efefef;
@@ -769,4 +825,4 @@ button#addToLayoutsBtn:hover {
       min-width: 44px;
       margin-right: 4px;
    }
- }
+}
