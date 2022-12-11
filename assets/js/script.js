@@ -47,6 +47,7 @@ const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
 var closeModalBtn = document.getElementsByClassName("close")[0];
 
+
 const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
 const removeFromLayoutsBtn = document.getElementById("removeFromLayoutsBtn");
 
@@ -712,6 +713,22 @@ function buildLayoutDropdown() {
     selectLayout();
 }
 
+function removeUserLayout() {
+    delete USER_LAYOUTS[opt_layout.value.slice(12)];
+    localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+    closeModal();
+    buildLayoutDropdown();
+}
+
+// currently, this is only used to add a layout shared via a link to the user's locally-stored layouts. Layouts the user edits handle this a different way.
+function addUserLayout() {
+    let newName = document.getElementById("newLayoutName").value;
+    let url = window.location.href.slice(0, window.location.href.lastIndexOf("&")) + "&title=" + encodeURI(newName);
+    USER_LAYOUTS[newName] = {layout: buttons, url};
+    localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+    closeModal();
+    buildLayoutDropdown();
+}
 
 
 // stuff to do when the page is loaded
