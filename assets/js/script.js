@@ -636,8 +636,9 @@ closeModalBtn.onclick = function () {
 }
 
 window.onclick = function (event) {
-    if (event.target == aboutModal) {
-        aboutModal.style.display = "none";
+    if (event.target.className == "modal") {
+        console.log(event.target);
+        event.target.style.display = "none";
     }
 }
 
