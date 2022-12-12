@@ -6,6 +6,7 @@ let customLayoutFromURL;
 let customTitleFromURL;
 let layoutShortcut;
 let parsedLayoutFromURL = [];
+let parsedWithErrors = false;
 
 // are we on a mobile device?
 let mobileDevice = false;
@@ -185,10 +186,17 @@ function parseLayout(origin) {
             x = layout.substring(1, layout.indexOf('_', 1));
             layout = layout.slice(layout.indexOf('_', 1) + 1);
         }
+        if (noteCodes[layout[0]] && noteCodes[layout[1]]) {
             push = noteCodes[layout[0]];
             pull = noteCodes[layout[1]];
             newLayout.push({ push, pull, x, newRow });
             layout = layout.slice(2);
+        } else {
+            layout = "";
+            parsedWithErrors = true;
+            document.getElementById("parse-error-modal").style.display = "block";
+            console.error("Error while parsing layout!")
+        }
     }
     if (origin == "editor") {
         addToDropdown("customFromEditor", customTitleFromEditor, "editor");
@@ -196,12 +204,14 @@ function parseLayout(origin) {
         parsedLayoutFromEditor = newLayout;
         buttons = parsedLayoutFromEditor;
     } else {
-        parsedLayoutFromURL = newLayout;
-        buttons = parsedLayoutFromURL;
+        if (newLayout.length > 0){
+            parsedLayoutFromURL = newLayout;
+            buttons = parsedLayoutFromURL;
+        }
     }
-    angloKeyboard.innerHTML = "";
-    renderAngloKeyboard();
-    selectConcertinaButtons();
+    // angloKeyboard.innerHTML = "";
+    // renderAngloKeyboard();
+    // selectConcertinaButtons();
     return newLayout;
 }
 
@@ -250,7 +260,7 @@ function parseLegacyLayout() {
 
 
 // This encodes the layout displayed in the viewer. Not currently used, but useful for testing
-function encodeLayout() {
+function encodeLayoutFromDOM() {
     let encodedLayout = "";
     for (element of angloKeyboard.children) {
         if (element.nodeName != "BR") {
@@ -265,6 +275,22 @@ function encodeLayout() {
         } else {
             encodedLayout += ".";
         }
+    }
+    return encodedLayout;
+}
+
+// this encodes a layout from the current buttons array
+function encodeLayout() {
+    let encodedLayout = "";
+    for (button of buttons) {
+        if (button.newRow) {
+            encodedLayout += ".";
+        }
+        if (button.x > 0) {
+            encodedLayout += `_${button.x}_`;
+        }
+        encodedLayout += encoder[button.push];
+        encodedLayout += encoder[button.pull];
     }
     return encodedLayout;
 }
@@ -525,7 +551,7 @@ function getUrlParams() {
             //opt_layout.value = legacyPaths[legacyParam];
             layoutShortcut = legacyParam;
             // selectLayout();
-            console.log("selecting a hard-coded layout from legacy param");
+            // console.log("selecting a hard-coded layout from legacy param");
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
             console.log("parsing custom legacy layout...");
@@ -533,7 +559,7 @@ function getUrlParams() {
             parseLegacyLayout();
             opt_layout.value = "customFromURL";
         } else {
-            console.log("empty param; proceeding with default");
+            // console.log("empty param; proceeding with default");
             // selectLayout();
         }
     } else if (window.location.href.includes("?")) {
@@ -719,7 +745,7 @@ function buildLayoutDropdown() {
 
             let urlOption = document.createElement("option");
             urlOption.value = "customFromURL";
-            urlOption.text = customTitleFromURL || "Custom layout";
+            urlOption.text = customTitleFromURL || "Untitled layout";
             urlGroup.appendChild(urlOption);
         }
     }
