@@ -4,7 +4,9 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 // store a custom layout passed in via the URL
 let customLayoutFromURL;
 let customTitleFromURL;
+let layoutShortcut;
 let parsedLayoutFromURL = [];
+let parsedWithErrors = false;
 
 // are we on a mobile device?
 let mobileDevice = false;
@@ -42,10 +44,15 @@ const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
 
-// the 'about' modal
+// modals
 const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
 var closeModalBtn = document.getElementsByClassName("close")[0];
+const getLinkBtn = document.getElementById("getLinkBtn");
+
+
+const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
+const removeFromLayoutsBtn = document.getElementById("removeFromLayoutsBtn");
 
 // an array that contains all currently-displayed concertina buttons
 let buttons = [];
@@ -179,10 +186,17 @@ function parseLayout(origin) {
             x = layout.substring(1, layout.indexOf('_', 1));
             layout = layout.slice(layout.indexOf('_', 1) + 1);
         }
+        if (noteCodes[layout[0]] && noteCodes[layout[1]]) {
             push = noteCodes[layout[0]];
             pull = noteCodes[layout[1]];
             newLayout.push({ push, pull, x, newRow });
             layout = layout.slice(2);
+        } else {
+            layout = "";
+            parsedWithErrors = true;
+            document.getElementById("parse-error-modal").style.display = "block";
+            console.error("Error while parsing layout!")
+        }
     }
     if (origin == "editor") {
         addToDropdown("customFromEditor", customTitleFromEditor, "editor");
@@ -190,13 +204,15 @@ function parseLayout(origin) {
         parsedLayoutFromEditor = newLayout;
         buttons = parsedLayoutFromEditor;
     } else {
-        parsedLayoutFromURL = newLayout;
-        buttons = parsedLayoutFromURL;
+        if (newLayout.length > 0){
+            parsedLayoutFromURL = newLayout;
+            buttons = parsedLayoutFromURL;
+        }
     }
-    angloKeyboard.innerHTML = "";
-    renderAngloKeyboard();
-    selectConcertinaButtons();
-
+    // angloKeyboard.innerHTML = "";
+    // renderAngloKeyboard();
+    // selectConcertinaButtons();
+    return newLayout;
 }
 
 
@@ -244,7 +260,7 @@ function parseLegacyLayout() {
 
 
 // This encodes the layout displayed in the viewer. Not currently used, but useful for testing
-function encodeLayout() {
+function encodeLayoutFromDOM() {
     let encodedLayout = "";
     for (element of angloKeyboard.children) {
         if (element.nodeName != "BR") {
@@ -259,6 +275,22 @@ function encodeLayout() {
         } else {
             encodedLayout += ".";
         }
+    }
+    return encodedLayout;
+}
+
+// this encodes a layout from the current buttons array
+function encodeLayout() {
+    let encodedLayout = "";
+    for (button of buttons) {
+        if (button.newRow) {
+            encodedLayout += ".";
+        }
+        if (button.x > 0) {
+            encodedLayout += `_${button.x}_`;
+        }
+        encodedLayout += encoder[button.push];
+        encodedLayout += encoder[button.pull];
     }
     return encodedLayout;
 }
@@ -329,9 +361,9 @@ function resetView() {
 
 function selectDrone() {
     if (!opt_drone.checked && document.getElementsByClassName("drone")[0]) {
-        document.getElementsByClassName("drone")[0].style.visibility = 'hidden';
+        document.getElementsByClassName("drone")[0].style.display = 'none';
     } else if (document.getElementsByClassName("drone")[0]) {
-        document.getElementsByClassName("drone")[0].style.visibility = 'visible';
+        document.getElementsByClassName("drone")[0].style.display = 'block';
     }
 }
 
@@ -490,12 +522,20 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    if (LAYOUTS[opt_layout.value]) {
-        buttons = LAYOUTS[opt_layout.value].layout;
-    } else if (opt_layout.value == "customFromURL") {
+    if (opt_layout.value == "customFromURL") {
         buttons = parsedLayoutFromURL;
+        addToLayoutsBtn.style.display = "block";
+        removeFromLayoutsBtn.style.display = "none";
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
+    } else if (opt_layout.value.includes("USER_LAYOUT_")) {
+        buttons = USER_LAYOUTS[opt_layout.value.slice(12)].layout;
+        addToLayoutsBtn.style.display = "none";
+        removeFromLayoutsBtn.style.display = "block";
+    } else if (LAYOUTS[opt_layout.value]) {
+        buttons = LAYOUTS[opt_layout.value].layout;
+        addToLayoutsBtn.style.display = "none";
+        removeFromLayoutsBtn.style.display = "none";
     }
     renderAngloKeyboard();
     opt_layout.blur();
@@ -503,49 +543,34 @@ function selectLayout() {
 
 
 
-// TODO: put custom legacy layout into dropdown, add handler for new layouts
 function getUrlParams() {
     if (window.location.href.includes("#layout=")) {
         let legacyParam = window.location.href.split("#layout=")[1];
         if (legacyParam && legacyPaths[legacyParam]) {
-            opt_layout.value = legacyPaths[legacyParam];
-            selectLayout();
-            console.log("selecting a hard-coded layout from legacy param");
+            layoutShortcut = legacyParam;
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
             console.log("parsing custom legacy layout...");
-            addToDropdown("customFromURL", "Custom layout", "url");
             parseLegacyLayout();
             opt_layout.value = "customFromURL";
-        } else {
-            console.log("empty param; proceeding with default");
-            selectLayout();
         }
     } else if (window.location.href.includes("?")) {
         let urlParam = window.location.href.split("?")[1];
         if (urlParam && legacyPaths[urlParam]) {
-            opt_layout.value = legacyPaths[urlParam];
-            selectLayout();
-            console.log("selecting a hard-coded layout from new param");
+            layoutShortcut = urlParam;
+            console.log("selecting a hard-coded layout from new param: " + urlParam);
         } else if (urlParam && urlParam.includes("&title=")) {
             customLayoutFromURL = urlParam.split("&title=")[0];
-            customTitleFromURL = urlParam.split("&title=")[1];
-            if (customTitleFromURL) {
-                addToDropdown("customFromURL", decodeURI(customTitleFromURL), "url");
-            } else {
-                addToDropdown("customFromURL", "Custom layout", "url");
-            }
+            customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
             parseLayout("url")
             opt_layout.value = "customFromURL";
         } else if (urlParam) {
             customLayoutFromURL = urlParam;
             console.log("parsing custom new layout...");
-            addToDropdown("customFromURL", "Custom layout", "url");
             parseLayout("url");
             opt_layout.value = "customFromURL";
         } else {
             console.log("empty param; proceeding with default");
-            selectLayout();
         }
     }
 }
@@ -562,10 +587,31 @@ function addToDropdown(value, title, origin) {
         }
 }
 
+function selectShareLink() {
+    document.getElementById("shareLink").select();
+}
 
 opt_layout.addEventListener("change", () => {
     selectLayout();
 });
+
+getLinkBtn.onclick = function () {
+    let linkField = document.getElementById("shareLink");
+    if (opt_layout.value == "customFromURL") {
+        let title = ""
+        if (customTitleFromURL) {
+            title = "&title=" + encodeURI(customTitleFromURL);
+        }
+        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + title;
+    } else if (opt_layout.value.includes("USER_LAYOUT")) {
+        linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url;
+    } else {
+        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + opt_layout.value;
+    }
+    document.getElementById("share-modal").style.display = "block";
+    linkField.focus();
+    linkField.select();
+}
 
 opt_pushpull.addEventListener("change", () => {
     resetView();
@@ -624,9 +670,39 @@ document.addEventListener('keyup', function (e) {
 });
 
 
+addToLayoutsBtn.onclick = function () {
+    let newLayoutName = document.getElementById("newLayoutName");
+    newLayoutName.value = customTitleFromURL || "";
+    document.getElementById("add-modal").style.display = "block";
+    newLayoutName.focus();
+    newLayoutName.select();
+    
+}
+
+removeFromLayoutsBtn.onclick = function () {
+    document.getElementById("confirmRemoveMsg").innerText = `Do you really want to remove "${opt_layout.value.slice(12)}" from your layouts?`
+    document.getElementById("remove-modal").style.display = "block";
+}
+
+function copyToClipboard() {
+    var shareLink = document.getElementById("shareLink");
+    shareLink.select();
+    shareLink.setSelectionRange(0, 99999); // For mobile devices
+    navigator.clipboard.writeText(shareLink.value);
+    document.getElementById("copySuccessMsg").style.visibility = "visible";
+  } 
+
+
 // about modal
 about.onclick = function () {
     aboutModal.style.display = "block";
+}
+
+function closeModal() {
+    console.log("inside closeModal");
+    [...document.getElementsByClassName("modal")].forEach((element) => element.style.display = "none");
+    [...document.querySelectorAll(".modal .error-text")].forEach((element) => element.style.visibility = "hidden");
+    [...document.querySelectorAll(".modal .success-text")].forEach((element) => element.style.visibility = "hidden");
 }
 
 closeModalBtn.onclick = function () {
@@ -634,47 +710,106 @@ closeModalBtn.onclick = function () {
 }
 
 window.onclick = function (event) {
-    if (event.target == aboutModal) {
-        aboutModal.style.display = "none";
+    if (event.target.className == "modal") {
+        closeModal();
     }
 }
 
 
 
-// This needs more thought. Initially I thought to use localStorage to save custom layouts, but this might just overcomplicate things:
-// What happens when I edit a stored layout? Does it create a copy or overwrite the original? What if a URL is a duplicate of something in localStorage? How do I manage stored layouts?
-// function buildLayoutDropdown() {
-//     if (!window.location.href.includes("#") && !window.location.href.includes("?") && !localStorage.getItem("USER_LAYOUTS")) {
-//         for (layout of Object.keys(LAYOUTS)) {
-//             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
-//         }
-//         return;
-//     }
-//     if (window.location.href.includes("#") || window.location.href.includes("?")) {
-//         // create optgroup "Shared via URL"
-//     }
-//     if (localStorage.getItem(USER_LAYOUTS)) {
-//         //create optgroup "Your layouts"
-//     }
-//     for (layout of Object.keys(LAYOUTS)) {
-//         addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
-//     }
+// If we don't have layouts from URL params or localStorage, build a simple dropdown. If we have URL params or locally-stored layouts, create optgroups.
+function buildLayoutDropdown() {
+    opt_layout.innerHTML = "";
+    if (!customLayoutFromURL && !localStorage.getItem("USER_LAYOUTS")) {
+        for (layout of Object.keys(LAYOUTS)) {
+            addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+        }
+        if (layoutShortcut) {
+            opt_layout.value = layoutShortcut;
+        }
+        selectLayout();
+        return;
+    }
+    if (customLayoutFromURL) {
+        // create optgroup "Shared via URL"
+        if (!layoutShortcut) {
+            let urlGroup = document.createElement("optgroup");
+            urlGroup.label = "Shared via link";
+            opt_layout.appendChild(urlGroup);
 
-// }
+            let urlOption = document.createElement("option");
+            urlOption.value = "customFromURL";
+            urlOption.text = customTitleFromURL || "Untitled layout";
+            urlGroup.appendChild(urlOption);
+        }
+    }
+    if (localStorage.getItem("USER_LAYOUTS")) {
+        //create optgroup "Your layouts"
+        console.log("have items in localStorage");
+        USER_LAYOUTS = JSON.parse(localStorage.getItem("USER_LAYOUTS"));
+        let userGroup = document.createElement("optgroup");
+        userGroup.label = "Your layouts";
+        opt_layout.appendChild(userGroup);
+        for (layout of Object.keys(USER_LAYOUTS)) {
+            let usrOption = document.createElement("option");
+            usrOption.value = "USER_LAYOUT_" + layout;
+            usrOption.text = layout;
+            userGroup.insertBefore(usrOption, userGroup.firstChild);
+            //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+        }
+        
+    }
+    let standardGroup = document.createElement("optgroup");
+    standardGroup.label = "Standard layouts";
+    opt_layout.appendChild(standardGroup);
+    for (layout of Object.keys(LAYOUTS)) {
+        let stdOption = document.createElement("option");
+        stdOption.value = layout;
+        stdOption.text = LAYOUTS[layout].title;
+        standardGroup.appendChild(stdOption);
+        //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+    }
+    if (layoutShortcut) {
+        opt_layout.value = layoutShortcut;
+    }
+    selectLayout();
+}
 
+function removeUserLayout() {
+    delete USER_LAYOUTS[opt_layout.value.slice(12)];
+    localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+    closeModal();
+    buildLayoutDropdown();
+}
+
+// currently, this is only used to add a layout shared via a link to the user's locally-stored layouts. Layouts the user edits handle this a different way.
+function addUserLayout() {
+    let newName = document.getElementById("newLayoutName").value;
+    if (newName.trim() && !USER_LAYOUTS[newName]) {
+        let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + "&title=" + encodeURI(newName.trim());
+        USER_LAYOUTS[newName] = {layout: buttons, url};
+        localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+        document.getElementById("addLayoutError").style.display = "visible";
+        closeModal();
+        buildLayoutDropdown();
+        opt_layout.value = "USER_LAYOUT_" + newName;
+        selectLayout();
+    } else if (!newName.trim()) {
+        let error = document.getElementById("addLayoutError");
+        error.innerHTML = "Please enter a name for this layout";
+        error.style.visibility = "visible";
+    } else if (USER_LAYOUTS[newName.trim()]) {
+        let error = document.getElementById("addLayoutError");
+        error.innerHTML = "You already have a layout with this name.<br>Please choose another.";
+        error.style.visibility = "visible";
+    }
+}
 
 
 // stuff to do when the page is loaded
 function init() {
-    opt_pushpull.checked = true;
-    for (layout of Object.keys(LAYOUTS)) {
-        addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
-    }
-    if (window.location.href.includes("#") || window.location.href.includes("?")) {
-        getUrlParams();
-    } else {
-        selectLayout();
-    }
+    getUrlParams();
+    buildLayoutDropdown();
 }
 
 init();

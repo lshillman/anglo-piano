@@ -46,7 +46,11 @@
             </div>
             <div>
                 <button id="editLayoutBtn">Edit layout</button>
-                <!-- <button>Get link</button> -->
+                <button id="getLinkBtn">Get link</button>
+            </div>
+            <div>
+                <button id="addToLayoutsBtn">Add to your layouts</button>
+                <button id="removeFromLayoutsBtn">Remove from your layouts</button>
             </div>
         </div>
         <div>
@@ -150,13 +154,65 @@
 
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" onclick="closeModal()">&times;</span>
             <h2>Hi, I’m Luke.</h2>
             <p>I made Anglo Piano to help myself transcribe things, puzzle out chords, and explore different keyboard layouts.</p>
             <p>If you find this tool helpful, I’d love to know! Contact me via <a href="https://www.concertina.net/forums/index.php?/topic/24636-anglo-piano-webapp/" target="_blank" rel="noreferrer noopener">concertina.net</a>, <a rel="me noreferrer noopener" href="https://wandering.shop/@luke" target="_blank">mastodon</a>, <a href="https://www.youtube.com/lshillman" target="_blank" rel="noreferrer noopener">youtube</a>, or email to ‘hi’ at this domain.</p>
             <p>If you feel like it, you can <a href="https://ko-fi.com/luuke" target="_blank" rel="noreferrer noopener">buy me a coffee</a>.</p>
         </div>
 
+    </div>
+
+    <div id="remove-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Remove layout?</h2>
+            <p id="confirmRemoveMsg">Do you really want to remove LAYOUT_NAME from your layouts?</p>
+            <div class="modal-actions">
+                <button id="cancelRemoveBtn" onclick="closeModal()">Cancel</button>
+                <button id="finalRemoveBtn" class="destructive" onclick="removeUserLayout()">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add layout</h2>
+            <p>What do you want to call this layout?</p>
+            <input type="text" id ="newLayoutName" placeholder="e.g., 'My custom 38b C/G'">
+            <span class="error-text" id="addLayoutError">Please enter a name for this layout</span>
+            <div class="modal-actions">
+                <button id="cancelAddBtn" onclick="closeModal()">Cancel</button>
+                <button id="addLayoutBtn" class="primary" onclick="addUserLayout()">Add layout</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Get link</h2>
+            <p>You can share or bookmark this link:</p>
+            <input type="text" id ="shareLink" readonly onclick="selectShareLink()">
+            <span class="success-text" id="copySuccessMsg">Link copied to clipboard.</span>
+            <div class="modal-actions">
+                <button onclick="closeModal()">Close</button>
+                <button id="copyLinkBtn" class="primary" onclick="copyToClipboard()">Copy link</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="parse-error-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Error reading layout</h2>
+            <p>We did all we could, but something feels wrong.</p>
+            <p>Some buttons may be incorrect or missing. If you pasted a link from somewhere, make sure you copied the whole thing.</p>
+            <div class="modal-actions">
+                <button onclick="closeModal()">Roger roger</button>
+            </div>
+        </div>
     </div>
 
     <script src="./assets/js/notes.js"></script>
