@@ -731,6 +731,12 @@ button#addToLayoutsBtn:active {
    background-color: #578609;
 }
 
+.modal-content .success-text {
+   color: #578609;
+   visibility: hidden;
+   display: block;
+}
+
 /* close button */
 .close {
    color: #aaaaaa;

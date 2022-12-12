@@ -4,6 +4,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 // store a custom layout passed in via the URL
 let customLayoutFromURL;
 let customTitleFromURL;
+let layoutShortcut;
 let parsedLayoutFromURL = [];
 
 // are we on a mobile device?
@@ -46,6 +47,7 @@ const opt_absentNotes = document.getElementById("absent-notes");
 const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
 var closeModalBtn = document.getElementsByClassName("close")[0];
+const getLinkBtn = document.getElementById("getLinkBtn");
 
 
 const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
@@ -520,7 +522,8 @@ function getUrlParams() {
     if (window.location.href.includes("#layout=")) {
         let legacyParam = window.location.href.split("#layout=")[1];
         if (legacyParam && legacyPaths[legacyParam]) {
-            opt_layout.value = legacyPaths[legacyParam];
+            //opt_layout.value = legacyPaths[legacyParam];
+            layoutShortcut = legacyParam;
             // selectLayout();
             console.log("selecting a hard-coded layout from legacy param");
         } else if (legacyParam) {
@@ -536,9 +539,10 @@ function getUrlParams() {
     } else if (window.location.href.includes("?")) {
         let urlParam = window.location.href.split("?")[1];
         if (urlParam && legacyPaths[urlParam]) {
-            opt_layout.value = legacyPaths[urlParam];
-            // selectLayout();
-            console.log("selecting a hard-coded layout from new param");
+            // opt_layout.value = LAYOUTS[urlParam];
+            //selectLayout();
+            layoutShortcut = urlParam;
+            console.log("selecting a hard-coded layout from new param: " + urlParam);
         } else if (urlParam && urlParam.includes("&title=")) {
             customLayoutFromURL = urlParam.split("&title=")[0];
             customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
@@ -574,10 +578,27 @@ function addToDropdown(value, title, origin) {
         }
 }
 
+function selectShareLink() {
+    document.getElementById("shareLink").select();
+}
 
 opt_layout.addEventListener("change", () => {
     selectLayout();
 });
+
+getLinkBtn.onclick = function () {
+    let linkField = document.getElementById("shareLink");
+    if (opt_layout.value == "customFromURL") {
+        linkField.value = window.location.href;
+    } else if (opt_layout.value.includes("USER_LAYOUT")) {
+        linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url;
+    } else {
+        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + opt_layout.value;
+    }
+    document.getElementById("share-modal").style.display = "block";
+    linkField.focus();
+    linkField.select();
+}
 
 opt_pushpull.addEventListener("change", () => {
     resetView();
@@ -638,7 +659,7 @@ document.addEventListener('keyup', function (e) {
 
 addToLayoutsBtn.onclick = function () {
     let newLayoutName = document.getElementById("newLayoutName");
-    newLayoutName.value = customTitleFromURL
+    newLayoutName.value = customTitleFromURL || "";
     document.getElementById("add-modal").style.display = "block";
     newLayoutName.focus();
     newLayoutName.select();
@@ -678,9 +699,13 @@ window.onclick = function (event) {
 // What happens when I edit a stored layout? Does it create a copy or overwrite the original? What if a URL is a duplicate of something in localStorage? How do I manage stored layouts?
 function buildLayoutDropdown() {
     opt_layout.innerHTML = "";
-    if (!window.location.href.includes("#") && !window.location.href.includes("?") && !localStorage.getItem("USER_LAYOUTS")) {
+    getUrlParams();
+    if (!customLayoutFromURL && !localStorage.getItem("USER_LAYOUTS")) {
         for (layout of Object.keys(LAYOUTS)) {
             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+        }
+        if (layoutShortcut) {
+            opt_layout.value = layoutShortcut;
         }
         selectLayout();
         return;
@@ -688,14 +713,16 @@ function buildLayoutDropdown() {
     if (window.location.href.includes("#") || window.location.href.includes("?")) {
         // create optgroup "Shared via URL"
         getUrlParams();
-        let urlGroup = document.createElement("optgroup");
-        urlGroup.label = "Shared via link";
-        opt_layout.appendChild(urlGroup);
+        if (!layoutShortcut) {
+            let urlGroup = document.createElement("optgroup");
+            urlGroup.label = "Shared via link";
+            opt_layout.appendChild(urlGroup);
 
-        let urlOption = document.createElement("option");
-        urlOption.value = "customFromURL";
-        urlOption.text = customTitleFromURL || "Custom layout";
-        urlGroup.appendChild(urlOption);
+            let urlOption = document.createElement("option");
+            urlOption.value = "customFromURL";
+            urlOption.text = customTitleFromURL || "Custom layout";
+            urlGroup.appendChild(urlOption);
+        }
     }
     if (localStorage.getItem("USER_LAYOUTS")) {
         //create optgroup "Your layouts"
@@ -722,6 +749,9 @@ function buildLayoutDropdown() {
         stdOption.text = LAYOUTS[layout].title;
         standardGroup.appendChild(stdOption);
         //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
+    }
+    if (layoutShortcut) {
+        opt_layout.value = layoutShortcut;
     }
     selectLayout();
 }

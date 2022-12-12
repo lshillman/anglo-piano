@@ -189,6 +189,20 @@
         </div>
     </div>
 
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Get link</h2>
+            <p>You can share or bookmark this link:</p>
+            <input type="text" id ="shareLink" readonly onclick="selectShareLink()">
+            <span class="success-text" id="copySuccessMsg">Link copied to clipboard.</span>
+            <div class="modal-actions">
+                <button id="cancelAddBtn" onclick="closeModal()">Close</button>
+                <button id="addLayoutBtn" class="primary" onclick="">Copy link</button>
+            </div>
+        </div>
+    </div>
+
     <script src="./assets/js/notes.js"></script>
     <script src="./assets/js/layouts.js"></script>
     <script src="./assets/js/script.js"></script>
