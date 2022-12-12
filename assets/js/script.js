@@ -701,6 +701,14 @@ removeFromLayoutsBtn.onclick = function () {
     document.getElementById("remove-modal").style.display = "block";
 }
 
+function copyToClipboard() {
+    var shareLink = document.getElementById("shareLink");
+    shareLink.select();
+    shareLink.setSelectionRange(0, 99999); // For mobile devices
+    navigator.clipboard.writeText(shareLink.value);
+    document.getElementById("copySuccessMsg").style.visibility = "visible";
+  } 
+
 
 // about modal
 about.onclick = function () {
@@ -711,6 +719,7 @@ function closeModal() {
     console.log("inside closeModal");
     [...document.getElementsByClassName("modal")].forEach((element) => element.style.display = "none");
     [...document.querySelectorAll(".modal .error-text")].forEach((element) => element.style.visibility = "hidden");
+    [...document.querySelectorAll(".modal .success-text")].forEach((element) => element.style.visibility = "hidden");
 }
 
 closeModalBtn.onclick = function () {
@@ -729,7 +738,6 @@ window.onclick = function (event) {
 // What happens when I edit a stored layout? Does it create a copy or overwrite the original? What if a URL is a duplicate of something in localStorage? How do I manage stored layouts?
 function buildLayoutDropdown() {
     opt_layout.innerHTML = "";
-    getUrlParams();
     if (!customLayoutFromURL && !localStorage.getItem("USER_LAYOUTS")) {
         for (layout of Object.keys(LAYOUTS)) {
             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
@@ -795,15 +803,23 @@ function removeUserLayout() {
 // currently, this is only used to add a layout shared via a link to the user's locally-stored layouts. Layouts the user edits handle this a different way.
 function addUserLayout() {
     let newName = document.getElementById("newLayoutName").value;
-    if (newName.trim()) {
+    if (newName.trim() && !USER_LAYOUTS[newName]) {
         let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + "&title=" + encodeURI(newName.trim());
         USER_LAYOUTS[newName] = {layout: buttons, url};
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         document.getElementById("addLayoutError").style.display = "visible";
         closeModal();
         buildLayoutDropdown();
-    } else {
-        document.getElementById("addLayoutError").style.visibility = "visible";
+        opt_layout.value = "USER_LAYOUT_" + newName;
+        selectLayout();
+    } else if (!newName.trim()) {
+        let error = document.getElementById("addLayoutError");
+        error.innerHTML = "Please enter a name for this layout";
+        error.style.visibility = "visible";
+    } else if (USER_LAYOUTS[newName.trim()]) {
+        let error = document.getElementById("addLayoutError");
+        error.innerHTML = "You already have a layout with this name.<br>Please choose another.";
+        error.style.visibility = "visible";
     }
 }
 
@@ -819,6 +835,7 @@ function init() {
     // } else {
     //     selectLayout();
     // }
+    getUrlParams();
     buildLayoutDropdown();
 }
 
