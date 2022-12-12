@@ -543,51 +543,34 @@ function selectLayout() {
 
 
 
-// TODO: put custom legacy layout into dropdown, add handler for new layouts
 function getUrlParams() {
     if (window.location.href.includes("#layout=")) {
         let legacyParam = window.location.href.split("#layout=")[1];
         if (legacyParam && legacyPaths[legacyParam]) {
-            //opt_layout.value = legacyPaths[legacyParam];
             layoutShortcut = legacyParam;
-            // selectLayout();
-            // console.log("selecting a hard-coded layout from legacy param");
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
             console.log("parsing custom legacy layout...");
-            // addToDropdown("customFromURL", "Custom layout", "url");
             parseLegacyLayout();
             opt_layout.value = "customFromURL";
-        } else {
-            // console.log("empty param; proceeding with default");
-            // selectLayout();
         }
     } else if (window.location.href.includes("?")) {
         let urlParam = window.location.href.split("?")[1];
         if (urlParam && legacyPaths[urlParam]) {
-            // opt_layout.value = LAYOUTS[urlParam];
-            //selectLayout();
             layoutShortcut = urlParam;
             console.log("selecting a hard-coded layout from new param: " + urlParam);
         } else if (urlParam && urlParam.includes("&title=")) {
             customLayoutFromURL = urlParam.split("&title=")[0];
             customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
-            // if (customTitleFromURL) {
-            //     addToDropdown("customFromURL", customTitleFromURL, "url");
-            // } else {
-            //     addToDropdown("customFromURL", "Custom layout", "url");
-            // }
             parseLayout("url")
             opt_layout.value = "customFromURL";
         } else if (urlParam) {
             customLayoutFromURL = urlParam;
             console.log("parsing custom new layout...");
-            // addToDropdown("customFromURL", "Custom layout", "url");
             parseLayout("url");
             opt_layout.value = "customFromURL";
         } else {
             console.log("empty param; proceeding with default");
-            // selectLayout();
         }
     }
 }
@@ -734,8 +717,7 @@ window.onclick = function (event) {
 
 
 
-// This needs more thought. Initially I thought to use localStorage to save custom layouts, but this might just overcomplicate things:
-// What happens when I edit a stored layout? Does it create a copy or overwrite the original? What if a URL is a duplicate of something in localStorage? How do I manage stored layouts?
+// If we don't have layouts from URL params or localStorage, build a simple dropdown. If we have URL params or locally-stored layouts, create optgroups.
 function buildLayoutDropdown() {
     opt_layout.innerHTML = "";
     if (!customLayoutFromURL && !localStorage.getItem("USER_LAYOUTS")) {
@@ -826,15 +808,6 @@ function addUserLayout() {
 
 // stuff to do when the page is loaded
 function init() {
-    // opt_pushpull.checked = true;
-    // for (layout of Object.keys(LAYOUTS)) {
-    //     addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
-    // }
-    // if (window.location.href.includes("#") || window.location.href.includes("?")) {
-    //     getUrlParams();
-    // } else {
-    //     selectLayout();
-    // }
     getUrlParams();
     buildLayoutDropdown();
 }
