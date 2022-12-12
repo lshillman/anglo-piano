@@ -710,9 +710,8 @@ function buildLayoutDropdown() {
         selectLayout();
         return;
     }
-    if (window.location.href.includes("#") || window.location.href.includes("?")) {
+    if (customLayoutFromURL) {
         // create optgroup "Shared via URL"
-        getUrlParams();
         if (!layoutShortcut) {
             let urlGroup = document.createElement("optgroup");
             urlGroup.label = "Shared via link";
