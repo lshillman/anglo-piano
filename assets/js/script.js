@@ -615,7 +615,11 @@ opt_layout.addEventListener("change", () => {
 getLinkBtn.onclick = function () {
     let linkField = document.getElementById("shareLink");
     if (opt_layout.value == "customFromURL") {
-        linkField.value = window.location.href;
+        let title = ""
+        if (customTitleFromURL) {
+            title = "&title=" + encodeURI(customTitleFromURL);
+        }
+        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + title;
     } else if (opt_layout.value.includes("USER_LAYOUT")) {
         linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url;
     } else {
@@ -792,7 +796,7 @@ function removeUserLayout() {
 function addUserLayout() {
     let newName = document.getElementById("newLayoutName").value;
     if (newName.trim()) {
-        let url = window.location.href.slice(0, window.location.href.lastIndexOf("&")) + "&title=" + encodeURI(newName.trim());
+        let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + "&title=" + encodeURI(newName.trim());
         USER_LAYOUTS[newName] = {layout: buttons, url};
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         document.getElementById("addLayoutError").style.display = "visible";
