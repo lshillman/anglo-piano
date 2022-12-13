@@ -49,6 +49,7 @@ const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
 var closeModalBtn = document.getElementsByClassName("close")[0];
 const getLinkBtn = document.getElementById("getLinkBtn");
+const keyboardShortcutsBtn = document.getElementById("keyboardShortcutsBtn");
 
 
 const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
@@ -649,7 +650,7 @@ opt_absentNotes.addEventListener("change", () => {
 
 
 document.addEventListener('keydown', function (e) {
-    // console.log(e.code);
+    console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
     } else if (e.code == "ArrowRight") {
@@ -660,6 +661,18 @@ document.addEventListener('keydown', function (e) {
         moveLeft();
     } else if (e.code == "Escape") {
         closeModal();
+    } else if (e.code == "Digit1" && currentMode == "view") {
+        findChord('maj');
+    } else if (e.code == "Digit2" && currentMode == "view") {
+        findChord('min');
+    } else if (e.code == "Digit3" && currentMode == "view") {
+        findChord('dim');
+    } else if (e.code == "Digit4" && currentMode == "view") {
+        findChord('7');
+    } else if (e.code == "Digit5" && currentMode == "view") {
+        findChord('maj7');
+    } else if (e.code == "Digit6" && currentMode == "view") {
+        findChord('min7');
     }
 })
 
@@ -696,6 +709,10 @@ function copyToClipboard() {
 // about modal
 about.onclick = function () {
     aboutModal.style.display = "block";
+}
+
+keyboardShortcutsBtn.onclick = function () {
+    document.getElementById("keyboard-shortcuts-modal").style.display = "block";
 }
 
 function closeModal() {
@@ -808,6 +825,7 @@ function addUserLayout() {
 
 // stuff to do when the page is loaded
 function init() {
+    if (!mobileDevice) {keyboardShortcutsBtn.style.display = "block"}
     getUrlParams();
     buildLayoutDropdown();
 }

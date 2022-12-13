@@ -325,6 +325,7 @@ function insertButton(where) {
 function cleanUpEditor() {
     editorKeyboard.innerHTML = "";
     layoutTitle.value = "";
+    layoutTitle.classList.remove("invalid");
     document.getElementById("editor-error").style.display = "none";
     editorSection.style.display = "none";
     viewerSection.style.display = "block";

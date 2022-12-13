@@ -34,6 +34,15 @@ header h1 {
    display: inline-block;
 }
 
+#keyboardShortcutsBtn {
+   background: transparent url(/assets/images/ic-keyboard.svg) no-repeat center;
+   border: none;
+   width: 60px;
+   height: 50px;
+   cursor: pointer;
+   display: none;
+}
+
 #about {
    line-height: 50px;
    background-color: transparent;
@@ -45,8 +54,33 @@ header h1 {
    cursor: pointer;
 }
 
-#about:hover {
+#about:hover,
+#keyboardShortcutsBtn:hover {
    background-color: #555;
+}
+
+.copyright {
+   color: #767676;
+}
+
+.keyboard-shortcut {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+   margin-bottom: 1rem;
+}
+
+.keyboard-shortcut div:first-child {
+   white-space: nowrap;
+}
+
+.keyboard-button {
+   background-color: #ddd;
+   border: 1px solid #767676;
+   border-radius: 4px;
+   box-sizing: border-box;
+   padding: 0.25rem 0.5rem;
+   display: inline-block;
 }
 
 body {
@@ -693,6 +727,10 @@ button#addToLayoutsBtn:active {
    margin-top: 0;
 }
 
+.modal-content p {
+   line-height: 1.3;
+}
+
 .modal-content input[type=text] {
    display: block;
    box-sizing: border-box;
@@ -733,7 +771,7 @@ button#addToLayoutsBtn:active {
 }
 
 .modal-content .success-text {
-   color: #578609;
+   color: #4D7A06;
    visibility: hidden;
    display: block;
    margin-bottom: 0.5rem;
@@ -791,9 +829,27 @@ button#addToLayoutsBtn:active {
 }
 
 
+@media only screen and (max-width: 630px) {
+
+   #viewer-options {
+      max-width: 100%;
+      justify-content: space-evenly;
+   }
+
+   #viewer-options div:first-child {
+      flex-grow: 0.5;
+   }
+
+   #layout {
+      width: 100%;
+   }
+
+}
+
 
 
 @media only screen and (max-width: 600px) {
+
    #editor-header {
       flex-direction: column;
       justify-content: left;
