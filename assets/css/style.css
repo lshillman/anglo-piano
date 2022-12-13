@@ -673,6 +673,16 @@ button#addToLayoutsBtn:active {
    margin-top: 0.5rem;
 }
 
+#editor-options #deleteBtn {
+   border-color: #A30014;
+   color: #A30014;
+}
+
+#editor-options #deleteBtn:hover {
+   background-color: #A30014;
+   color: #fff;
+}
+
 #editor-error {
    max-width: 700px;
    margin: 1rem auto 1rem auto;
