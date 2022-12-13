@@ -58,6 +58,26 @@ header h1 {
    background-color: #555;
 }
 
+.keyboard-shortcut {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+   margin-bottom: 1rem;
+}
+
+.keyboard-shortcut div:first-child {
+   white-space: nowrap;
+}
+
+.keyboard-button {
+   background-color: #ddd;
+   border: 1px solid #767676;
+   border-radius: 4px;
+   box-sizing: border-box;
+   padding: 0.25rem 0.5rem;
+   display: inline-block;
+}
+
 body {
    background-color: #fafafa;
    text-align: center;
