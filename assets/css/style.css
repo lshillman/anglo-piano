@@ -763,7 +763,7 @@ button#addToLayoutsBtn:active {
 }
 
 .modal-content .success-text {
-   color: #578609;
+   color: #4D7A06;
    visibility: hidden;
    display: block;
    margin-bottom: 0.5rem;
@@ -821,9 +821,27 @@ button#addToLayoutsBtn:active {
 }
 
 
+@media only screen and (max-width: 630px) {
+
+   #viewer-options {
+      max-width: 100%;
+      justify-content: space-evenly;
+   }
+
+   #viewer-options div:first-child {
+      flex-grow: 0.5;
+   }
+
+   #layout {
+      width: 100%;
+   }
+
+}
+
 
 
 @media only screen and (max-width: 600px) {
+
    #editor-header {
       flex-direction: column;
       justify-content: left;
