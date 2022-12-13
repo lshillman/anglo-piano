@@ -659,7 +659,7 @@ document.addEventListener('keydown', function (e) {
         deselectChordButtons();
         moveLeft();
     } else if (e.code == "Escape") {
-        aboutModal.style.display = "none";
+        closeModal();
     }
 })
 
