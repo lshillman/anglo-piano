@@ -650,7 +650,7 @@ opt_absentNotes.addEventListener("change", () => {
 
 
 document.addEventListener('keydown', function (e) {
-    // console.log(e.code);
+    console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
     } else if (e.code == "ArrowRight") {
@@ -661,6 +661,18 @@ document.addEventListener('keydown', function (e) {
         moveLeft();
     } else if (e.code == "Escape") {
         closeModal();
+    } else if (e.code == "Digit1" && currentMode == "view") {
+        findChord('maj');
+    } else if (e.code == "Digit2" && currentMode == "view") {
+        findChord('min');
+    } else if (e.code == "Digit3" && currentMode == "view") {
+        findChord('dim');
+    } else if (e.code == "Digit4" && currentMode == "view") {
+        findChord('7');
+    } else if (e.code == "Digit5" && currentMode == "view") {
+        findChord('maj7');
+    } else if (e.code == "Digit6" && currentMode == "view") {
+        findChord('min7');
     }
 })
 
