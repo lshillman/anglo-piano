@@ -720,7 +720,7 @@ window.onclick = function (event) {
 // If we don't have layouts from URL params or localStorage, build a simple dropdown. If we have URL params or locally-stored layouts, create optgroups.
 function buildLayoutDropdown() {
     opt_layout.innerHTML = "";
-    if (!customLayoutFromURL && !localStorage.getItem("USER_LAYOUTS")) {
+    if (!customLayoutFromURL && (!localStorage.getItem("USER_LAYOUTS") || Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length == 0)) {
         for (layout of Object.keys(LAYOUTS)) {
             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
         }
@@ -743,7 +743,7 @@ function buildLayoutDropdown() {
             urlGroup.appendChild(urlOption);
         }
     }
-    if (localStorage.getItem("USER_LAYOUTS")) {
+    if (localStorage.getItem("USER_LAYOUTS") && !!Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length) {
         //create optgroup "Your layouts"
         console.log("have items in localStorage");
         USER_LAYOUTS = JSON.parse(localStorage.getItem("USER_LAYOUTS"));
