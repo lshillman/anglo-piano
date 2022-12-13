@@ -35,7 +35,7 @@ header h1 {
 }
 
 #keyboardShortcutsBtn {
-   background: transparent url(/assets/images/ic-keyboard.svg) no-repeat center;
+   background: transparent url(../images/ic-keyboard.svg) no-repeat center;
    border: none;
    width: 60px;
    height: 50px;
