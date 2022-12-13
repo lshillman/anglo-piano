@@ -548,6 +548,7 @@ button#addToLayoutsBtn:active {
 
 #editor-header input.invalid {
    border-color: red;
+   border-width: 2px;
 }
 
 #cancelBtn {
@@ -682,7 +683,6 @@ button#addToLayoutsBtn:active {
 .error-text {
    color: #A30014;
    display: block;
-   border: 1px solid #A30014;
    padding: 0.25rem;
    font-size: .825rem;
    margin-bottom: 0.5rem;
