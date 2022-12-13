@@ -77,9 +77,9 @@ function renderPianoKeyboard(min, max, layoutnotes, pushnotes, pullnotes) {
     let allnotes = Object.keys(notes); // get an array of notes from the note object
     for (let i = min; i < max; i++) {
         let note = allnotes[i];
-        let label = note.replace('b', '♭').replace('#', '♯');
+        let label = note;
         if (opt_accidentals.checked) {
-            label = altNoteNames[note].replace('b', '♭').replace('#', '♯');
+            label = altNoteNames[note];
         }
         if (!opt_pianoLabels.checked) {
             label = "";
@@ -123,11 +123,11 @@ function renderAngloKeyboard() {
         pushnotes.push(button.push);
         pullnotes.push(button.pull);
 
-        let pushLabel = button.push.replace('b', '♭').replace('#', '♯');
-        let pullLabel = button.pull.replace('b', '♭').replace('#', '♯');
+        let pushLabel = button.push;
+        let pullLabel = button.pull;
         if (opt_accidentals.checked) {
-            pushLabel = altNoteNames[button.push].replace('b', '♭').replace('#', '♯');
-            pullLabel = altNoteNames[button.pull].replace('b', '♭').replace('#', '♯');
+            pushLabel = altNoteNames[button.push];
+            pullLabel = altNoteNames[button.pull];
         }
         if (!opt_concertinaLabels.checked) {
             pushLabel = "&nbsp;"; // for some reason, empty string results in layout issues on non-mac browsers
