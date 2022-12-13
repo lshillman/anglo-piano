@@ -49,6 +49,7 @@ const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
 var closeModalBtn = document.getElementsByClassName("close")[0];
 const getLinkBtn = document.getElementById("getLinkBtn");
+const keyboardShortcutsBtn = document.getElementById("keyboardShortcutsBtn");
 
 
 const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
@@ -696,6 +697,10 @@ function copyToClipboard() {
 // about modal
 about.onclick = function () {
     aboutModal.style.display = "block";
+}
+
+keyboardShortcutsBtn.onclick = function () {
+    document.getElementById("keyboard-shortcuts-modal").style.display = "block";
 }
 
 function closeModal() {

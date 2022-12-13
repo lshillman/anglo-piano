@@ -34,6 +34,14 @@ header h1 {
    display: inline-block;
 }
 
+#keyboardShortcutsBtn {
+   background: transparent url(/assets/images/ic-keyboard.svg) no-repeat center;
+   border: none;
+   width: 60px;
+   height: 50px;
+   cursor: pointer;
+}
+
 #about {
    line-height: 50px;
    background-color: transparent;
@@ -45,7 +53,8 @@ header h1 {
    cursor: pointer;
 }
 
-#about:hover {
+#about:hover,
+#keyboardShortcutsBtn:hover {
    background-color: #555;
 }
 

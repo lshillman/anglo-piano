@@ -16,6 +16,7 @@
             <h1>Anglo Piano</h1>
         </div>
         <div>
+            <button id="keyboardShortcutsBtn"></button>
             <button id="about">About</a>
         </div>
     </header>
@@ -207,8 +208,26 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Error reading layout</h2>
-            <p>We did all we could, but something feels wrong.</p>
+            <p>I did everything I could, but something feels wrong.</p>
             <p>Some buttons may be incorrect or missing. If you pasted a link from somewhere, make sure you copied the whole thing.</p>
+            <div class="modal-actions">
+                <button onclick="closeModal()">Roger roger</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="keyboard-shortcuts-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Keyboard shortcuts</h2>
+            <p>[left] / [right] : select the previous / next piano key</p>
+            <p>[1] - [5] : select chords</p>
+            <p>[shift] + click : select multiple notes on either keyboard</p>
+            <p>[esc] : close dialog boxes like this one</p>
+            <h3>Editor:</h3>
+            <p>[up] / [down] : transpose the current note up / down</p>
+            <p>[shift] + [left] / [right] : move the current button left or right</p>
+            <p>[shift] + [backspace] : delete the current button</p>
             <div class="modal-actions">
                 <button onclick="closeModal()">Roger roger</button>
             </div>
