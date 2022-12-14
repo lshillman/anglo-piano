@@ -22,6 +22,8 @@ const cancelBtn = document.getElementById("cancelBtn");
 const finishedBtn = document.getElementById("finishedBtn");
 const layoutTitle = document.getElementById("layoutTitle");
 
+const notePicker = document.getElementById("mobile-note-picker");
+
 
 let validNotes = Object.keys(editorNotes);
 let currentButton;
@@ -47,19 +49,25 @@ function renderEditor() {
         layoutTitle.value = opt_layout.value.slice(12);
     }
     editorKeyboard.innerHTML = "";
+    let readonly = "";
+    if(mobileDevice) {
+        readonly = " readonly";
+    } else {
+        notePicker.style.display = "none";
+    }
     for (button of buttons) {
         let pushLabel = button.push;
         let pullLabel = button.pull;
         if (button.newRow) {
             editorKeyboard.innerHTML += `<br>`;
         }
-        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" placeholder="push" value="${pushLabel}"></div><div class="bottom"><input type=text maxlength="3"  placeholder="pull" value="${pullLabel}"></div></div>`;
+        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" placeholder="push"${readonly} value="${pushLabel}"></div><div class="bottom"><input type=text maxlength="3"  placeholder="pull"${readonly} value="${pullLabel}"></div></div>`;
     }
     bindInputs("all");
     currentField = document.querySelectorAll("#editor-anglo-keyboard input")[0];
     currentButton = document.querySelectorAll("#editor-anglo-keyboard .editor-button")[0];
     currentButton.classList.add("selected");
-    !mobileDevice && currentField.focus();
+    currentField.focus();
 }
 
 
@@ -146,21 +154,22 @@ function deleteButton(button) {
     if (document.querySelectorAll(".editor-button").length == 1) {
         button.firstChild.firstChild.value = "";
         button.lastChild.firstChild.value = "";
+        button.style.marginLeft = 0;
         button.firstChild.firstChild.focus();
         return;
     }
-    // if the currently active button is the one being deleted, send the focus somewhere useful before deleting (but not on mobile; the onscreen keyboard gets annoying)
-    if (!mobileDevice) {
-        if (button == currentButton && button.nextSibling && button.nextSibling.nodeName != "BR") {
-            button.nextSibling.firstChild.firstChild.focus()
-        } else if (button == currentButton && button.nextSibling && button.nextSibling.nodeName == "BR") {
-            button.nextSibling.nextSibling.firstChild.firstChild.focus()
-        } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName != "BR") {
-            button.previousSibling.firstChild.firstChild.focus()
-        } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName == "BR") {
-            button.previousSibling.previousSibling.firstChild.firstChild.focus()
-        }
+    // if the currently active button is the one being deleted, send the focus somewhere useful before deleting
+
+    if (button == currentButton && button.nextSibling && button.nextSibling.nodeName != "BR") {
+        button.nextSibling.firstChild.firstChild.focus()
+    } else if (button == currentButton && button.nextSibling && button.nextSibling.nodeName == "BR") {
+        button.nextSibling.nextSibling.firstChild.firstChild.focus()
+    } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName != "BR") {
+        button.previousSibling.firstChild.firstChild.focus()
+    } else if (button == currentButton && button.previousSibling && button.previousSibling.nodeName == "BR") {
+        button.previousSibling.previousSibling.firstChild.firstChild.focus()
     }
+
     // immediately start fading the button. After button faded, set the width and the left margin to 0. Finally, if the button is the last in its row, remove the next line break, and then remove the button.
     button.style.cssText += "transition:margin-left 0.2s ease 0.2s, width 0.2s ease 0.2s, opacity 0.2s;"
     button.style.marginLeft = 0;
@@ -178,7 +187,6 @@ function deleteButton(button) {
 
 
 function transposeNote(direction) {
-    currentField.focus()
     if (direction == "up") {
         if (editorNotes[currentField.value].next) {
             currentField.value = editorNotes[currentField.value].next;
@@ -190,7 +198,7 @@ function transposeNote(direction) {
         }
         playNote(noteNames[currentField.value]);
     }
-
+    currentField.focus()
 }
 
 
@@ -252,11 +260,14 @@ function bindInputs(fields) {
         currentButton = e.target.parentNode.parentNode;
         document.querySelectorAll(".editor-button").forEach((button) => {button.classList.remove("selected")});
         currentButton.classList.add("selected");
+        mobileDevice && populatePicker();
     }));
     allfields.forEach((field) => field.addEventListener('focusout', (e) => {
         e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1).toLowerCase();
         if (!isValid(e.target.value)) {
             e.target.classList.add("invalid");
+        } else {
+            e.target.classList.remove("invalid");
         }
     }));
     allfields.forEach((field) => field.addEventListener('keydown', (e) => {
@@ -306,7 +317,11 @@ function moveButton(direction) {
 }
 
 function insertButton(where) {
-    let newButton = `<div class="editor-button newbutton" style="margin-left:0px"><div class="top"><input type=text maxlength="3" placeholder="push" value=""></div><div class="bottom"><input type=text maxlength="3" placeholder="pull" value=""></div></div>`;
+    let readonly = "";
+    if (mobileDevice) {
+        readonly = " readonly";
+    }
+    let newButton = `<div class="editor-button newbutton" style="margin-left:0px"><div class="top"><input type=text maxlength="3"${readonly} placeholder="push" value=""></div><div class="bottom"><input type=text maxlength="3"${readonly} placeholder="pull" value=""></div></div>`;
     if (where == "left") {
         currentButton.insertAdjacentHTML("beforebegin", newButton);
         bindInputs("new");
@@ -322,6 +337,63 @@ function insertButton(where) {
     }
 }
 
+
+function pickNote(e) {
+    if ("CDEFGABC".includes(e.target.innerText)) {
+        [...document.querySelectorAll("#mobile-notes button")].forEach((button) => {
+            button.classList.remove("selected");
+        });
+        e.target.classList.add("selected");
+    } else if ("♭♯".includes(e.target.innerText)) {
+        if (e.target.classList.contains("selected")) {
+            e.target.classList.remove("selected");
+        } else {
+            [...document.querySelectorAll("#mobile-accidental button")].forEach((button) => {
+                button.classList.remove("selected");
+            });
+            e.target.classList.add("selected");
+        }
+    } else if ("234567".includes(e.target.innerText)) {
+        [...document.querySelectorAll("#mobile-octave button")].forEach((button) => {
+            button.classList.remove("selected");
+        });
+        e.target.classList.add("selected");
+    }
+    let selectedNote = "";
+    [...document.querySelectorAll("#mobile-note-picker button.selected")].forEach((button) => {
+        selectedNote += button.innerText
+    })
+    console.log(selectedNote);
+    currentField.value = selectedNote.replace("♭", "b").replace("♯", "#");
+    if (isValid(selectedNote.replace("♭", "b").replace("♯", "#"))) {
+        currentField.focus();
+        playNote(noteNames[selectedNote.replace("♭", "b").replace("♯", "#")]);
+    }
+}
+
+function populatePicker() {
+    document.querySelectorAll("#mobile-note-picker button").forEach((button) => {
+        button.classList.remove("selected");
+    });
+    document.querySelectorAll("#mobile-notes button").forEach((button) => {
+        if (button.innerText == currentField.value[0]) {
+            button.classList.add("selected");
+        }
+    });
+    document.querySelectorAll("#mobile-octave button").forEach((button) => {
+        if (currentField.value.includes(button.innerText)) {
+            button.classList.add("selected");
+        }
+    });
+    if (currentField.value.includes("#")) {
+        document.querySelector("#mobile-accidental button:first-child").classList.add("selected");
+    }
+    if (currentField.value.includes("b")) {
+        document.querySelector("#mobile-accidental button:last-child").classList.add("selected");
+    }
+}
+
+
 function cleanUpEditor() {
     editorKeyboard.innerHTML = "";
     layoutTitle.value = "";
@@ -333,6 +405,9 @@ function cleanUpEditor() {
 }
 
 
+notePicker.addEventListener("click", (e) => {
+    pickNote(e);
+});
 
 layoutUpBtn.addEventListener("click", () => {
     transposeLayout("up");

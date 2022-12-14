@@ -559,6 +559,10 @@ button#addToLayoutsBtn:active {
    border-radius: 5px;
 }
 
+#cancelBtn:hover {
+   background-color: #eee;
+}
+
 #finishedBtn {
    height: 36px;
    padding-left: 1rem;
@@ -647,7 +651,7 @@ button#addToLayoutsBtn:active {
 }
 
 #editor-options-container {
-   overflow-x: auto;
+   /* overflow-x: auto; */
    margin: 2rem auto 0 auto;
    max-width: 100%;
 }
@@ -656,8 +660,12 @@ button#addToLayoutsBtn:active {
    display: flex;
    text-align: left;
    padding: 1rem 0;
+   box-sizing: border-box;
    gap: 2rem;
    width: fit-content;
+   max-width: 100%;
+   margin: 0 auto;
+   overflow-x: auto;
 }
 
 #editor-options div {
@@ -671,6 +679,16 @@ button#addToLayoutsBtn:active {
 
 #editor-options button {
    margin-top: 0.5rem;
+}
+
+#editor-options #deleteBtn {
+   border-color: #A30014;
+   color: #A30014;
+}
+
+#editor-options #deleteBtn:hover {
+   background-color: #A30014;
+   color: #fff;
 }
 
 #editor-error {
@@ -687,6 +705,55 @@ button#addToLayoutsBtn:active {
    font-size: .825rem;
    margin-bottom: 0.5rem;
 }
+
+#mobile-note-picker {
+   margin: 0 auto;
+   width: fit-content;
+   max-width: 100%;
+   overflow-x: auto;
+   background-color: #f5f5f5;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   display: flex;
+   box-sizing: border-box;
+}
+
+#mobile-note-picker div {
+   display:flex;
+   width:100%;
+   padding: 0.2rem 0.4rem;
+   border-right: 1px solid #ccc;
+}
+
+#mobile-note-picker div:first-child {
+   padding-left: 0;
+}
+
+#mobile-note-picker div:last-child {
+   padding-right: 0;
+   border-right: none;
+}
+
+
+#mobile-note-picker button {
+   height: 50px;
+   background-color: transparent;
+   border: none;
+   border-radius: 5px;
+   font-size: 1rem;
+   min-width: 45px;
+}
+
+#mobile-note-picker button.selected,
+#mobile-note-picker button.selected:hover {
+   background-color: #8400FF;
+   color: #fff;
+}
+
+#mobile-note-picker button:hover {
+   background-color: #eee;
+}
+
 
 /* ===== MODALS ===== */
 
@@ -866,7 +933,7 @@ button#addToLayoutsBtn:active {
    }
 
    #editor-anglo-container {
-      padding-bottom: 8rem;
+      padding-bottom: 10rem;
    }
 
    #editor-options-container {
