@@ -371,11 +371,14 @@ function selectDrone() {
 
 function updateNoteSelection(note) {
     if (!selection.includes(note) && (multiselect.checked == true || selection.length == 0)) {
+        console.log("selecting single note");
         selection.push(note);
     } else if (!selection.includes(note)) {
+        console.log("case 2");
         selection.length = 0;
         selection.push(note);
     } else {
+        console.log("removing note");
         selection.splice(selection.indexOf(note), 1);
     }
     selectPianoKey();
@@ -505,105 +508,96 @@ function bindPianoKeys() {
     //     deselectChordButtons();
     //     updateNoteSelection(e.target.dataset.note);
     // }));
-    // LONG-PRESS EXPERIMENT
-
-    if (!mobileDevice) {
-        allkeys.forEach((key) => {
-            key.addEventListener('mousedown', (e) => {
-                touch = true
-                setTimeout(() => {
-                    if (touch) {
-                        multiselect.checked = true;
-                        if (!selection.includes(e.target.dataset.note)) {
-                            playNote(e.target.dataset.note);
-                        }
-                        currentIndex = activeNotes.indexOf(e.target.dataset.note)
-                        deselectChordButtons();
-                        updateNoteSelection(e.target.dataset.note);
-                        multiselect.checked = false;
-                        touch = false;
-                    }
-                }, "400");
-            });
-        });
-
-        allkeys.forEach((key) => {
-            key.addEventListener('mouseup', (e) => {
+    allkeys.forEach((key) => {
+        key.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
+            touch = true
+            setTimeout(() => {
                 if (touch) {
-                    touch = false;
+                    multiselect.checked = true;
                     if (!selection.includes(e.target.dataset.note)) {
                         playNote(e.target.dataset.note);
                     }
                     currentIndex = activeNotes.indexOf(e.target.dataset.note)
                     deselectChordButtons();
                     updateNoteSelection(e.target.dataset.note);
-                }
-            });
-        });
-
-        allkeys.forEach((key) => {
-            key.addEventListener('mouseout', (e) => {
-                touch = false;
-            });
-        });
-    }
-
-    if (mobileDevice) {
-        allkeys.forEach((key) => {
-            key.addEventListener('touchstart', (e) => {
-                touch = true
-                setTimeout(() => {
-                    if (touch) {
-                        multiselect.checked = true;
-                        if (!selection.includes(e.target.dataset.note)) {
-                            playNote(e.target.dataset.note);
-                        }
-                        currentIndex = activeNotes.indexOf(e.target.dataset.note)
-                        deselectChordButtons();
-                        updateNoteSelection(e.target.dataset.note);
-                        multiselect.checked = false;
-                        touch = false;
-                    }
-                }, "400");
-            });
-        });
-
-        allkeys.forEach((key) => {
-            key.addEventListener('touchend', (e) => {
-                if (touch) {
+                    multiselect.checked = false;
                     touch = false;
-                    if (!selection.includes(e.target.dataset.note)) {
-                        playNote(e.target.dataset.note);
-                    }
-                    currentIndex = activeNotes.indexOf(e.target.dataset.note)
-                    deselectChordButtons();
-                    updateNoteSelection(e.target.dataset.note);
                 }
-            });
+            }, "400");
         });
+    });
 
-        allkeys.forEach((key) => {
-            key.addEventListener('touchmove', (e) => {
+    allkeys.forEach((key) => {
+        key.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
+            if (touch) {
                 touch = false;
-            });
+                if (!selection.includes(e.target.dataset.note)) {
+                    playNote(e.target.dataset.note);
+                }
+                currentIndex = activeNotes.indexOf(e.target.dataset.note)
+                deselectChordButtons();
+                updateNoteSelection(e.target.dataset.note);
+            }
         });
-    }
+    });
 
-    // END LONG PRESS EXPERIMENT
+    allkeys.forEach((key) => {
+        key.addEventListener((mobileDevice ? 'touchmove' : 'mouseout'), (e) => {
+            touch = false;
+        });
+    });
 }
 
 
 
 function bindAngloButtons() {
+    let touch = false; // helps detect long-presses
     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-    allbuttons.forEach((button) => button.addEventListener('click', (e) => {
-        if (!selection.includes(e.target.dataset.note)) {
-            playNote(e.target.dataset.note);
-        }
-        currentIndex = activeNotes.indexOf(e.target.dataset.note);
-        deselectChordButtons();
-        updateNoteSelection(e.target.dataset.note);
-    }));
+    // allbuttons.forEach((button) => button.addEventListener('click', (e) => {
+    //     if (!selection.includes(e.target.dataset.note)) {
+    //         playNote(e.target.dataset.note);
+    //     }
+    //     currentIndex = activeNotes.indexOf(e.target.dataset.note);
+    //     deselectChordButtons();
+    //     updateNoteSelection(e.target.dataset.note);
+    // }));
+
+        allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
+            touch = true
+            setTimeout(() => {
+                if (touch) {
+                    multiselect.checked = true;
+                    if (!selection.includes(e.target.dataset.note)) {
+                        playNote(e.target.dataset.note);
+                    }
+                    currentIndex = activeNotes.indexOf(e.target.dataset.note);
+                    deselectChordButtons();
+                    updateNoteSelection(e.target.dataset.note);
+                    multiselect.checked = false;
+                    touch = false
+                }
+            }, "400");
+        }));
+
+        allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
+            if (touch) {
+                touch = false;
+                if (!selection.includes(e.target.dataset.note)) {
+                    playNote(e.target.dataset.note);
+                }
+                currentIndex = activeNotes.indexOf(e.target.dataset.note);
+                deselectChordButtons();
+                updateNoteSelection(e.target.dataset.note);
+                console.log("Regular click");
+            }
+        }));
+
+        allbuttons.forEach((button) => {
+            button.addEventListener((mobileDevice ? 'touchmove' : 'mouseout'), (e) => {
+                touch = false;
+            });
+        });
+
 }
 
 
