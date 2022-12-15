@@ -610,6 +610,7 @@ button#addToLayoutsBtn:active {
    text-align: center;
    border: 1px solid #767676;
    font-family: monospace;
+   font-size: 16px;
 }
 
 .editor-button input[type=text]:focus {
