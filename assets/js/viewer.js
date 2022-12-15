@@ -904,7 +904,10 @@ function addUserLayout() {
 
 // stuff to do when the page is loaded
 function init() {
-    if (!mobileDevice) {keyboardShortcutsBtn.style.display = "block"}
+    if (!mobileDevice) {
+        keyboardShortcutsBtn.style.display = "block"
+        document.querySelector('[for="multiselect"]').innerText = "Select multiple notes [shift]";
+    }
     getUrlParams();
     buildLayoutDropdown();
 }
