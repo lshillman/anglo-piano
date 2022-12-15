@@ -494,17 +494,52 @@ function findChord(chord) {
     playSelection();
 }
 
-
+let mouseDown = false; // helps detect long-presses
 function bindPianoKeys() {
     let allkeys = document.querySelectorAll("#keyboard button");
-    allkeys.forEach((key) => key.addEventListener('click', (e) => {
-        if (!selection.includes(e.target.dataset.note)) {
-            playNote(e.target.dataset.note);
-        }
-        currentIndex = activeNotes.indexOf(e.target.dataset.note)
-        deselectChordButtons();
-        updateNoteSelection(e.target.dataset.note);
-    }));
+    // allkeys.forEach((key) => key.addEventListener('click', (e) => {
+    //     if (!selection.includes(e.target.dataset.note)) {
+    //         playNote(e.target.dataset.note);
+    //     }
+    //     currentIndex = activeNotes.indexOf(e.target.dataset.note)
+    //     deselectChordButtons();
+    //     updateNoteSelection(e.target.dataset.note);
+    // }));
+    // LONG-PRESS EXPERIMENT
+    allkeys.forEach((key) => {
+        key.addEventListener('mousedown', (e) => {
+            mouseDown = true
+            setTimeout(() => {
+                if (mouseDown) {
+                    multiselect.checked = true;
+                    if (!selection.includes(e.target.dataset.note)) {
+                        playNote(e.target.dataset.note);
+                    }
+                    currentIndex = activeNotes.indexOf(e.target.dataset.note)
+                    deselectChordButtons();
+                    updateNoteSelection(e.target.dataset.note);
+                    multiselect.checked = false;
+                    mouseDown = false;
+                }
+              }, "400");
+        })
+    });
+
+    allkeys.forEach((key) => {
+        key.addEventListener('mouseup', (e) => {
+            if (mouseDown) {
+                mouseDown = false;
+                if (!selection.includes(e.target.dataset.note)) {
+                    playNote(e.target.dataset.note);
+                }
+                currentIndex = activeNotes.indexOf(e.target.dataset.note)
+                deselectChordButtons();
+                updateNoteSelection(e.target.dataset.note);
+            }
+        });
+    })
+
+    // END LONG PRESS EXPERIMENT
 }
 
 
