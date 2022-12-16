@@ -339,7 +339,25 @@ function insertButton(where) {
 
 
 function pickNote(e) {
-    if ("CDEFGABC".includes(e.target.innerText)) {
+    if (e.target.id == "prev-field" || e.target.parentNode.id == "prev-field") {
+        let inputs = document.querySelectorAll("#editor-anglo-keyboard input");
+        for ( i=0; i < inputs.length; i++) {
+            if (inputs[i] == currentField && i != 0) {
+                currentField = inputs[i-1];
+                currentField.focus()
+                break;
+             }
+        }   
+    } else if (e.target.id == "next-field" || e.target.parentNode.id == "next-field") {
+        let inputs = document.querySelectorAll("#editor-anglo-keyboard input");
+        for ( i=0; i < inputs.length; i++) {
+            if (inputs[i] == currentField && i != inputs.length -1) {
+                currentField = inputs[i+1];
+                currentField.focus()
+                break;
+             }
+        }   
+    } else if ("CDEFGABC".includes(e.target.innerText)) {
         [...document.querySelectorAll("#mobile-notes button")].forEach((button) => {
             button.classList.remove("selected");
         });
