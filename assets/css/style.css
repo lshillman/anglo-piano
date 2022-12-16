@@ -906,7 +906,7 @@ button#addToLayoutsBtn:active {
 
 @media only screen and (max-width: 630px) {
 
-   #viewer-options {
+   /* #viewer-options {
       max-width: 100%;
       justify-content: space-evenly;
    }
@@ -917,7 +917,7 @@ button#addToLayoutsBtn:active {
 
    #layout {
       width: 100%;
-   }
+   } */
 
 }
 
