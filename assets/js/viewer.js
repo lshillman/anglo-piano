@@ -867,6 +867,10 @@ function buildLayoutDropdown() {
     }
     if (layoutShortcut) {
         opt_layout.value = layoutShortcut;
+    } else if (customLayoutFromURL) {
+        opt_layout.value = "customFromURL";
+    } else if (Object.keys(USER_LAYOUTS)[0]) {
+        opt_layout.value = "USER_LAYOUT_" + Object.keys(USER_LAYOUTS)[Object.keys(USER_LAYOUTS).length-1];
     }
     selectLayout();
 }

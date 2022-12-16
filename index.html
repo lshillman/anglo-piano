@@ -121,26 +121,34 @@
         
         <div id ="editor-options-container">
             <div id="mobile-note-picker">
-                <div id="mobile-notes">
-                    <button>C</button>
-                    <button>D</button>
-                    <button>E</button>
-                    <button>F</button>
-                    <button>G</button>
-                    <button>A</button>
-                    <button>B</button>
+                <div>
+                    <div id="mobile-notes">
+                        <button>C</button>
+                        <button>D</button>
+                        <button>E</button>
+                        <button>F</button>
+                        <button>G</button>
+                        <button>A</button>
+                        <button>B</button>
+                    </div>
+                    <div id="mobile-accidental">
+                        <button>♯</button>
+                        <button>♭</button>
+                    </div>
                 </div>
-                <div id="mobile-accidental">
-                    <button>♯</button>
-                    <button>♭</button>
-                </div>
-                <div id="mobile-octave">
-                    <button>2</button>
-                    <button>3</button>
-                    <button>4</button>
-                    <button>5</button>
-                    <button>6</button>
-                    <button>7</button>
+                <div>
+                    <div id="mobile-octave">
+                        <button>2</button>
+                        <button>3</button>
+                        <button>4</button>
+                        <button>5</button>
+                        <button>6</button>
+                        <button>7</button>
+                    </div>
+                    <div id="picker-nav">
+                        <button id="prev-field"><span class="arrow left"></span></button>
+                        <button id="next-field"><span class="arrow right"></span></button>
+                    </div>
                 </div>
             </div>
         <div id="editor-options">
@@ -244,7 +252,7 @@
     <div id="keyboard-shortcuts-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Keyboard shortcuts</h2>
+            <h2>Keyboard controls</h2>
             <div class="keyboard-shortcut">
                 <div>
                     <span class="keyboard-button">left</span> / <span class="keyboard-button">right</span>
