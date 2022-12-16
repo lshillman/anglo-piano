@@ -384,9 +384,9 @@ function pickNote(e) {
     console.log(selectedNote);
     currentField.value = selectedNote.replace("♭", "b").replace("♯", "#");
     if (isValid(selectedNote.replace("♭", "b").replace("♯", "#"))) {
-        currentField.focus();
         playNote(noteNames[selectedNote.replace("♭", "b").replace("♯", "#")]);
     }
+    currentField.focus();
 }
 
 function populatePicker() {
