@@ -7,9 +7,9 @@ Anglo Piano is a learning, composition, and layout exploration tool for Anglo co
 ## Current features
 
 * Select a note on either the piano or the concertina keyboards to see all instances of that note highlighted on both keyboards.
-* By default, notes absent from the concertina keyboard are grayed-out on the piano keyboard. This helps you get a bird's-eye view of the tradeoffs between different keyboard layouts.
+* By default, notes absent from the concertina keyboard are grayed out on the piano keyboard. This helps you get a bird's-eye view of the tradeoffs between different keyboard layouts.
 * Customize the view: select from several popular concertina layouts, hide or show labels, color-code octaves, limit the display to one bellows direction.
-* Edit any of the built-in layouts to suit your needs, or build one from scratch. Your layouts are stored locally so you can easily return to them. You can also get a link to any layout to share with others.
+* Edit any of the built-in layouts to suit your needs, or build one from scratch. Your layouts are stored locally so you can easily return to them. You can also get a link to any layout to bookmark or share with others (I strongly recommend bookmarking your own layouts in case you clear your browser data and wipe out the locally-stored layouts).
 
 ## Feature requests, bugs, contributions, hate mail, etc.
 

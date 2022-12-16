@@ -371,11 +371,14 @@ function selectDrone() {
 
 function updateNoteSelection(note) {
     if (!selection.includes(note) && (multiselect.checked == true || selection.length == 0)) {
+        console.log("selecting single note");
         selection.push(note);
     } else if (!selection.includes(note)) {
+        console.log("case 2");
         selection.length = 0;
         selection.push(note);
     } else {
+        console.log("removing note");
         selection.splice(selection.indexOf(note), 1);
     }
     selectPianoKey();
@@ -494,31 +497,107 @@ function findChord(chord) {
     playSelection();
 }
 
-
 function bindPianoKeys() {
+    let touch = false; // helps detect long-presses
     let allkeys = document.querySelectorAll("#keyboard button");
-    allkeys.forEach((key) => key.addEventListener('click', (e) => {
-        if (!selection.includes(e.target.dataset.note)) {
-            playNote(e.target.dataset.note);
-        }
-        currentIndex = activeNotes.indexOf(e.target.dataset.note)
-        deselectChordButtons();
-        updateNoteSelection(e.target.dataset.note);
-    }));
+    // allkeys.forEach((key) => key.addEventListener('click', (e) => {
+    //     if (!selection.includes(e.target.dataset.note)) {
+    //         playNote(e.target.dataset.note);
+    //     }
+    //     currentIndex = activeNotes.indexOf(e.target.dataset.note)
+    //     deselectChordButtons();
+    //     updateNoteSelection(e.target.dataset.note);
+    // }));
+    allkeys.forEach((key) => {
+        key.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
+            touch = true
+            setTimeout(() => {
+                if (touch) {
+                    multiselect.checked = true;
+                    if (!selection.includes(e.target.dataset.note)) {
+                        playNote(e.target.dataset.note);
+                    }
+                    currentIndex = activeNotes.indexOf(e.target.dataset.note)
+                    deselectChordButtons();
+                    updateNoteSelection(e.target.dataset.note);
+                    multiselect.checked = false;
+                    touch = false;
+                }
+            }, "400");
+        });
+    });
+
+    allkeys.forEach((key) => {
+        key.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
+            if (touch) {
+                touch = false;
+                if (!selection.includes(e.target.dataset.note)) {
+                    playNote(e.target.dataset.note);
+                }
+                currentIndex = activeNotes.indexOf(e.target.dataset.note)
+                deselectChordButtons();
+                updateNoteSelection(e.target.dataset.note);
+            }
+        });
+    });
+
+    allkeys.forEach((key) => {
+        key.addEventListener((mobileDevice ? 'touchmove' : 'mouseout'), (e) => {
+            touch = false;
+        });
+    });
 }
 
 
 
 function bindAngloButtons() {
+    let touch = false; // helps detect long-presses
     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-    allbuttons.forEach((button) => button.addEventListener('click', (e) => {
-        if (!selection.includes(e.target.dataset.note)) {
-            playNote(e.target.dataset.note);
-        }
-        currentIndex = activeNotes.indexOf(e.target.dataset.note);
-        deselectChordButtons();
-        updateNoteSelection(e.target.dataset.note);
-    }));
+    // allbuttons.forEach((button) => button.addEventListener('click', (e) => {
+    //     if (!selection.includes(e.target.dataset.note)) {
+    //         playNote(e.target.dataset.note);
+    //     }
+    //     currentIndex = activeNotes.indexOf(e.target.dataset.note);
+    //     deselectChordButtons();
+    //     updateNoteSelection(e.target.dataset.note);
+    // }));
+
+        allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
+            touch = true
+            setTimeout(() => {
+                if (touch) {
+                    multiselect.checked = true;
+                    if (!selection.includes(e.target.dataset.note)) {
+                        playNote(e.target.dataset.note);
+                    }
+                    currentIndex = activeNotes.indexOf(e.target.dataset.note);
+                    deselectChordButtons();
+                    updateNoteSelection(e.target.dataset.note);
+                    multiselect.checked = false;
+                    touch = false
+                }
+            }, "400");
+        }));
+
+        allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
+            if (touch) {
+                touch = false;
+                if (!selection.includes(e.target.dataset.note)) {
+                    playNote(e.target.dataset.note);
+                }
+                currentIndex = activeNotes.indexOf(e.target.dataset.note);
+                deselectChordButtons();
+                updateNoteSelection(e.target.dataset.note);
+                console.log("Regular click");
+            }
+        }));
+
+        allbuttons.forEach((button) => {
+            button.addEventListener((mobileDevice ? 'touchmove' : 'mouseout'), (e) => {
+                touch = false;
+            });
+        });
+
 }
 
 
@@ -788,6 +867,10 @@ function buildLayoutDropdown() {
     }
     if (layoutShortcut) {
         opt_layout.value = layoutShortcut;
+    } else if (customLayoutFromURL) {
+        opt_layout.value = "customFromURL";
+    } else if (Object.keys(USER_LAYOUTS)[0]) {
+        opt_layout.value = "USER_LAYOUT_" + Object.keys(USER_LAYOUTS)[Object.keys(USER_LAYOUTS).length-1];
     }
     selectLayout();
 }
@@ -825,7 +908,10 @@ function addUserLayout() {
 
 // stuff to do when the page is loaded
 function init() {
-    if (!mobileDevice) {keyboardShortcutsBtn.style.display = "block"}
+    if (!mobileDevice) {
+        keyboardShortcutsBtn.style.display = "block"
+        document.querySelector('[for="multiselect"]').innerText = "Select multiple notes [shift]";
+    }
     getUrlParams();
     buildLayoutDropdown();
 }

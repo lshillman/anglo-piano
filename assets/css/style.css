@@ -91,6 +91,13 @@ body {
 button {
    padding: 0;
    background-color: #fff;
+   color: #333;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
 }
 
 /* #keyboard button:hover {
@@ -610,6 +617,7 @@ button#addToLayoutsBtn:active {
    text-align: center;
    border: 1px solid #767676;
    font-family: monospace;
+   font-size: 16px; /* has to be 16px instead of 1rem for iOS */
 }
 
 .editor-button input[type=text]:focus {
@@ -712,8 +720,8 @@ button#addToLayoutsBtn:active {
    max-width: 100%;
    overflow-x: auto;
    background-color: #f5f5f5;
-   border: 1px solid #ccc;
-   border-radius: 5px;
+   border-top: 1px solid #ccc;
+   border-bottom: 1px solid #ccc;
    display: flex;
    box-sizing: border-box;
 }
@@ -722,26 +730,26 @@ button#addToLayoutsBtn:active {
    display:flex;
    width:100%;
    padding: 0.2rem 0.4rem;
+}
+
+#mobile-notes,
+#mobile-accidental {
    border-right: 1px solid #ccc;
 }
 
-#mobile-note-picker div:first-child {
-   padding-left: 0;
-}
-
-#mobile-note-picker div:last-child {
-   padding-right: 0;
-   border-right: none;
+#mobile-note-picker #picker-nav {
+   display: none;
+   border-left: 1px solid #ccc;
 }
 
 
 #mobile-note-picker button {
-   height: 50px;
+   height: 40px;
    background-color: transparent;
    border: none;
    border-radius: 5px;
    font-size: 1rem;
-   min-width: 45px;
+   min-width: 40px;
 }
 
 #mobile-note-picker button.selected,
@@ -898,7 +906,7 @@ button#addToLayoutsBtn:active {
 
 @media only screen and (max-width: 630px) {
 
-   #viewer-options {
+   /* #viewer-options {
       max-width: 100%;
       justify-content: space-evenly;
    }
@@ -909,7 +917,7 @@ button#addToLayoutsBtn:active {
 
    #layout {
       width: 100%;
-   }
+   } */
 
 }
 
@@ -933,7 +941,7 @@ button#addToLayoutsBtn:active {
    }
 
    #editor-anglo-container {
-      padding-bottom: 10rem;
+      padding-bottom: 14rem;
    }
 
    #editor-options-container {
@@ -941,8 +949,11 @@ button#addToLayoutsBtn:active {
       bottom: 0;
       left: 0;
       width: 100%;
-      background-color: #efefef;
+      background-color: #f5f5f5;
       border-top: 1px solid #ccc;
+      display: flex;
+      flex-direction: column-reverse;
+      box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.10);
    }
 
    #editor-options {
@@ -952,8 +963,32 @@ button#addToLayoutsBtn:active {
    }
 
    #editor-options button {
-      height: 44px;
+      height: 40px;
       min-width: 44px;
       margin-right: 4px;
+      margin-top: 2px;
+   }
+
+   #mobile-note-picker {
+      flex-wrap: wrap;
+   }
+
+   #mobile-note-picker button {
+      flex-grow: 1;
+      min-width: 33px;
+      height: 50px;
+   }
+
+   #mobile-accidental {
+      flex-basis: 20%;
+      border-right: none;
+   }
+
+   #picker-nav {
+      flex-basis: 40%;
+   }
+
+   #mobile-note-picker #picker-nav {
+      display: flex;
    }
 }
