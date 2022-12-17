@@ -299,6 +299,7 @@ button {
 
 #layout {
    height: 30px;
+   width: 100%;
    background-color: white;
    border: 1px solid #767676;
    border-radius: 0%;
@@ -906,18 +907,14 @@ button#addToLayoutsBtn:active {
 
 @media only screen and (max-width: 630px) {
 
-   /* #viewer-options {
-      max-width: 100%;
-      justify-content: space-evenly;
-   }
-
    #viewer-options div:first-child {
-      flex-grow: 0.5;
+      flex-grow: 1;
    }
 
    #layout {
       width: 100%;
-   } */
+      height: 40px;
+   }
 
 }
 
