@@ -301,9 +301,7 @@ function bindInputs(fields) {
 
 
 function moveButton(direction) {
-    if (!mobileDevice) {
-        currentField.focus();
-    }
+    currentField.focus();
     let margin = currentButton.style.marginLeft.slice(0,-2)*1;
     if (direction == "left") {
         if (margin - 10 >= 0) {
@@ -331,6 +329,9 @@ function insertButton(where) {
         bindInputs("new");
         currentButton.nextSibling.firstChild.firstChild.focus();
     } else if (where == "newRow") {
+        if (editorKeyboard.lastChild.nodeName == "BR") {
+            editorKeyboard.lastChild.remove();
+        }
         editorKeyboard.lastChild.insertAdjacentHTML("afterend", "<br>" + newButton);
         bindInputs("new");
         editorKeyboard.lastChild.firstChild.firstChild.focus();
