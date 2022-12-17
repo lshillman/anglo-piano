@@ -626,7 +626,7 @@ function selectLayout() {
 function getUrlParams() {
     if (window.location.href.includes("#layout=")) {
         let legacyParam = window.location.href.split("#layout=")[1];
-        if (legacyParam && legacyPaths[legacyParam]) {
+        if (legacyParam && LAYOUTS[legacyParam]) {
             layoutShortcut = legacyParam;
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
@@ -636,7 +636,7 @@ function getUrlParams() {
         }
     } else if (window.location.href.includes("?")) {
         let urlParam = window.location.href.split("?")[1];
-        if (urlParam && legacyPaths[urlParam]) {
+        if (urlParam && LAYOUTS[urlParam]) {
             layoutShortcut = urlParam;
             console.log("selecting a hard-coded layout from new param: " + urlParam);
         } else if (urlParam && urlParam.includes("&title=")) {
