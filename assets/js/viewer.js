@@ -371,14 +371,14 @@ function selectDrone() {
 
 function updateNoteSelection(note) {
     if (!selection.includes(note) && (multiselect.checked == true || selection.length == 0)) {
-        console.log("selecting single note");
+        // console.log("selecting single note");
         selection.push(note);
     } else if (!selection.includes(note)) {
-        console.log("case 2");
+        // console.log("case 2");
         selection.length = 0;
         selection.push(note);
     } else {
-        console.log("removing note");
+        // console.log("removing note");
         selection.splice(selection.indexOf(note), 1);
     }
     selectPianoKey();
@@ -588,7 +588,6 @@ function bindAngloButtons() {
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
                 updateNoteSelection(e.target.dataset.note);
-                console.log("Regular click");
             }
         }));
 
@@ -729,7 +728,7 @@ opt_absentNotes.addEventListener("change", () => {
 
 
 document.addEventListener('keydown', function (e) {
-    console.log(e.code);
+    // console.log(e.code);
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
     } else if (e.code == "ArrowRight") {
@@ -795,7 +794,6 @@ keyboardShortcutsBtn.onclick = function () {
 }
 
 function closeModal() {
-    console.log("inside closeModal");
     [...document.getElementsByClassName("modal")].forEach((element) => element.style.display = "none");
     [...document.querySelectorAll(".modal .error-text")].forEach((element) => element.style.visibility = "hidden");
     [...document.querySelectorAll(".modal .success-text")].forEach((element) => element.style.visibility = "hidden");
@@ -841,7 +839,6 @@ function buildLayoutDropdown() {
     }
     if (localStorage.getItem("USER_LAYOUTS") && !!Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length) {
         //create optgroup "Your layouts"
-        console.log("have items in localStorage");
         USER_LAYOUTS = JSON.parse(localStorage.getItem("USER_LAYOUTS"));
         let userGroup = document.createElement("optgroup");
         userGroup.label = "Your layouts";
