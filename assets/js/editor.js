@@ -34,11 +34,6 @@ let parsedLayoutFromEditor;
 let customTitleFromEditor;
 
 
-
-
-
-
-
 function renderEditor() {
     currentMode = "edit"
     editorSection.style.display = "block";
@@ -235,9 +230,6 @@ function transposeLayout(direction) {
         }
     }
 }
-
-
-
 
 
 
