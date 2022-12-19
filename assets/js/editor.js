@@ -34,11 +34,6 @@ let parsedLayoutFromEditor;
 let customTitleFromEditor;
 
 
-
-
-
-
-
 function renderEditor() {
     currentMode = "edit"
     editorSection.style.display = "block";
@@ -198,7 +193,8 @@ function transposeNote(direction) {
         }
         playNote(noteNames[currentField.value]);
     }
-    currentField.focus()
+    currentField.focus();
+    populatePicker();
 }
 
 
@@ -237,9 +233,6 @@ function transposeLayout(direction) {
 
 
 
-
-
-
 function bindInputs(fields) {
     let allfields;
     if (fields == "all") {
@@ -273,15 +266,9 @@ function bindInputs(fields) {
     allfields.forEach((field) => field.addEventListener('keydown', (e) => {
         if (e.code.indexOf('Shift') != -1) {
         } else if (e.code == "ArrowUp") {
-            if (editorNotes[e.target.value].next) {
-                e.target.value = editorNotes[e.target.value].next;
-            }
-            playNote(noteNames[e.target.value]);
+            transposeNote("up");
         } else if (e.code == "ArrowDown") {
-            if (editorNotes[e.target.value].prev) {
-                e.target.value = editorNotes[e.target.value].prev;
-            }
-            playNote(noteNames[e.target.value]);
+            transposeNote("down");
         } else if (e.code == "Escape") {
             console.log("Esc");
         } else if (e.code == "ArrowRight" && e.shiftKey) {
