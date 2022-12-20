@@ -781,7 +781,31 @@ function copyToClipboard() {
     shareLink.setSelectionRange(0, 99999); // For mobile devices
     navigator.clipboard.writeText(shareLink.value);
     document.getElementById("copySuccessMsg").style.visibility = "visible";
-  } 
+  }
+
+// save selection (experimental)
+let savedSelections = [];
+function saveSelection() {
+    savedSelections.push({bellows: opt_bellows, selection: [...selection]});
+}
+
+function loadSelection (index) {
+    if (savedSelections[index].bellows == "pushpull") {
+        opt_pushpull.checked = true;
+        resetView();
+    } else if (savedSelections[index].bellows == "push-only") {
+        opt_push.checked = true;
+        togglePushView();
+    } else if (savedSelections[index].bellows == "pull-only") {
+        opt_pull.checked = true;
+        togglePullView();
+    }
+    selection.length = 0;
+    selection.push(...savedSelections[index].selection);
+    selectConcertinaButtons();
+    selectPianoKey();
+}
+
 
 
 // about modal
