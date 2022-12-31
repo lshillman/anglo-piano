@@ -37,6 +37,7 @@ const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
 let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
+const opt_matchoctave = document.getElementById("matchoctave");
 const multiselect = document.getElementById("multiselect");
 const opt_coloroctave = document.getElementById("coloroctave");
 const opt_concertinaLabels = document.getElementById("concertina-labels");
@@ -310,13 +311,23 @@ function selectPianoKey() {
 
 
 function selectConcertinaButtons() {
+    let noOctaveSelection = selection.map(note => note.slice(0, -1));
+    console.log(noOctaveSelection);
     for (button of angloKeyboard.children) {
         for (div of button.children) {
             for (note of div.children) {
-                if (selection.includes(note.dataset.note)) {
-                    note.classList.add("selected");
+                if (opt_matchoctave.checked) {
+                    if (selection.includes(note.dataset.note)) {
+                        note.classList.add("selected");
+                    } else {
+                        note.classList.remove("selected");
+                    }
                 } else {
-                    note.classList.remove("selected");
+                    if (noOctaveSelection.includes(note.dataset.note.slice(0, -1))) {
+                        note.classList.add("selected");
+                    } else {
+                        note.classList.remove("selected");
+                    }
                 }
             }
         }
@@ -702,6 +713,10 @@ opt_pull.addEventListener("change", () => {
     togglePullView();
 });
 
+opt_matchoctave.addEventListener("change", () => {
+    selectConcertinaButtons();
+});
+
 opt_coloroctave.addEventListener("change", () => {
     colorOctaves();
 });
@@ -781,7 +796,31 @@ function copyToClipboard() {
     shareLink.setSelectionRange(0, 99999); // For mobile devices
     navigator.clipboard.writeText(shareLink.value);
     document.getElementById("copySuccessMsg").style.visibility = "visible";
-  } 
+  }
+
+// save selection (experimental)
+let savedSelections = [];
+function saveSelection() {
+    savedSelections.push({bellows: opt_bellows, selection: [...selection]});
+}
+
+function loadSelection (index) {
+    if (savedSelections[index].bellows == "pushpull") {
+        opt_pushpull.checked = true;
+        resetView();
+    } else if (savedSelections[index].bellows == "push-only") {
+        opt_push.checked = true;
+        togglePushView();
+    } else if (savedSelections[index].bellows == "pull-only") {
+        opt_pull.checked = true;
+        togglePullView();
+    }
+    selection.length = 0;
+    selection.push(...savedSelections[index].selection);
+    selectConcertinaButtons();
+    selectPianoKey();
+}
+
 
 
 // about modal
