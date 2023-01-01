@@ -312,7 +312,6 @@ function selectPianoKey() {
 
 function selectConcertinaButtons() {
     let noOctaveSelection = selection.map(note => note.slice(0, -1));
-    console.log(noOctaveSelection);
     for (button of angloKeyboard.children) {
         for (div of button.children) {
             for (note of div.children) {
