@@ -37,6 +37,7 @@ const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
 let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
+const opt_sound = document.getElementById("sound");
 const opt_matchoctave = document.getElementById("matchoctave");
 const multiselect = document.getElementById("multiselect");
 const opt_coloroctave = document.getElementById("coloroctave");
@@ -407,25 +408,27 @@ function deselectChordButtons() {
 }
 
 function playNote(note) {
-    let oscillator;
-    let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
-    let freq = notes[note];
-    let fullVolume = 0;
-    if (selection.length) {
-        fullVolume = -1 + 1 / selection.length // avoid the utter cracklefest on webkit and mobile browsers
+    if (opt_sound.checked) {
+        let oscillator;
+        let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
+        let freq = notes[note];
+        let fullVolume = 0;
+        if (selection.length) {
+            fullVolume = -1 + 1 / selection.length // avoid the utter cracklefest on webkit and mobile browsers
+        }
+        // console.debug(note + " (" + freq + " Hz)");
+        oscillator = audioCtx.createOscillator(); // create Oscillator node
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
+        oscillator.connect(audioCtx.destination);
+        oscillator.connect(gainNode); // connect the volume control to the oscillator
+        gainNode.connect(audioCtx.destination);
+        gainNode.gain.setValueAtTime(-1, audioCtx.currentTime); // set the volume to -1 when the note first starts playing
+        gainNode.gain.linearRampToValueAtTime(fullVolume, audioCtx.currentTime + 0.01); // linearly increase to full volume in 0.1 seconds
+        gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 0.5);
     }
-    // console.debug(note + " (" + freq + " Hz)");
-    oscillator = audioCtx.createOscillator(); // create Oscillator node
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
-    oscillator.connect(audioCtx.destination);
-    oscillator.connect(gainNode); // connect the volume control to the oscillator
-    gainNode.connect(audioCtx.destination);
-    gainNode.gain.setValueAtTime(-1, audioCtx.currentTime); // set the volume to -1 when the note first starts playing
-    gainNode.gain.linearRampToValueAtTime(fullVolume, audioCtx.currentTime + 0.01); // linearly increase to full volume in 0.1 seconds
-    gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
-    oscillator.start(audioCtx.currentTime);
-    oscillator.stop(audioCtx.currentTime + 0.5);
 }
 
 function playSelection() {
