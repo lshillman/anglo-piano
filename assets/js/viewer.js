@@ -37,6 +37,7 @@ const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
 let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
+const opt_sound = document.getElementById("sound");
 const opt_matchoctave = document.getElementById("matchoctave");
 const multiselect = document.getElementById("multiselect");
 const opt_coloroctave = document.getElementById("coloroctave");
@@ -121,9 +122,10 @@ function renderAngloKeyboard() {
 
         layoutnotes.push(button.push);
         layoutnotes.push(button.pull);
-        pushnotes.push(button.push);
-        pullnotes.push(button.pull);
-
+        if (!(button.drone && !opt_drone.checked)) {
+            pushnotes.push(button.push);
+            pullnotes.push(button.pull);
+        }
         let pushLabel = button.push;
         let pullLabel = button.pull;
         if (opt_accidentals.checked) {
@@ -134,7 +136,6 @@ function renderAngloKeyboard() {
             pushLabel = "&nbsp;"; // for some reason, empty string results in layout issues on non-mac browsers
             pullLabel = "&nbsp;";
         }
-        let droneclass = "";
         if (button.drone) {
             droneDiv.style.display = 'block';
             droneclass = "drone";
@@ -142,7 +143,9 @@ function renderAngloKeyboard() {
         if (button.newRow) {
             angloKeyboard.innerHTML += `<br>`;
         }
-        angloKeyboard.innerHTML += `<div class="button ${opt_bellows} ${droneclass}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
+        if (!(button.drone && !opt_drone.checked)) {
+            angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
+        }
     }
     bindAngloButtons();
 
@@ -407,25 +410,27 @@ function deselectChordButtons() {
 }
 
 function playNote(note) {
-    let oscillator;
-    let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
-    let freq = notes[note];
-    let fullVolume = 0;
-    if (selection.length) {
-        fullVolume = -1 + 1 / selection.length // avoid the utter cracklefest on webkit and mobile browsers
+    if (opt_sound.checked) {
+        let oscillator;
+        let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
+        let freq = notes[note];
+        let fullVolume = 0;
+        if (selection.length) {
+            fullVolume = -1 + 1 / selection.length // avoid the utter cracklefest on webkit and mobile browsers
+        }
+        // console.debug(note + " (" + freq + " Hz)");
+        oscillator = audioCtx.createOscillator(); // create Oscillator node
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
+        oscillator.connect(audioCtx.destination);
+        oscillator.connect(gainNode); // connect the volume control to the oscillator
+        gainNode.connect(audioCtx.destination);
+        gainNode.gain.setValueAtTime(-1, audioCtx.currentTime); // set the volume to -1 when the note first starts playing
+        gainNode.gain.linearRampToValueAtTime(fullVolume, audioCtx.currentTime + 0.01); // linearly increase to full volume in 0.1 seconds
+        gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 0.5);
     }
-    // console.debug(note + " (" + freq + " Hz)");
-    oscillator = audioCtx.createOscillator(); // create Oscillator node
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime); // value in hertz
-    oscillator.connect(audioCtx.destination);
-    oscillator.connect(gainNode); // connect the volume control to the oscillator
-    gainNode.connect(audioCtx.destination);
-    gainNode.gain.setValueAtTime(-1, audioCtx.currentTime); // set the volume to -1 when the note first starts playing
-    gainNode.gain.linearRampToValueAtTime(fullVolume, audioCtx.currentTime + 0.01); // linearly increase to full volume in 0.1 seconds
-    gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
-    oscillator.start(audioCtx.currentTime);
-    oscillator.stop(audioCtx.currentTime + 0.5);
 }
 
 function playSelection() {
@@ -721,7 +726,7 @@ opt_coloroctave.addEventListener("change", () => {
 });
 
 opt_drone.addEventListener("change", () => {
-    selectDrone();
+    renderAngloKeyboard();
 });
 
 opt_concertinaLabels.addEventListener("change", () => {

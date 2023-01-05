@@ -270,6 +270,10 @@ button {
    gap: 0.3rem;
 }
 
+#viewer-options #sound-option {
+   margin-top: 1rem;
+}
+
 #viewer-options select {
    margin-bottom: 0.5rem;
 }
