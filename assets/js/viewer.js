@@ -122,9 +122,10 @@ function renderAngloKeyboard() {
 
         layoutnotes.push(button.push);
         layoutnotes.push(button.pull);
-        pushnotes.push(button.push);
-        pullnotes.push(button.pull);
-
+        if (!(button.drone && !opt_drone.checked)) {
+            pushnotes.push(button.push);
+            pullnotes.push(button.pull);
+        }
         let pushLabel = button.push;
         let pullLabel = button.pull;
         if (opt_accidentals.checked) {
@@ -135,7 +136,6 @@ function renderAngloKeyboard() {
             pushLabel = "&nbsp;"; // for some reason, empty string results in layout issues on non-mac browsers
             pullLabel = "&nbsp;";
         }
-        let droneclass = "";
         if (button.drone) {
             droneDiv.style.display = 'block';
             droneclass = "drone";
@@ -143,7 +143,9 @@ function renderAngloKeyboard() {
         if (button.newRow) {
             angloKeyboard.innerHTML += `<br>`;
         }
-        angloKeyboard.innerHTML += `<div class="button ${opt_bellows} ${droneclass}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
+        if (!(button.drone && !opt_drone.checked)) {
+            angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
+        }
     }
     bindAngloButtons();
 
@@ -724,7 +726,7 @@ opt_coloroctave.addEventListener("change", () => {
 });
 
 opt_drone.addEventListener("change", () => {
-    selectDrone();
+    renderAngloKeyboard();
 });
 
 opt_concertinaLabels.addEventListener("change", () => {
