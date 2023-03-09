@@ -46,6 +46,9 @@ const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
 
+// are we selecting notes or buttons? EXPERIMENTAL
+let selectionMode = "notes"
+
 // modals
 const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
@@ -65,6 +68,9 @@ const activeNotes = [];
 
 // an array to hold the currently selected notes
 const selection = [];
+
+//an array to hold the selected buttons, if in button selection mode
+const buttonSelection = [];
 
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
@@ -403,6 +409,12 @@ function updateNoteSelection(note) {
     }
 }
 
+function updateButtonSelection(index) {
+    if (!buttonSelection.includes(index) && (multiselect.checked == true || buttonSelection.length == 0)) {
+        buttonSelection.push(index);
+    }
+}
+
 function deselectChordButtons() {
     for (let i = 0; i < chordBar.children.length; i++) {
         chordBar.children[i].classList.remove('selected');
@@ -603,6 +615,7 @@ function bindAngloButtons() {
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
                 updateNoteSelection(e.target.dataset.note);
+                updateButtonSelection(allbuttons.indexOf(e.target));
             }
         }));
 
