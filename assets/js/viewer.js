@@ -321,23 +321,34 @@ function selectPianoKey() {
 
 function selectConcertinaButtons() {
     let noOctaveSelection = selection.map(note => note.slice(0, -1));
-    for (button of angloKeyboard.children) {
-        for (div of button.children) {
-            for (note of div.children) {
-                if (opt_matchoctave.checked) {
-                    if (selection.includes(note.dataset.note)) {
-                        note.classList.add("selected");
+    if (selectionMode == "notes") {
+        for (button of angloKeyboard.children) {
+            for (div of button.children) {
+                for (note of div.children) {
+                    if (opt_matchoctave.checked) {
+                        if (selection.includes(note.dataset.note)) {
+                            note.classList.add("selected");
+                        } else {
+                            note.classList.remove("selected");
+                        }
                     } else {
-                        note.classList.remove("selected");
-                    }
-                } else {
-                    if (noOctaveSelection.includes(note.dataset.note.slice(0, -1))) {
-                        note.classList.add("selected");
-                    } else {
-                        note.classList.remove("selected");
+                        if (noOctaveSelection.includes(note.dataset.note.slice(0, -1))) {
+                            note.classList.add("selected");
+                        } else {
+                            note.classList.remove("selected");
+                        }
                     }
                 }
             }
+        }
+    } else if (selectionMode == "buttons") {
+        let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+        for (let i = 0; i < allbuttons.length; i++) {
+            if (buttonSelection.includes(i)) {
+                allbuttons[i].classList.add("selected");
+            } else {
+                allbuttons[i].classList.remove("selected");
+            } 
         }
     }
 }
@@ -410,8 +421,14 @@ function updateNoteSelection(note) {
 }
 
 function updateButtonSelection(index) {
+    // let allbuttons = document.querySelectorAll("#anglo-keyboard button");
     if (!buttonSelection.includes(index) && (multiselect.checked == true || buttonSelection.length == 0)) {
         buttonSelection.push(index);
+    } else if (!buttonSelection.includes(index)) {
+        buttonSelection.length = 0;
+        buttonSelection.push(index);
+    } else {
+        buttonSelection.splice(selection.indexOf(index), 1);
     }
 }
 
@@ -614,8 +631,8 @@ function bindAngloButtons() {
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
+                updateButtonSelection([...allbuttons].indexOf(e.target));
                 updateNoteSelection(e.target.dataset.note);
-                updateButtonSelection(allbuttons.indexOf(e.target));
             }
         }));
 
