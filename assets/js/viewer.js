@@ -838,7 +838,11 @@ let savedSelections = [];
 let currentSelection = -1;
 
 function saveSelection() {
-    savedSelections.push({bellows: opt_bellows, notes: [...selection], buttons: [...buttonSelection]});
+    savedSelections.push({bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]});
+}
+
+function updateSelection() {
+    savedSelections[currentSelection] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
 }
 
 function loadSelection (index) {
@@ -854,6 +858,7 @@ function loadSelection (index) {
     }
     selection.length = 0;
     buttonSelection.length = 0;
+    selectionMode = savedSelections[index].mode;
     buttonSelection.push(...savedSelections[index].buttons)
     selection.push(...savedSelections[index].notes);
     selectConcertinaButtons();
