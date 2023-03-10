@@ -321,7 +321,7 @@ function selectPianoKey() {
 
 function selectConcertinaButtons() {
     let noOctaveSelection = selection.map(note => note.slice(0, -1));
-    if (selectionMode == "notes") {
+    if (selectionMode == "notes" || buttonSelection.length == 0) {
         for (button of angloKeyboard.children) {
             for (div of button.children) {
                 for (note of div.children) {
@@ -428,7 +428,7 @@ function updateButtonSelection(index) {
         buttonSelection.length = 0;
         buttonSelection.push(index);
     } else {
-        buttonSelection.splice(selection.indexOf(index), 1);
+        buttonSelection.splice(buttonSelection.indexOf(index), 1);
     }
 }
 
@@ -832,10 +832,13 @@ function copyToClipboard() {
     document.getElementById("copySuccessMsg").style.visibility = "visible";
   }
 
-// save selection (experimental)
+// save selections (experimental)
+
 let savedSelections = [];
+let currentSelection = -1;
+
 function saveSelection() {
-    savedSelections.push({bellows: opt_bellows, selection: [...selection]});
+    savedSelections.push({bellows: opt_bellows, notes: [...selection], buttons: [...buttonSelection]});
 }
 
 function loadSelection (index) {
@@ -850,11 +853,22 @@ function loadSelection (index) {
         togglePullView();
     }
     selection.length = 0;
-    selection.push(...savedSelections[index].selection);
+    buttonSelection.length = 0;
+    buttonSelection.push(...savedSelections[index].buttons)
+    selection.push(...savedSelections[index].notes);
     selectConcertinaButtons();
     selectPianoKey();
+    playSelection();
 }
 
+function loadNextSelection() {
+    if (savedSelections[currentSelection + 1]) {
+        currentSelection++;
+        loadSelection(currentSelection);
+    } else {
+        currentSelection = -1;
+    }
+}
 
 
 // about modal
