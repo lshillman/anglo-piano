@@ -875,6 +875,15 @@ function loadNextSelection() {
     }
 }
 
+function loadPrevSelection() {
+    if (savedSelections[currentSelection - 1]) {
+        currentSelection--;
+        loadSelection(currentSelection);
+    } else {
+        currentSelection = -1;
+    }
+}
+
 
 // about modal
 about.onclick = function () {
