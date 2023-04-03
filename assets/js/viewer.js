@@ -55,6 +55,7 @@ const seq_update = document.getElementById("seq-update");
 const seq_delete = document.getElementById("seq-delete");
 const seq_next = document.getElementById("seq-next");
 const seq_prev = document.getElementById("seq-prev");
+const timeline = document.getElementById("timeline");
 
 // modals
 const aboutLink = document.getElementById("about");
@@ -787,6 +788,24 @@ seq_update.addEventListener("click", () => updateSelection());
 seq_delete.addEventListener("click", () => deleteSelection());
 seq_next.addEventListener("click", () => loadNextSelection());
 seq_prev.addEventListener("click", () => loadPrevSelection());
+timeline.addEventListener("click", (e) => {
+    if(e.target && e.target.className.includes("sequencer-frame")) {
+        currentSelection = e.target.dataset.position;
+        loadSelection(currentSelection);
+        console.log(currentSelection);
+        updateSelectedFrames();
+    }
+});
+
+function updateSelectedFrames() {
+    [...timeline.children].forEach((frame) => {
+        if (frame.dataset.position == currentSelection) {
+            frame.classList.add("selected");
+        } else {
+            frame.classList.remove("selected");
+        }
+    });
+}
 
 
 document.addEventListener('keydown', function (e) {
@@ -876,6 +895,7 @@ function loadSelection (index) {
     selection.push(...savedSelections[index].notes);
     selectConcertinaButtons();
     selectPianoKey();
+    updateSelectedFrames();
     playSelection();
 }
 

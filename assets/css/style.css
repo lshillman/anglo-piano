@@ -559,6 +559,10 @@ button#addToLayoutsBtn:active {
    outline: 3px solid purple;
 }
 
+.sequencer-frame:hover {
+   outline: 3px solid rgb(136, 97, 136);
+}
+
 
 /* ===== EDITOR ===== */
 
