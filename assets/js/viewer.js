@@ -49,6 +49,13 @@ const opt_absentNotes = document.getElementById("absent-notes");
 // are we selecting notes or buttons? EXPERIMENTAL
 let selectionMode = "notes"
 
+// sequencer
+const seq_save = document.getElementById("seq-save");
+const seq_update = document.getElementById("seq-update");
+const seq_delete = document.getElementById("seq-delete");
+const seq_next = document.getElementById("seq-next");
+const seq_prev = document.getElementById("seq-prev");
+
 // modals
 const aboutLink = document.getElementById("about");
 var aboutModal = document.getElementById("about-modal");
@@ -774,6 +781,12 @@ opt_accidentals.addEventListener("change", () => {
 opt_absentNotes.addEventListener("change", () => {
     renderAngloKeyboard();
 });
+
+seq_save.addEventListener("click", () => saveSelection());
+seq_update.addEventListener("click", () => updateSelection());
+seq_delete.addEventListener("click", () => deleteSelection());
+seq_next.addEventListener("click", () => loadNextSelection());
+seq_prev.addEventListener("click", () => loadPrevSelection());
 
 
 document.addEventListener('keydown', function (e) {
