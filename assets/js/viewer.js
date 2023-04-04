@@ -807,6 +807,19 @@ function updateSelectedFrames() {
     });
 }
 
+function scrollToCurrentSelection () {
+    let el = timeline.children[currentSelection];
+    const elLeft = el.offsetLeft + el.offsetWidth;
+    const elParentLeft = el.parentNode.offsetLeft + el.parentNode.offsetWidth;
+  
+    // check if element not in view
+    if (elLeft >= elParentLeft + el.parentNode.scrollLeft) {
+      el.parentNode.scrollLeft = elLeft - elParentLeft;
+    } else if (elLeft <= el.parentNode.offsetLeft + el.parentNode.scrollLeft) {
+      el.parentNode.scrollLeft = el.offsetLeft - el.parentNode.offsetLeft;
+    }
+  }
+
 
 document.addEventListener('keydown', function (e) {
     // console.log(e.code);
@@ -909,6 +922,7 @@ function loadNextSelection() {
     } else {
         currentSelection = -1;
     }
+    scrollToCurrentSelection();
 }
 
 function loadPrevSelection() {
@@ -918,6 +932,7 @@ function loadPrevSelection() {
     } else {
         currentSelection = -1;
     }
+    scrollToCurrentSelection();
 }
 
 function loadSequence() {
