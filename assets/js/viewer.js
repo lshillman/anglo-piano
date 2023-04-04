@@ -790,7 +790,7 @@ seq_next.addEventListener("click", () => loadNextSelection());
 seq_prev.addEventListener("click", () => loadPrevSelection());
 timeline.addEventListener("click", (e) => {
     if(e.target && e.target.className.includes("sequencer-frame")) {
-        currentSelection = e.target.dataset.position;
+        currentSelection = parseInt(e.target.dataset.position);
         loadSelection(currentSelection);
         console.log(currentSelection);
         updateSelectedFrames();
@@ -869,8 +869,11 @@ function copyToClipboard() {
 let savedSelections = [];
 let currentSelection = -1;
 
-function saveSelection() {
+function saveSelection(position = savedSelections.length) {
     savedSelections.push({bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]});
+    timeline.innerHTML += `<div class="sequencer-frame" data-position="${savedSelections.length - 1}">${savedSelections.length}</div>`
+    currentSelection = position;
+    updateSelectedFrames();
 }
 
 function updateSelection() {
@@ -917,6 +920,12 @@ function loadPrevSelection() {
     }
 }
 
+function loadSequence() {
+    timeline.innerHTML = "";
+    for (let i = 0; i < savedSelections.length; i++) {
+        timeline.innerHTML += `<div class="sequencer-frame" data-position="${i}">${i + 1}</div>`
+    }
+}
 
 // about modal
 about.onclick = function () {
