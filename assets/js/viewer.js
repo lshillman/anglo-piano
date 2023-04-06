@@ -909,6 +909,7 @@ function loadSelection (index) {
     selectionMode = savedSelections[index].mode;
     buttonSelection.push(...savedSelections[index].buttons)
     selection.push(...savedSelections[index].notes);
+    deselectChordButtons();
     selectConcertinaButtons();
     selectPianoKey();
     updateSelectedFrames();
