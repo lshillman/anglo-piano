@@ -1,7 +1,9 @@
 // are we selecting notes or buttons? EXPERIMENTAL
 let selectionMode = "notes"
 
-// sequencer
+// sequencer elements
+const seq_dropdown = document.getElementById("sequence");
+const seq_new = document.getElementById("seq-new");
 const seq_save = document.getElementById("seq-save");
 const seq_update = document.getElementById("seq-update");
 const seq_delete = document.getElementById("seq-delete");
@@ -10,14 +12,19 @@ const seq_prev = document.getElementById("seq-prev");
 const timeline = document.getElementById("timeline");
 
 
-
-// save selections (experimental)
-
-const selectedSequence = document.getElementById("sequence");
 let sequences = {};
+
 function loadSequences() {
-    if (localStorage.getItem("SEQUENCES")) {
+    if (localStorage.getItem("SEQUENCES") && Object.keys(JSON.parse(localStorage.getItem("SEQUENCES"))).length != 0) {
         sequences = JSON.parse(localStorage.getItem("SEQUENCES"));
+        seq_dropdown.innerHTML = "";
+        Object.keys(sequences).forEach((key) => {
+            console.log(key);
+            seq_dropdown.innerHTML += `<option value="${key}">${key}</option>`;
+        });
+    } else {
+        console.log("localStorage is empty")
+        // prompt user to enter a name for the new sequence
     }
 }
 
@@ -33,36 +40,38 @@ function createSequence(title) {
     }
 }
 
-let savedSelections = []; // to be replaced by sequences[title].frames
 let currentSelection = -1;
 
-function saveSelection(position = savedSelections.length) {
-    savedSelections.push({bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]});
-    timeline.innerHTML += `<div class="sequencer-frame" data-position="${savedSelections.length - 1}">${savedSelections.length}</div>`
+function saveSelection(position = sequences[seq_dropdown.value].frames.length) {
+    let frames = sequences[seq_dropdown.value].frames;
+    frames.push({bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]});
+    timeline.innerHTML += `<div class="sequencer-frame" data-position="${frames.length - 1}">${frames.length}</div>`
     currentSelection = position;
     updateSelectedFrames();
 }
 
 function updateSelection() {
-    savedSelections[currentSelection] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
+    let frames = sequences[seq_dropdown.value].frames;
+    frames[currentSelection] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
 }
 
 function loadSelection (index) {
-    if (savedSelections[index].bellows == "pushpull") {
+    let frames = sequences[seq_dropdown.value].frames;
+    if (frames[index].bellows == "pushpull") {
         opt_pushpull.checked = true;
         resetView();
-    } else if (savedSelections[index].bellows == "push-only") {
+    } else if (frames[index].bellows == "push-only") {
         opt_push.checked = true;
         togglePushView();
-    } else if (savedSelections[index].bellows == "pull-only") {
+    } else if (frames[index].bellows == "pull-only") {
         opt_pull.checked = true;
         togglePullView();
     }
     selection.length = 0;
     buttonSelection.length = 0;
-    selectionMode = savedSelections[index].mode;
-    buttonSelection.push(...savedSelections[index].buttons)
-    selection.push(...savedSelections[index].notes);
+    selectionMode = frames[index].mode;
+    buttonSelection.push(...frames[index].buttons)
+    selection.push(...frames[index].notes);
     deselectChordButtons();
     selectConcertinaButtons();
     selectPianoKey();
@@ -71,7 +80,8 @@ function loadSelection (index) {
 }
 
 function loadNextSelection() {
-    if (savedSelections[currentSelection + 1]) {
+    let frames = sequences[seq_dropdown.value].frames;
+    if (frames[currentSelection + 1]) {
         currentSelection++;
         loadSelection(currentSelection);
     } else {
@@ -81,7 +91,8 @@ function loadNextSelection() {
 }
 
 function loadPrevSelection() {
-    if (savedSelections[currentSelection - 1]) {
+    let frames = sequences[seq_dropdown.value].frames;
+    if (frames[currentSelection - 1]) {
         currentSelection--;
         loadSelection(currentSelection);
     } else {
@@ -90,14 +101,18 @@ function loadPrevSelection() {
     scrollToCurrentSelection();
 }
 
-function loadSequence() {
+function populateTimeline(frames) {
     timeline.innerHTML = "";
-    for (let i = 0; i < savedSelections.length; i++) {
+    for (let i = 0; i < frames.length; i++) {
         timeline.innerHTML += `<div class="sequencer-frame" data-position="${i}">${i + 1}</div>`
     }
 }
 
 
+seq_dropdown.addEventListener("change", () => {
+    populateTimeline(sequences[seq_dropdown.value].frames);
+});
+seq_new.addEventListener("click", () => promptForTitle());
 seq_save.addEventListener("click", () => saveSelection());
 seq_update.addEventListener("click", () => updateSelection());
 seq_delete.addEventListener("click", () => deleteSelection());
