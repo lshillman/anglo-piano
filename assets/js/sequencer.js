@@ -4,6 +4,7 @@ let selectionMode = "notes"
 // sequencer elements
 const seq_dropdown = document.getElementById("sequence");
 const seq_new = document.getElementById("seq-new");
+const seq_createBtn = document.getElementById("createSequenceBtn");
 const seq_save = document.getElementById("seq-save");
 const seq_update = document.getElementById("seq-update");
 const seq_delete = document.getElementById("seq-delete");
@@ -22,20 +23,32 @@ function loadSequences() {
             console.log(key);
             seq_dropdown.innerHTML += `<option value="${key}">${key}</option>`;
         });
+        populateTimeline(sequences[seq_dropdown.value].frames);
     } else {
         console.log("localStorage is empty")
         // prompt user to enter a name for the new sequence
     }
 }
 
+loadSequences();
+
 function writeSequences() {
     localStorage.setItem("SEQUENCES", JSON.stringify(sequences));
 }
 
-function createSequence(title) {
+function promptForTitle() {
+    document.getElementById("new-sequence-modal").style.display = "block";
+}
+
+function createSequence() {
+    let title = document.getElementById("newSequenceTitle").value;
     if (!sequences[title]) {
+        document.getElementById("new-sequence-modal").style.display = "none";
         console.log("Creating new sequence...");
-        sequences[title] = {layout: opt_layout.value};
+        sequences[title] = {
+            layout: opt_layout.value,
+            frames: []
+        };
         writeSequences();
     }
 }
@@ -101,10 +114,13 @@ function loadPrevSelection() {
     scrollToCurrentSelection();
 }
 
-function populateTimeline(frames) {
+function populateTimeline() {
+    let frames = sequences[seq_dropdown.value].frames;
     timeline.innerHTML = "";
-    for (let i = 0; i < frames.length; i++) {
-        timeline.innerHTML += `<div class="sequencer-frame" data-position="${i}">${i + 1}</div>`
+    if (frames && frames.length != 0) {
+        for (let i = 0; i < frames.length; i++) {
+            timeline.innerHTML += `<div class="sequencer-frame" data-position="${i}">${i + 1}</div>`
+        }
     }
 }
 
@@ -112,6 +128,7 @@ function populateTimeline(frames) {
 seq_dropdown.addEventListener("change", () => {
     populateTimeline(sequences[seq_dropdown.value].frames);
 });
+seq_createBtn.addEventListener("click", () => createSequence());
 seq_new.addEventListener("click", () => promptForTitle());
 seq_save.addEventListener("click", () => saveSelection());
 seq_update.addEventListener("click", () => updateSelection());

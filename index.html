@@ -259,6 +259,20 @@
         </div>
     </div>
 
+    <div id="new-sequence-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>New Sequence</h2>
+            <p>Enter a name for the sequence:</p>
+            <input type="text" id ="newSequenceTitle" placeholder="e.g., 'Hot Cross Buns'">
+            <span class="error-text" id="newSequenceError">Please enter a name for this sequence</span>
+            <div class="modal-actions">
+                <button id="cancelCreateSequenceBtn" onclick="closeModal()">Cancel</button>
+                <button id="createSequenceBtn" class="primary">Create sequence</button>
+            </div>
+        </div>
+    </div>
+
     <div id="parse-error-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
