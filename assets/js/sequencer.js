@@ -20,10 +20,10 @@ function loadSequences() {
     if (localStorage.getItem("SEQUENCES") && Object.keys(JSON.parse(localStorage.getItem("SEQUENCES"))).length != 0) {
         sequences = JSON.parse(localStorage.getItem("SEQUENCES"));
         seq_dropdown.innerHTML = "";
-        Object.keys(sequences).forEach((key) => {
-            console.log(key);
-            seq_dropdown.innerHTML += `<option value="${key}">${key}</option>`;
-        });
+        for (let i = Object.keys(sequences).length - 1; i > -1; i--) {
+            console.log(Object.keys(sequences)[i]);
+            seq_dropdown.innerHTML += `<option value="${Object.keys(sequences)[i]}">${Object.keys(sequences)[i]}</option>`;
+        }
         populateTimeline(sequences[seq_dropdown.value].frames);
     } else {
         console.log("localStorage is empty")
@@ -126,6 +126,7 @@ function populateTimeline() {
                 timeline.innerHTML += `<div class="sequencer-frame" data-position="${i}">${i + 1}</div>`
             }
         }
+
     } else {
         timeline.innerHTML = "";
     }
@@ -147,6 +148,8 @@ function deleteSequence() {
 
 seq_dropdown.addEventListener("change", () => {
     populateTimeline(sequences[seq_dropdown.value].frames);
+    currentSelection = -1;
+    timeline.scrollLeft = 0;
 });
 seq_createBtn.addEventListener("click", () => createSequence());
 seq_new.addEventListener("click", () => promptForTitle());
