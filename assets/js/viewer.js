@@ -58,6 +58,9 @@ const keyboardShortcutsBtn = document.getElementById("keyboardShortcutsBtn");
 const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
 const removeFromLayoutsBtn = document.getElementById("removeFromLayoutsBtn");
 
+// are we selecting notes or buttons? EXPERIMENTAL
+let selectionMode = "notes"
+
 // an array that contains all currently-displayed concertina buttons
 let buttons = [];
 

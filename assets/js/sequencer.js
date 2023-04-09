@@ -1,6 +1,3 @@
-// are we selecting notes or buttons? EXPERIMENTAL
-let selectionMode = "notes"
-
 // sequencer elements
 const seq_dropdown = document.getElementById("sequence");
 const seq_new = document.getElementById("seq-new"); // shows the create modal
@@ -26,7 +23,7 @@ function loadSequences() {
         }
         populateTimeline(sequences[seq_dropdown.value].frames);
     } else {
-        console.log("localStorage is empty")
+        console.log("no sequences in localStorage")
         // prompt user to enter a name for the new sequence
     }
 }
@@ -44,7 +41,8 @@ function promptForTitle() {
 function createSequence() {
     let title = document.getElementById("newSequenceTitle").value;
     if (!sequences[title]) {
-        document.getElementById("new-sequence-modal").style.display = "none";
+        document.getElementById("newSequenceTitle").value = "";
+        closeModal();
         console.log("Creating new sequence...");
         sequences[title] = {
             layout: opt_layout.value,
@@ -126,7 +124,8 @@ function populateTimeline() {
                 timeline.innerHTML += `<div class="sequencer-frame" data-position="${i}">${i + 1}</div>`
             }
         }
-
+        opt_layout.value = sequences[seq_dropdown.value].layout;
+        selectLayout();
     } else {
         timeline.innerHTML = "";
     }
@@ -179,14 +178,18 @@ function updateSelectedFrames() {
 }
 
 function scrollToCurrentSelection () {
-    let el = timeline.children[currentSelection];
-    const elLeft = el.offsetLeft + el.offsetWidth;
-    const elParentLeft = el.parentNode.offsetLeft + el.parentNode.offsetWidth;
-  
-    // check if element not in view
-    if (elLeft >= elParentLeft + el.parentNode.scrollLeft) {
-      el.parentNode.scrollLeft = elLeft - elParentLeft;
-    } else if (elLeft <= el.parentNode.offsetLeft + el.parentNode.scrollLeft) {
-      el.parentNode.scrollLeft = el.offsetLeft - el.parentNode.offsetLeft;
+    if (currentSelection != -1) {
+        let el = timeline.children[currentSelection];
+        const elLeft = el.offsetLeft + el.offsetWidth;
+        const elParentLeft = el.parentNode.offsetLeft + el.parentNode.offsetWidth;
+    
+        // check if element not in view
+        if (elLeft >= elParentLeft + el.parentNode.scrollLeft) {
+        el.parentNode.scrollLeft = elLeft - elParentLeft;
+        } else if (elLeft <= el.parentNode.offsetLeft + el.parentNode.scrollLeft) {
+        el.parentNode.scrollLeft = el.offsetLeft - el.parentNode.offsetLeft;
+        }
+    } else {
+        timeline.scrollLeft = 0;
     }
-  }
+}
