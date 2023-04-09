@@ -109,11 +109,12 @@
             <div id="sequencer-controls">
                 <select id="sequence"></select>
                 <button id="seq-new">New sequence</button>
-                <button id="seq-save">Save selection</button>
-                <button id="seq-update">Update selection</button>
-                <button id="seq-delete">Delete selection</button>
-                <button id="seq-next">Next</button>
-                <button id="seq-prev">Previous</button>
+                <button id="seq-delete">Delete sequence</button>
+                <button id="frame-save">Save frame</button>
+                <button id="frame-update">Update frame</button>
+                <button id="frame-delete">Delete frame</button>
+                <button id="frame-next">Next</button>
+                <button id="frame-prev">Previous</button>
             </div>
             <div id="timeline">
                 <!-- <div class="sequencer-frame selected" data-position="0">1</div>
@@ -269,6 +270,18 @@
             <div class="modal-actions">
                 <button id="cancelCreateSequenceBtn" onclick="closeModal()">Cancel</button>
                 <button id="createSequenceBtn" class="primary">Create sequence</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-sequence-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Delete sequence?</h2>
+            <p id="confirmDeleteSequenceMsg">Do you really want to delete SEQUENCE_NAME?</p>
+            <div class="modal-actions">
+                <button id="cancelDeleteBtn" onclick="closeModal()">Cancel</button>
+                <button id="finalDeleteBtn" class="destructive" onclick="deleteSequence()">Delete</button>
             </div>
         </div>
     </div>
