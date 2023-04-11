@@ -801,8 +801,12 @@ document.addEventListener('keydown', function (e) {
         findChord('maj7');
     } else if (e.code == "Digit6" && currentMode == "view") {
         findChord('min7');
+    } else if (e.code == "KeyJ" && currentMode == "view") {
+        loadPrevSelection();
+    } else if (e.code == "KeyK" && currentMode == "view") {
+        loadNextSelection();
     }
-})
+});
 
 document.addEventListener('keyup', function (e) {
     if (e.code.indexOf('Shift') != -1) {
