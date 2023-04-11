@@ -31,8 +31,8 @@ const min7 = document.getElementById("minor7");
 
 // user-defined display options
 const opt_layout = document.getElementById("layout");
-const opt_drone = document.getElementById("drone");
-const droneDiv = document.getElementById("drone-option");
+// const opt_drone = document.getElementById("drone");
+// const droneDiv = document.getElementById("drone-option");
 const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
@@ -123,16 +123,16 @@ function renderAngloKeyboard() {
     let pullnotes = [];
     let allnotes = Object.keys(notes);
 
-    droneDiv.style.display = 'none';
+    // droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
 
         layoutnotes.push(button.push);
         layoutnotes.push(button.pull);
-        if (!(button.drone && !opt_drone.checked)) {
+        // if (!(button.drone && !opt_drone.checked)) {
             pushnotes.push(button.push);
             pullnotes.push(button.pull);
-        }
+        // }
         let pushLabel = button.push;
         let pullLabel = button.pull;
         if (opt_accidentals.checked) {
@@ -143,16 +143,16 @@ function renderAngloKeyboard() {
             pushLabel = "&nbsp;"; // for some reason, empty string results in layout issues on non-mac browsers
             pullLabel = "&nbsp;";
         }
-        if (button.drone) {
-            droneDiv.style.display = 'block';
-            droneclass = "drone";
-        }
+        // if (button.drone) {
+        //     droneDiv.style.display = 'block';
+        //     droneclass = "drone";
+        // }
         if (button.newRow) {
             angloKeyboard.innerHTML += `<br>`;
         }
-        if (!(button.drone && !opt_drone.checked)) {
+        // if (!(button.drone && !opt_drone.checked)) {
             angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
-        }
+        // }
     }
     bindAngloButtons();
 
@@ -167,7 +167,7 @@ function renderAngloKeyboard() {
         }
     }
     
-    selectDrone();
+    // selectDrone();
     colorOctaves();
     renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
 }
@@ -391,13 +391,13 @@ function resetView() {
     opt_bellows = "";
 }
 
-function selectDrone() {
-    if (!opt_drone.checked && document.getElementsByClassName("drone")[0]) {
-        document.getElementsByClassName("drone")[0].style.display = 'none';
-    } else if (document.getElementsByClassName("drone")[0]) {
-        document.getElementsByClassName("drone")[0].style.display = 'block';
-    }
-}
+// function selectDrone() {
+//     if (!opt_drone.checked && document.getElementsByClassName("drone")[0]) {
+//         document.getElementsByClassName("drone")[0].style.display = 'none';
+//     } else if (document.getElementsByClassName("drone")[0]) {
+//         document.getElementsByClassName("drone")[0].style.display = 'block';
+//     }
+// }
 
 
 function updateNoteSelection(note) {
@@ -756,9 +756,9 @@ opt_coloroctave.addEventListener("change", () => {
     colorOctaves();
 });
 
-opt_drone.addEventListener("change", () => {
-    renderAngloKeyboard();
-});
+// opt_drone.addEventListener("change", () => {
+//     renderAngloKeyboard();
+// });
 
 opt_concertinaLabels.addEventListener("change", () => {
     renderAngloKeyboard();

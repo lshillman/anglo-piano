@@ -30,7 +30,7 @@ const LAYOUTS = {
 		{ "push": "D6", "pull": "C6", "x": 0, "newRow": false },
 		{ "push": "G6", "pull": "E6", "x": 0, "newRow": false },
 		{ "push": "B6", "pull": "F#6", "x": 0, "newRow": false },
-		{ "push": "C4", "pull": "C4", "x": "270", "newRow": true, "drone": true }
+		// { "push": "C4", "pull": "C4", "x": "270", "newRow": true, "drone": true }
 	]},
 	"cg-jeffries-30": {title: "CG Jeffries 30", layout: [
 		{ "push": "E3", "pull": "F3", "x": "30", "newRow": false },
@@ -63,7 +63,7 @@ const LAYOUTS = {
 		{ "push": "D6", "pull": "C6", "x": 0, "newRow": false },
 		{ "push": "G6", "pull": "E6", "x": 0, "newRow": false },
 		{ "push": "B6", "pull": "F#6", "x": 0, "newRow": false },
-		{ "push": "C4", "pull": "C4", "x": "270", "newRow": true, "drone": true }
+		// { "push": "C4", "pull": "C4", "x": "270", "newRow": true, "drone": true }
 	]},
 	"cg-wheatstone-40": {title: "CG Wheatstone 40", layout: [
 		{ "push": "E3", "pull": "F3", "x": "30", "newRow": false },
@@ -178,7 +178,7 @@ const LAYOUTS = {
 		{ "push": "A5", "pull": "G5", "x": 0, "newRow": false },
 		{ "push": "D6", "pull": "B5", "x": 0, "newRow": false },
 		{ "push": "F#6", "pull": "C#6", "x": 0, "newRow": false },
-		{ "push": "G3", "pull": "G3", "x": "270", "newRow": true, "drone": true }
+		// { "push": "G3", "pull": "G3", "x": "270", "newRow": true, "drone": true }
 	]},
 	"gd-jeffries-30": {title: "GD Jeffries 30", layout: [
 		{ "push": "B2", "pull": "C3", "x": "30", "newRow": false },
@@ -211,7 +211,7 @@ const LAYOUTS = {
 		{ "push": "A5", "pull": "G5", "x": 0, "newRow": false },
 		{ "push": "D6", "pull": "B5", "x": 0, "newRow": false },
 		{ "push": "F#6", "pull": "C#6", "x": 0, "newRow": false },
-		{ "push": "G3", "pull": "G3", "x": "270", "newRow": true, "drone": true }
+		// { "push": "G3", "pull": "G3", "x": "270", "newRow": true, "drone": true }
 	]},
 	"gd-wheatstone-40": {title: "GD Wheatstone 40", layout: [
 		{ "push": "B2", "pull": "C3", "x": "30", "newRow": false },
@@ -326,7 +326,7 @@ const LAYOUTS = {
 		{ "push": "C6", "pull": "Bb5", "x": 0, "newRow": false },
 		{ "push": "F6", "pull": "D6", "x": 0, "newRow": false },
 		{ "push": "A6", "pull": "E6", "x": 0, "newRow": false },
-		{ "push": "Bb3", "pull": "Bb3", "x": "270", "newRow": true, "drone": true }
+		// { "push": "Bb3", "pull": "Bb3", "x": "270", "newRow": true, "drone": true }
 	]},
 	"bbf-jeffries-30": {title: "BbF Jeffries 30", layout: [
 		{ "push": "D3", "pull": "D#3", "x": "30", "newRow": false },
@@ -359,7 +359,7 @@ const LAYOUTS = {
 		{ "push": "C6", "pull": "Bb5", "x": 0, "newRow": false },
 		{ "push": "F6", "pull": "D6", "x": 0, "newRow": false },
 		{ "push": "A6", "pull": "E6", "x": 0, "newRow": false },
-		{ "push": "Bb3", "pull": "Bb3", "x": "270", "newRow": true, "drone": true }
+		// { "push": "Bb3", "pull": "Bb3", "x": "270", "newRow": true, "drone": true }
 	]},
 	"bbf-wheatstone-40": {title: "BbF Wheatstone 40", layout: [
 		{ "push": "D3", "pull": "D#3", "x": "30", "newRow": false },
