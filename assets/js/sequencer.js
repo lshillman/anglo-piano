@@ -115,10 +115,10 @@ function loadNextSelection() {
     let frames = sequences[seq_dropdown.value].frames;
     if (frames[currentSelection + 1]) {
         currentSelection++;
-        loadSelection(currentSelection);
     } else {
-        currentSelection = -1;
+        currentSelection = 0;
     }
+    loadSelection(currentSelection);
     scrollToCurrentSelection();
 }
 
@@ -126,10 +126,10 @@ function loadPrevSelection() {
     let frames = sequences[seq_dropdown.value].frames;
     if (frames[currentSelection - 1]) {
         currentSelection--;
-        loadSelection(currentSelection);
     } else {
-        currentSelection = -1;
+        currentSelection = frames.length - 1;
     }
+    loadSelection(currentSelection);
     scrollToCurrentSelection();
 }
 
