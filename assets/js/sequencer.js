@@ -69,6 +69,24 @@ function updateSelection() {
     frames[currentSelection] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
 }
 
+function deleteSelection() {
+    let frames = sequences[seq_dropdown.value].frames;
+    let frame = document.querySelector(".sequencer-frame.selected");
+    frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
+    frame.classList.remove("selected");
+    frame.nextSibling && frame.nextSibling.classList.add("selected");
+    frame.style.padding = 0;
+    frame.style.width = 0;
+    frame.style.opacity = 0;
+    setTimeout(() => {
+        frame.remove();
+        frames.splice(currentSelection, 1);
+        populateTimeline();
+        updateSelectedFrames();
+      }, "300");
+    writeSequences();
+}
+
 function loadSelection (index) {
     let frames = sequences[seq_dropdown.value].frames;
     if (frames[index].bellows == "pushpull") {
