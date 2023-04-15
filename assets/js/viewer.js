@@ -130,8 +130,8 @@ function renderAngloKeyboard() {
         layoutnotes.push(button.push);
         layoutnotes.push(button.pull);
         // if (!(button.drone && !opt_drone.checked)) {
-            pushnotes.push(button.push);
-            pullnotes.push(button.pull);
+        pushnotes.push(button.push);
+        pullnotes.push(button.pull);
         // }
         let pushLabel = button.push;
         let pullLabel = button.pull;
@@ -151,7 +151,7 @@ function renderAngloKeyboard() {
             angloKeyboard.innerHTML += `<br>`;
         }
         // if (!(button.drone && !opt_drone.checked)) {
-            angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
+        angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
         // }
     }
     bindAngloButtons();
@@ -166,7 +166,7 @@ function renderAngloKeyboard() {
             max = allnotes.indexOf(noteNames[layoutnotes[i]]);
         }
     }
-    
+
     // selectDrone();
     colorOctaves();
     renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
@@ -216,7 +216,7 @@ function parseLayout(origin) {
         parsedLayoutFromEditor = newLayout;
         buttons = parsedLayoutFromEditor;
     } else {
-        if (newLayout.length > 0){
+        if (newLayout.length > 0) {
             parsedLayoutFromURL = newLayout;
             buttons = parsedLayoutFromURL;
         }
@@ -349,7 +349,7 @@ function selectConcertinaButtons() {
                 allbuttons[i].classList.add("selected");
             } else {
                 allbuttons[i].classList.remove("selected");
-            } 
+            }
         }
     }
 }
@@ -545,14 +545,6 @@ function findChord(chord) {
 function bindPianoKeys() {
     let touch = false; // helps detect long-presses
     let allkeys = document.querySelectorAll("#keyboard button");
-    // allkeys.forEach((key) => key.addEventListener('click', (e) => {
-    //     if (!selection.includes(e.target.dataset.note)) {
-    //         playNote(e.target.dataset.note);
-    //     }
-    //     currentIndex = activeNotes.indexOf(e.target.dataset.note)
-    //     deselectChordButtons();
-    //     updateNoteSelection(e.target.dataset.note);
-    // }));
     allkeys.forEach((key) => {
         key.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
             touch = true
@@ -598,50 +590,41 @@ function bindPianoKeys() {
 function bindAngloButtons() {
     let touch = false; // helps detect long-presses
     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-    // allbuttons.forEach((button) => button.addEventListener('click', (e) => {
-    //     if (!selection.includes(e.target.dataset.note)) {
-    //         playNote(e.target.dataset.note);
-    //     }
-    //     currentIndex = activeNotes.indexOf(e.target.dataset.note);
-    //     deselectChordButtons();
-    //     updateNoteSelection(e.target.dataset.note);
-    // }));
-
-        allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
-            touch = true
-            setTimeout(() => {
-                if (touch) {
-                    multiselect.checked = true;
-                    if (!selection.includes(e.target.dataset.note)) {
-                        playNote(e.target.dataset.note);
-                    }
-                    currentIndex = activeNotes.indexOf(e.target.dataset.note);
-                    deselectChordButtons();
-                    updateNoteSelection(e.target.dataset.note);
-                    multiselect.checked = false;
-                    touch = false
-                }
-            }, "400");
-        }));
-
-        allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
+    allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
+        touch = true
+        setTimeout(() => {
             if (touch) {
-                touch = false;
+                multiselect.checked = true;
                 if (!selection.includes(e.target.dataset.note)) {
                     playNote(e.target.dataset.note);
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
-                updateButtonSelection([...allbuttons].indexOf(e.target));
                 updateNoteSelection(e.target.dataset.note);
+                multiselect.checked = false;
+                touch = false
             }
-        }));
+        }, "400");
+    }));
 
-        allbuttons.forEach((button) => {
-            button.addEventListener((mobileDevice ? 'touchmove' : 'mouseout'), (e) => {
-                touch = false;
-            });
+    allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
+        if (touch) {
+            touch = false;
+            if (!selection.includes(e.target.dataset.note)) {
+                playNote(e.target.dataset.note);
+            }
+            currentIndex = activeNotes.indexOf(e.target.dataset.note);
+            deselectChordButtons();
+            updateButtonSelection([...allbuttons].indexOf(e.target));
+            updateNoteSelection(e.target.dataset.note);
+        }
+    }));
+
+    allbuttons.forEach((button) => {
+        button.addEventListener((mobileDevice ? 'touchmove' : 'mouseout'), (e) => {
+            touch = false;
         });
+    });
 
 }
 
@@ -701,15 +684,15 @@ function getUrlParams() {
 }
 
 function addToDropdown(value, title, origin) {
-        let newOption = document.createElement("option");
-        // TODO logic to make sure title isn't a duplicate of a hard-coded title or one from localStorage
-        newOption.value = value;
-        newOption.text = title;
-        if (origin == "LAYOUTS") {
-            opt_layout.appendChild(newOption);
-        } else if (origin == "url" || origin == "editor") {
-            opt_layout.insertBefore(newOption, opt_layout.firstChild);
-        }
+    let newOption = document.createElement("option");
+    // TODO logic to make sure title isn't a duplicate of a hard-coded title or one from localStorage
+    newOption.value = value;
+    newOption.text = title;
+    if (origin == "LAYOUTS") {
+        opt_layout.appendChild(newOption);
+    } else if (origin == "url" || origin == "editor") {
+        opt_layout.insertBefore(newOption, opt_layout.firstChild);
+    }
 }
 
 function selectShareLink() {
@@ -805,6 +788,8 @@ document.addEventListener('keydown', function (e) {
         loadPrevSelection();
     } else if (e.code == "KeyK" && currentMode == "view") {
         loadNextSelection();
+    } else if (e.code == "KeyS" && e.shiftKey && currentMode == "view") {
+        saveSelection();
     }
 });
 
@@ -821,7 +806,7 @@ addToLayoutsBtn.onclick = function () {
     document.getElementById("add-modal").style.display = "block";
     newLayoutName.focus();
     newLayoutName.select();
-    
+
 }
 
 removeFromLayoutsBtn.onclick = function () {
@@ -835,7 +820,7 @@ function copyToClipboard() {
     shareLink.setSelectionRange(0, 99999); // For mobile devices
     navigator.clipboard.writeText(shareLink.value);
     document.getElementById("copySuccessMsg").style.visibility = "visible";
-  }
+}
 
 
 // about modal
@@ -904,7 +889,7 @@ function buildLayoutDropdown() {
             userGroup.insertBefore(usrOption, userGroup.firstChild);
             //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
         }
-        
+
     }
     let standardGroup = document.createElement("optgroup");
     standardGroup.label = "Standard layouts";
@@ -921,7 +906,7 @@ function buildLayoutDropdown() {
     } else if (customLayoutFromURL) {
         opt_layout.value = "customFromURL";
     } else if (Object.keys(USER_LAYOUTS)[0]) {
-        opt_layout.value = "USER_LAYOUT_" + Object.keys(USER_LAYOUTS)[Object.keys(USER_LAYOUTS).length-1];
+        opt_layout.value = "USER_LAYOUT_" + Object.keys(USER_LAYOUTS)[Object.keys(USER_LAYOUTS).length - 1];
     }
     selectLayout();
 }
@@ -938,7 +923,7 @@ function addUserLayout() {
     let newName = document.getElementById("newLayoutName").value;
     if (newName.trim() && !USER_LAYOUTS[newName]) {
         let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + "&title=" + encodeURI(newName.trim());
-        USER_LAYOUTS[newName] = {layout: buttons, url};
+        USER_LAYOUTS[newName] = { layout: buttons, url };
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         document.getElementById("addLayoutError").style.display = "visible";
         closeModal();
