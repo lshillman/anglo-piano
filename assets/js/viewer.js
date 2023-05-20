@@ -600,6 +600,7 @@ function bindAngloButtons() {
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
+                updateButtonSelection([...allbuttons].indexOf(e.target));
                 updateNoteSelection(e.target.dataset.note);
                 multiselect.checked = false;
                 touch = false
