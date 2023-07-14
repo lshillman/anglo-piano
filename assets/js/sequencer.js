@@ -99,11 +99,11 @@ function loadSelection (index) {
         opt_pull.checked = true;
         togglePullView();
     }
-    selection.length = 0;
+    noteSelection.length = 0;
     buttonSelection.length = 0;
     selectionMode = frames[index].mode;
     buttonSelection.push(...frames[index].buttons)
-    selection.push(...frames[index].notes);
+    noteSelection.push(...frames[index].notes);
     deselectChordButtons();
     selectConcertinaButtons();
     selectPianoKey();
