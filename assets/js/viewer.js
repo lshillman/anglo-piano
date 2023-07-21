@@ -473,31 +473,33 @@ function updateNoteSelection(note, button = "any") {
             let allbuttons = document.querySelectorAll("#anglo-keyboard button");
             if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
                 console.log("   adding buttons to selection");
+                let addCount = 0;
                 allbuttons.forEach((button, i) => {
                     if (note == button.dataset.note) {
                         selection.push({ note, "button": i });
+                        addCount++
                     }
                 });
+                if (!addCount) { // we still want to select the note even if there are no matching buttons
+                    selection.push({ note, "button": "any" });
+                }
             } else if (selection.findIndex(sel => sel.note == note) == -1) {
                 console.log("   replacing selection with buttons");
                 selection.length = 0;
+                let addCount = 0;
                 allbuttons.forEach((button, i) => {
                     if (note == button.dataset.note) {
                         selection.push({ note, "button": i });
                     }
                 });
+                if (!addCount) { // we still want to select the note even if there are no matching buttons
+                    selection.push({ note, "button": "any" });
+                }
             } else {
                 console.log("   removing buttons from selection");
                 let filteredSelection = selection.filter(sel => sel.note != note);
                 selection.length = 0;
                 selection.push(...filteredSelection);
-                // this consistently removes all but one, for some reason
-                // selection.forEach((sel, i) => {
-                //     if (sel.note == note) {
-                //         selection.splice(i, 1);
-                //         console.log("      deleted a button")
-                //     }
-                // });
             }
         }
     }
