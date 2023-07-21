@@ -331,21 +331,21 @@ function selectPianoKey() {
 function selectConcertinaButtons() {
     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
     if (selectionMode == "notes" || selection.length == 0) {
-        allbuttons.forEach(button => {
-            if (opt_matchoctave.checked) {
-                if (selection.findIndex(sel => sel.note == button.dataset.note) != -1) {
-                    button.classList.add("selected");
-                } else {
-                    button.classList.remove("selected");
-                }
+    allbuttons.forEach(button => {
+        if (opt_matchoctave.checked) {
+            if (selection.findIndex(sel => sel.note == button.dataset.note) != -1) {
+                button.classList.add("selected");
             } else {
-                if (selection.findIndex(sel => sel.note.slice(0, -1) == button.dataset.note.slice(0, -1)) != -1) {
-                    button.classList.add("selected");
-                } else {
-                    button.classList.remove("selected");
-                }
+                button.classList.remove("selected");
             }
-        });
+        } else {
+            if (selection.findIndex(sel => sel.note.slice(0, -1) == button.dataset.note.slice(0, -1)) != -1) {
+                button.classList.add("selected");
+            } else {
+                button.classList.remove("selected");
+            }
+        }
+    });
     } else if (selectionMode == "buttons") {
         console.log("ENTERING BUTTON SELECTOR");
         // for each button
@@ -443,7 +443,7 @@ function resetView() {
 
 // function updateSelection(note, button) {
 function updateNoteSelection(note, button = "any") {
-    if (button != "any") {
+    if (selectionMode == "notes") {
         if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
             console.log("adding a note (first condition)");
             selection.push({ note, button });
@@ -455,31 +455,50 @@ function updateNoteSelection(note, button = "any") {
             console.log("removing a note (third condition)");
             selection.splice(selection.findIndex(sel => sel.note == note), 1);
         }
-    } else if (button == "any") {
-        console.log("ANY BUTTON...");
-        let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-        if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
-            console.log("   adding buttons to selection");
-            allbuttons.forEach((button, i) => {
-                if (note == button.dataset.note) {
-                    selection.push({ note, "button": i });
-                }
-            });
-        } else if (selection.findIndex(sel => sel.note == note) == -1) {
-            console.log("   replacing selection with buttons");
-            selection.length = 0;
-            allbuttons.forEach((button, i) => {
-                if (note == button.dataset.note) {
-                    selection.push({ note, "button": i });
-                }
-            });
-        } else {
-            console.log("   removing buttons from selection");
-            selection.forEach((sel, i) => {
-                if (sel.note == note) {
-                    selection.splice(i, 1);
-                }
-            });
+    } else if (selectionMode == "buttons") {
+        if (button != "any") {
+            if (selection.findIndex(sel => sel.button == button) == -1 && (multiselect.checked == true || selection.length == 0)) {
+                console.log("adding a note (first condition)");
+                selection.push({ note, button });
+            } else if (selection.findIndex(sel => sel.button == button) == -1) {
+                console.log("replacing selection (second condition)");
+                selection.length = 0;
+                selection.push({ note, button });
+            } else {
+                console.log("removing a button (third condition)");
+                selection.splice(selection.findIndex(sel => sel.button == button), 1);
+            }
+        } else if (button == "any") {
+            console.log("ANY BUTTON...");
+            let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+            if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
+                console.log("   adding buttons to selection");
+                allbuttons.forEach((button, i) => {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                    }
+                });
+            } else if (selection.findIndex(sel => sel.note == note) == -1) {
+                console.log("   replacing selection with buttons");
+                selection.length = 0;
+                allbuttons.forEach((button, i) => {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                    }
+                });
+            } else {
+                console.log("   removing buttons from selection");
+                let filteredSelection = selection.filter(sel => sel.note != note);
+                selection.length = 0;
+                selection.push(...filteredSelection);
+                // this consistently removes all but one, for some reason
+                // selection.forEach((sel, i) => {
+                //     if (sel.note == note) {
+                //         selection.splice(i, 1);
+                //         console.log("      deleted a button")
+                //     }
+                // });
+            }
         }
     }
     selectPianoKey();
@@ -557,6 +576,7 @@ function playNote(note) {
         let freq = notes[note];
         let fullVolume = 0;
         if (noteSelection.length) {
+            // TODO refactor this for the new selection model
             fullVolume = -1 + 1 / noteSelection.length // avoid the utter cracklefest on webkit and mobile browsers
         }
         // console.debug(note + " (" + freq + " Hz)");
@@ -592,7 +612,7 @@ function moveLeft() {
 function moveRight() {
     if (currentIndex < activeNotes.length - 1 && currentMode == "view") {
         currentIndex++;
-        noteSelection.length = 0;
+        selection.length = 0;
         updateNoteSelection(activeNotes[currentIndex]);
         playNote(activeNotes[currentIndex]);
     }
@@ -610,41 +630,41 @@ function findChord(chord) {
     switch (chord) {
         case "maj":
             console.log("finding major chord");
-            activeNotes[rootIndex + 4] && selection.push({"note": activeNotes[rootIndex + 4], "button": "any"});
-            activeNotes[rootIndex + 7] && selection.push({"note": activeNotes[rootIndex + 7], "button": "any"});
+            activeNotes[rootIndex + 4] && selection.push({ "note": activeNotes[rootIndex + 4], "button": "any" });
+            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
             deselectChordButtons();
             maj.classList.add('selected');
             break;
         case "min":
-            activeNotes[rootIndex + 3] && noteSelection.push(activeNotes[rootIndex + 3]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
+            activeNotes[rootIndex + 3] && selection.push({ "note": activeNotes[rootIndex + 3], "button": "any" });
+            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
             deselectChordButtons();
             min.classList.add('selected');
             break;
         case "dim":
-            activeNotes[rootIndex + 3] && noteSelection.push(activeNotes[rootIndex + 3]);
-            activeNotes[rootIndex + 6] && noteSelection.push(activeNotes[rootIndex + 6]);
+            activeNotes[rootIndex + 3] && selection.push({ "note": activeNotes[rootIndex + 3], "button": "any" });
+            activeNotes[rootIndex + 6] && selection.push({ "note": activeNotes[rootIndex + 6], "button": "any" });
             deselectChordButtons();
             dim.classList.add('selected');
             break;
         case "7":
-            activeNotes[rootIndex + 4] && noteSelection.push(activeNotes[rootIndex + 4]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
-            activeNotes[rootIndex + 10] && noteSelection.push(activeNotes[rootIndex + 10]);
+            activeNotes[rootIndex + 4] && selection.push({ "note": activeNotes[rootIndex + 4], "button": "any" });
+            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
+            activeNotes[rootIndex + 10] && selection.push({ "note": activeNotes[rootIndex + 10], "button": "any" });
             deselectChordButtons();
             sev.classList.add('selected');
             break;
         case "maj7":
-            activeNotes[rootIndex + 4] && noteSelection.push(activeNotes[rootIndex + 4]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
-            activeNotes[rootIndex + 11] && noteSelection.push(activeNotes[rootIndex + 11]);
+            activeNotes[rootIndex + 4] && selection.push({ "note": activeNotes[rootIndex + 4], "button": "any" });
+            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
+            activeNotes[rootIndex + 11] && selection.push({ "note": activeNotes[rootIndex + 11], "button": "any" });
             deselectChordButtons();
             maj7.classList.add('selected');
             break;
         case "min7":
-            activeNotes[rootIndex + 3] && noteSelection.push(activeNotes[rootIndex + 3]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
-            activeNotes[rootIndex + 10] && noteSelection.push(activeNotes[rootIndex + 10]);
+            activeNotes[rootIndex + 3] && selection.push({ "note": activeNotes[rootIndex + 3], "button": "any" });
+            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
+            activeNotes[rootIndex + 10] && selection.push({ "note": activeNotes[rootIndex + 10], "button": "any" });
             deselectChordButtons();
             min7.classList.add('selected');
             break;
