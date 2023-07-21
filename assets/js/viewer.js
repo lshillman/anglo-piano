@@ -349,14 +349,14 @@ function selectConcertinaButtons() {
     } else if (selectionMode == "buttons") {
         console.log("ENTERING BUTTON SELECTOR");
         // for each button
-            // if selection includes this button's index AND MAYBE this button's note
-            allbuttons.forEach((button, i) => {
-                if (selection.findIndex(sel => sel.button == i) != -1) {
-                    button.classList.add("selected");
-                } else {
-                    button.classList.remove("selected");
-                }
-            });
+        // if selection includes this button's index AND MAYBE this button's note
+        allbuttons.forEach((button, i) => {
+            if (selection.findIndex(sel => sel.button == i) != -1) {
+                button.classList.add("selected");
+            } else {
+                button.classList.remove("selected");
+            }
+        });
     }
     // if (selectionMode == "notes" || buttonSelection.length == 0) {
     //     for (button of angloKeyboard.children) {
@@ -443,19 +443,52 @@ function resetView() {
 
 // function updateSelection(note, button) {
 function updateNoteSelection(note, button = "any") {
-    if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
-        console.log("adding a note (first condition)");
-        selection.push({ note, button });
-    } else if (selection.findIndex(sel => sel.note == note) == -1) {
-        console.log("replacing selection (second condition)");
-        selection.length = 0;
-        selection.push({ note, button });
-    } else {
-        console.log("removing a note (third condition)");
-        selection.splice(selection.findIndex(sel => sel.note == note), 1);
+    if (button != "any") {
+        if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
+            console.log("adding a note (first condition)");
+            selection.push({ note, button });
+        } else if (selection.findIndex(sel => sel.note == note) == -1) {
+            console.log("replacing selection (second condition)");
+            selection.length = 0;
+            selection.push({ note, button });
+        } else {
+            console.log("removing a note (third condition)");
+            selection.splice(selection.findIndex(sel => sel.note == note), 1);
+        }
+    } else if (button == "any") {
+        console.log("ANY BUTTON...");
+        let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+        if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
+            console.log("   adding buttons to selection");
+            allbuttons.forEach((button, i) => {
+                if (note == button.dataset.note) {
+                    selection.push({ note, "button": i });
+                }
+            });
+        } else if (selection.findIndex(sel => sel.note == note) == -1) {
+            console.log("   replacing selection with buttons");
+            selection.length = 0;
+            allbuttons.forEach((button, i) => {
+                if (note == button.dataset.note) {
+                    selection.push({ note, "button": i });
+                }
+            });
+        } else {
+            console.log("   removing buttons from selection");
+            selection.forEach((sel, i) => {
+                if (sel.note == note) {
+                    selection.splice(i, 1);
+                }
+            });
+        }
     }
     selectPianoKey();
     selectConcertinaButtons();
+    if (selection.length > 0) {
+        chordBar.style.visibility = "visible";
+    } else {
+        chordBar.style.visibility = "hidden";
+    }
 }
 
 // function updateNoteSelection(note) {
@@ -542,8 +575,8 @@ function playNote(note) {
 }
 
 function playSelection() {
-    noteSelection.forEach((note) => {
-        playNote(note);
+    selection.forEach((sel) => {
+        playNote(sel.note);
     });
 }
 
@@ -566,18 +599,19 @@ function moveRight() {
 }
 
 function findChord(chord) {
-    noteSelection.length = 1;
+    selection.length = 1;
     let rootIndex;
     for (let i = 0; i < activeNotes.length; i++) {
-        if (activeNotes[i] == noteSelection[0]) {
+        if (activeNotes[i] == selection[0].note) {
             rootIndex = i;
             break;
         }
     }
     switch (chord) {
         case "maj":
-            activeNotes[rootIndex + 4] && noteSelection.push(activeNotes[rootIndex + 4]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
+            console.log("finding major chord");
+            activeNotes[rootIndex + 4] && selection.push({"note": activeNotes[rootIndex + 4], "button": "any"});
+            activeNotes[rootIndex + 7] && selection.push({"note": activeNotes[rootIndex + 7], "button": "any"});
             deselectChordButtons();
             maj.classList.add('selected');
             break;
