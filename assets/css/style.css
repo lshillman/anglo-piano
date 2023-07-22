@@ -121,7 +121,7 @@ button {
    height: 150px;
    width: 40px;
    display: inline-flex;
-   align-items: end;
+   align-items: flex-end;
    justify-content: center;
    padding-bottom: 1rem;
    background-color: #fff;

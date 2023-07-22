@@ -468,7 +468,10 @@ function playNote(note) {
         let freq = notes[note];
         let fullVolume = 0;
         if (selection.length) {
-            fullVolume = -1 + 1 / selection.length // avoid the utter cracklefest on webkit and mobile browsers
+            let selectedNotes = new Set();
+            selection.forEach(sel => selectedNotes.add(sel.note)); // only calculate gain using unique notes
+            fullVolume = -1 + 1 / selectedNotes.size // avoid the utter cracklefest on webkit and mobile browsers
+            console.log(selectedNotes);
         }
         // console.debug(note + " (" + freq + " Hz)");
         oscillator = audioCtx.createOscillator(); // create Oscillator node
