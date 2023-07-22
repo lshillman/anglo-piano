@@ -31,8 +31,6 @@ const min7 = document.getElementById("minor7");
 
 // user-defined display options
 const opt_layout = document.getElementById("layout");
-// const opt_drone = document.getElementById("drone");
-// const droneDiv = document.getElementById("drone-option");
 const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
@@ -70,16 +68,16 @@ const activeNotes = [];
 // an array to hold the currently selected notes
 const noteSelection = [];
 
-// an array to hold the selected buttons, if in button selection mode
+//an array to hold the selected buttons, if in button selection mode
 const buttonSelection = [];
 
-// an array to hold the experimental new selection object
+// an array to hold the currently-selected notes and buttons, in the format {note: "C4", button: 24}
 const selection = [];
 
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
-// are we viewing or editing?
+// are we viewing a layout or editing a layout?
 let currentMode;
 
 // anglo keyboard calculates min / max and must be rendered first
@@ -146,16 +144,10 @@ function renderAngloKeyboard() {
             pushLabel = "&nbsp;"; // for some reason, empty string results in layout issues on non-mac browsers
             pullLabel = "&nbsp;";
         }
-        // if (button.drone) {
-        //     droneDiv.style.display = 'block';
-        //     droneclass = "drone";
-        // }
         if (button.newRow) {
             angloKeyboard.innerHTML += `<br>`;
         }
-        // if (!(button.drone && !opt_drone.checked)) {
         angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
-        // }
     }
     bindAngloButtons();
 
@@ -169,8 +161,6 @@ function renderAngloKeyboard() {
             max = allnotes.indexOf(noteNames[layoutnotes[i]]);
         }
     }
-
-    // selectDrone();
     colorOctaves();
     renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
 }
@@ -224,9 +214,6 @@ function parseLayout(origin) {
             buttons = parsedLayoutFromURL;
         }
     }
-    // angloKeyboard.innerHTML = "";
-    // renderAngloKeyboard();
-    // selectConcertinaButtons();
     return newLayout;
 }
 
@@ -313,12 +300,6 @@ function encodeLayout() {
 
 function selectPianoKey() {
     for (key of keyboard.children) {
-        // if (noteSelection.includes(key.dataset.note)) {
-        //     key.classList.add("selected");
-        //     // console.log(key);
-        // } else {
-        //     key.classList.remove("selected");
-        // }
         if (selection.findIndex(sel => sel.note == key.dataset.note) != -1) {
             key.classList.add("selected");
         } else {
@@ -348,8 +329,6 @@ function selectConcertinaButtons() {
     });
     } else if (selectionMode == "buttons") {
         console.log("ENTERING BUTTON SELECTOR");
-        // for each button
-        // if selection includes this button's index AND MAYBE this button's note
         allbuttons.forEach((button, i) => {
             if (selection.findIndex(sel => sel.button == i) != -1) {
                 button.classList.add("selected");
@@ -358,41 +337,6 @@ function selectConcertinaButtons() {
             }
         });
     }
-    // if (selectionMode == "notes" || buttonSelection.length == 0) {
-    //     for (button of angloKeyboard.children) {
-    //         for (div of button.children) {
-    //             for (note of div.children) {
-    //                 if (opt_matchoctave.checked) {
-    //                     if (noteSelection.includes(note.dataset.note)) {
-    //                         note.classList.add("selected");
-    //                     } else {
-    //                         note.classList.remove("selected");
-    //                     }
-    //                 } else {
-    //                     if (noOctaveSelection.includes(note.dataset.note.slice(0, -1))) {
-    //                         note.classList.add("selected");
-    //                     } else {
-    //                         note.classList.remove("selected");
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // } else if (selectionMode == "buttons") {
-    //     console.log("ENTERING BUTTON SELECTOR");
-    //     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-    //     for (let i = 0; i < allbuttons.length; i++) {
-    //         if (noteSelection.includes(allbuttons[i].dataset.note) && buttonSelection.includes(i)) {
-    //             console.log("Contents of buttonSelection:" + buttonSelection)
-    //             console.log("selecting a button");
-    //             allbuttons[i].classList.add("selected");
-    //         } else {
-    //             console.log("removing buttons");
-    //             allbuttons[i].classList.remove("selected");
-    //             // buttonSelection.splice(noteSelection.indexOf(allbuttons[i]), 1);
-    //         }
-    //     }
-    // }
 }
 
 function colorOctaves() {
@@ -432,16 +376,6 @@ function resetView() {
     opt_bellows = "";
 }
 
-// removing the drone option; it's a needless complication when folks can add it via the layout editor
-// function selectDrone() {
-//     if (!opt_drone.checked && document.getElementsByClassName("drone")[0]) {
-//         document.getElementsByClassName("drone")[0].style.display = 'none';
-//     } else if (document.getElementsByClassName("drone")[0]) {
-//         document.getElementsByClassName("drone")[0].style.display = 'block';
-//     }
-// }
-
-// function updateSelection(note, button) {
 function updateNoteSelection(note, button = "any") {
     if (selectionMode == "notes") {
         if (button == "chord") {
@@ -527,58 +461,6 @@ function updateNoteSelection(note, button = "any") {
     }
 }
 
-// function updateNoteSelection(note) {
-function updateSelection(note) {
-    if (!noteSelection.includes(note) && (multiselect.checked == true || noteSelection.length == 0)) {
-        noteSelection.push(note);
-        console.log("    added to note selection: " + noteSelection);
-    } else if (!noteSelection.includes(note)) {
-        noteSelection.length = 0;
-        noteSelection.push(note);
-        console.log("    replaced note selection: " + noteSelection);
-    } else {
-        noteSelection.splice(noteSelection.indexOf(note), 1);
-        console.log("    removed from note selection: " + noteSelection);
-    }
-    selectPianoKey();
-    if (selectionMode == "notes") {
-        console.log("button selection: " + buttonSelection);
-        selectConcertinaButtons();
-    }
-    if (noteSelection.length > 0) {
-        chordBar.style.visibility = "visible";
-    } else {
-        chordBar.style.visibility = "hidden";
-    }
-}
-
-function updateButtonSelection(index) {
-    //TODO add button to selection if button clicked AND in button select mode; else add all buttons matching notes
-    // let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-    if (!buttonSelection.includes(index) && (multiselect.checked == true || buttonSelection.length == 0)) {
-        buttonSelection.push(index);
-        console.log("  added to button selection: " + buttonSelection)
-    } else if (!buttonSelection.includes(index)) {
-        buttonSelection.length = 0;
-        buttonSelection.push(index);
-        console.log("  replaced button selection: " + buttonSelection)
-    } else {
-        buttonSelection.splice(buttonSelection.indexOf(index), 1);
-        console.log("  removed from button selection: " + buttonSelection)
-    }
-}
-
-// function updateButtonSelectionFromPiano(note) {
-//     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-//     if (selection.includes(note)) {
-//         console.log("adding buttons to selection...")
-//         allbuttons.forEach((button, i) => {
-//             if (button.dataset.note == note) {
-//                 buttonSelection.push(i);
-//             }
-//         });
-//     }
-// }
 
 function deselectChordButtons() {
     for (let i = 0; i < chordBar.children.length; i++) {
@@ -705,7 +587,6 @@ function bindPianoKeys() {
                     currentIndex = activeNotes.indexOf(e.target.dataset.note)
                     deselectChordButtons();
                     updateNoteSelection(e.target.dataset.note);
-                    // updateButtonSelectionFromPiano(e.target.dataset.note);
                     multiselect.checked = false;
                     touch = false;
                 }
@@ -723,7 +604,6 @@ function bindPianoKeys() {
                 currentIndex = activeNotes.indexOf(e.target.dataset.note)
                 deselectChordButtons();
                 updateNoteSelection(e.target.dataset.note);
-                // updateButtonSelectionFromPiano(e.target.dataset.note);
             }
         });
     });
@@ -752,9 +632,6 @@ function bindAngloButtons() {
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
                 updateNoteSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
-                if (selectionMode == "buttons") {
-                    updateButtonSelection([...allbuttons].indexOf(e.target));
-                }
                 multiselect.checked = false;
                 touch = false
             }
@@ -771,10 +648,6 @@ function bindAngloButtons() {
             currentIndex = activeNotes.indexOf(e.target.dataset.note);
             deselectChordButtons();
             updateNoteSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
-            if (selectionMode == "buttons") {
-                updateButtonSelection([...allbuttons].indexOf(e.target));
-                selectConcertinaButtons();
-            }
         }
     }));
 
