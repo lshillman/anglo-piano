@@ -321,7 +321,7 @@ function selectConcertinaButtons() {
         }
     });
     } else if (selectionMode == "buttons") {
-        console.log("ENTERING BUTTON SELECTOR");
+        // console.log("ENTERING BUTTON SELECTOR");
         allbuttons.forEach((button, i) => {
             if (selection.findIndex(sel => sel.button == i) != -1) {
                 button.classList.add("selected");
@@ -374,34 +374,34 @@ function updateSelection(note, button = "any") {
         if (button == "chord") {
             selection.push({ note, button });
         } else if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
-            console.log("adding a note (first condition)");
+            // console.log("adding a note (first condition)");
             selection.push({ note, button });
         } else if (selection.findIndex(sel => sel.note == note) == -1) {
-            console.log("replacing selection (second condition)");
+            // console.log("replacing selection (second condition)");
             selection.length = 0;
             selection.push({ note, button });
         } else {
-            console.log("removing a note (third condition)");
+            // console.log("removing a note (third condition)");
             selection.splice(selection.findIndex(sel => sel.note == note), 1);
         }
     } else if (selectionMode == "buttons") {
         if (button != "any" && button != "chord") {
             if (selection.findIndex(sel => sel.button == button) == -1 && (multiselect.checked == true || selection.length == 0)) {
-                console.log("adding a note (first condition)");
+                // console.log("adding a note (first condition)");
                 selection.push({ note, button });
             } else if (selection.findIndex(sel => sel.button == button) == -1) {
-                console.log("replacing selection (second condition)");
+                // console.log("replacing selection (second condition)");
                 selection.length = 0;
                 selection.push({ note, button });
             } else {
-                console.log("removing a button (third condition)");
+                // console.log("removing a button (third condition)");
                 selection.splice(selection.findIndex(sel => sel.button == button), 1);
             }
         } else if (button == "any") {
-            console.log("ANY BUTTON...");
+            // console.log("ANY BUTTON...");
             let allbuttons = document.querySelectorAll("#anglo-keyboard button");
             if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
-                console.log("   adding buttons to selection");
+                // console.log("   adding buttons to selection");
                 let addCount = 0;
                 allbuttons.forEach((button, i) => {
                     if (note == button.dataset.note) {
@@ -413,7 +413,7 @@ function updateSelection(note, button = "any") {
                     selection.push({ note, "button": "any" });
                 }
             } else if (selection.findIndex(sel => sel.note == note) == -1) {
-                console.log("   replacing selection with buttons");
+                // console.log("   replacing selection with buttons");
                 selection.length = 0;
                 let addCount = 0;
                 allbuttons.forEach((button, i) => {
@@ -426,7 +426,7 @@ function updateSelection(note, button = "any") {
                     selection.push({ note, "button": "any" });
                 }
             } else {
-                console.log("   removing buttons from selection");
+                // console.log("   removing buttons from selection");
                 let filteredSelection = selection.filter(sel => sel.note != note);
                 selection.length = 0;
                 selection.push(...filteredSelection);
@@ -519,7 +519,6 @@ function findChord(chord) {
     }
     switch (chord) {
         case "maj":
-            console.log("finding major chord");
             activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
             activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
             deselectChordButtons();
@@ -616,7 +615,7 @@ function bindAngloButtons() {
         touch = true
         setTimeout(() => {
             if (touch) {
-                console.log("long-pressed an anglo button");
+                // console.log("long-pressed an anglo button");
                 multiselect.checked = true;
                 if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                     playNote(e.target.dataset.note);
@@ -632,7 +631,7 @@ function bindAngloButtons() {
 
     allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
         if (touch) {
-            console.log("Clicked an anglo button");
+            // console.log("Clicked an anglo button");
             touch = false;
             if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                 playNote(e.target.dataset.note);
@@ -681,7 +680,7 @@ function getUrlParams() {
             layoutShortcut = legacyParam;
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
-            console.log("parsing custom legacy layout...");
+            // console.log("parsing custom legacy layout...");
             parseLegacyLayout();
             opt_layout.value = "customFromURL";
         }
@@ -689,7 +688,7 @@ function getUrlParams() {
         let urlParam = window.location.href.split("?")[1];
         if (urlParam && LAYOUTS[urlParam]) {
             layoutShortcut = urlParam;
-            console.log("selecting a hard-coded layout from new param: " + urlParam);
+            // console.log("selecting a hard-coded layout from new param: " + urlParam);
         } else if (urlParam && urlParam.includes("&title=")) {
             customLayoutFromURL = urlParam.split("&title=")[0];
             customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
@@ -697,11 +696,11 @@ function getUrlParams() {
             opt_layout.value = "customFromURL";
         } else if (urlParam) {
             customLayoutFromURL = urlParam;
-            console.log("parsing custom new layout...");
+            // console.log("parsing custom new layout...");
             parseLayout("url");
             opt_layout.value = "customFromURL";
         } else {
-            console.log("empty param; proceeding with default");
+            // console.log("empty param; proceeding with default");
         }
     }
 }
