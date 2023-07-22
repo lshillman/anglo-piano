@@ -100,7 +100,9 @@ function loadFrame (index) {
         togglePullView();
     }
     selection.length = 0;
-    selectionMode = frames[index].mode;
+    if (opt_layout.value == compositions[comp_dropdown.value].layout) {
+        selectionMode = frames[index].mode;
+    }
     selection.push(...frames[index].selection)
     deselectChordButtons();
     selectConcertinaButtons();
