@@ -592,9 +592,8 @@ function playNote(note) {
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
         let freq = notes[note];
         let fullVolume = 0;
-        if (noteSelection.length) {
-            // TODO refactor this for the new selection model
-            fullVolume = -1 + 1 / noteSelection.length // avoid the utter cracklefest on webkit and mobile browsers
+        if (selection.length) {
+            fullVolume = -1 + 1 / selection.length // avoid the utter cracklefest on webkit and mobile browsers
         }
         // console.debug(note + " (" + freq + " Hz)");
         oscillator = audioCtx.createOscillator(); // create Oscillator node
