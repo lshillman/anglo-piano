@@ -369,7 +369,7 @@ function resetView() {
     opt_bellows = "";
 }
 
-function updateNoteSelection(note, button = "any") {
+function updateSelection(note, button = "any") {
     if (selectionMode == "notes") {
         if (button == "chord") {
             selection.push({ note, button });
@@ -494,7 +494,7 @@ function playSelection() {
 function moveLeft() {
     if (currentIndex > 0 && currentMode == "view") {
         currentIndex--;
-        updateNoteSelection(activeNotes[currentIndex]);
+        updateSelection(activeNotes[currentIndex]);
         playNote(activeNotes[currentIndex]);
     }
 }
@@ -503,7 +503,7 @@ function moveRight() {
     if (currentIndex < activeNotes.length - 1 && currentMode == "view") {
         currentIndex++;
         selection.length = 0;
-        updateNoteSelection(activeNotes[currentIndex]);
+        updateSelection(activeNotes[currentIndex]);
         playNote(activeNotes[currentIndex]);
     }
 }
@@ -520,41 +520,41 @@ function findChord(chord) {
     switch (chord) {
         case "maj":
             console.log("finding major chord");
-            activeNotes[rootIndex + 4] && updateNoteSelection(activeNotes[rootIndex + 4], "chord");
-            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
             deselectChordButtons();
             maj.classList.add('selected');
             break;
         case "min":
-            activeNotes[rootIndex + 3] && updateNoteSelection(activeNotes[rootIndex + 3], "chord");
-            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 3] && updateSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
             deselectChordButtons();
             min.classList.add('selected');
             break;
         case "dim":
-            activeNotes[rootIndex + 3] && updateNoteSelection(activeNotes[rootIndex + 3], "chord");
-            activeNotes[rootIndex + 6] && updateNoteSelection(activeNotes[rootIndex + 6], "chord");
+            activeNotes[rootIndex + 3] && updateSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 6] && updateSelection(activeNotes[rootIndex + 6], "chord");
             deselectChordButtons();
             dim.classList.add('selected');
             break;
         case "7":
-            activeNotes[rootIndex + 4] && updateNoteSelection(activeNotes[rootIndex + 4], "chord");
-            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
-            activeNotes[rootIndex + 10] && updateNoteSelection(activeNotes[rootIndex + 10], "chord");
+            activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 10] && updateSelection(activeNotes[rootIndex + 10], "chord");
             deselectChordButtons();
             sev.classList.add('selected');
             break;
         case "maj7":
-            activeNotes[rootIndex + 4] && updateNoteSelection(activeNotes[rootIndex + 4], "chord");
-            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
-            activeNotes[rootIndex + 11] && updateNoteSelection(activeNotes[rootIndex + 11], "chord");
+            activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 11] && updateSelection(activeNotes[rootIndex + 11], "chord");
             deselectChordButtons();
             maj7.classList.add('selected');
             break;
         case "min7":
-            activeNotes[rootIndex + 3] && updateNoteSelection(activeNotes[rootIndex + 3], "chord");
-            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
-            activeNotes[rootIndex + 10] && updateNoteSelection(activeNotes[rootIndex + 10], "chord");
+            activeNotes[rootIndex + 3] && updateSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 10] && updateSelection(activeNotes[rootIndex + 10], "chord");
             deselectChordButtons();
             min7.classList.add('selected');
             break;
@@ -578,7 +578,7 @@ function bindPianoKeys() {
                     }
                     currentIndex = activeNotes.indexOf(e.target.dataset.note)
                     deselectChordButtons();
-                    updateNoteSelection(e.target.dataset.note);
+                    updateSelection(e.target.dataset.note);
                     multiselect.checked = false;
                     touch = false;
                 }
@@ -595,7 +595,7 @@ function bindPianoKeys() {
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note)
                 deselectChordButtons();
-                updateNoteSelection(e.target.dataset.note);
+                updateSelection(e.target.dataset.note);
             }
         });
     });
@@ -623,7 +623,7 @@ function bindAngloButtons() {
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
-                updateNoteSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
+                updateSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
                 multiselect.checked = false;
                 touch = false
             }
@@ -639,7 +639,7 @@ function bindAngloButtons() {
             }
             currentIndex = activeNotes.indexOf(e.target.dataset.note);
             deselectChordButtons();
-            updateNoteSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
+            updateSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
         }
     }));
 

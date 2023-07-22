@@ -53,20 +53,20 @@ function createSequence() {
     }
 }
 
-let currentSelection = -1;
+let currentFrame = -1;
 
 function saveFrame(position = sequences[seq_dropdown.value].frames.length) {
     let frames = sequences[seq_dropdown.value].frames;
     frames.push({bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]});
     writeSequences();
     timeline.innerHTML += `<div class="sequencer-frame" data-position="${frames.length - 1}">${frames.length}</div>`
-    currentSelection = position;
+    currentFrame = position;
     selectFrames();
 }
 
 function updateFrame() {
     let frames = sequences[seq_dropdown.value].frames;
-    frames[currentSelection] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
+    frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
 }
 
 function deleteFrame() {
@@ -80,14 +80,14 @@ function deleteFrame() {
     frame.style.opacity = 0;
     setTimeout(() => {
         frame.remove();
-        frames.splice(currentSelection, 1);
+        frames.splice(currentFrame, 1);
         populateTimeline();
         selectFrames();
       }, "300");
     writeSequences();
 }
 
-function loadSelection (index) {
+function loadFrame (index) {
     let frames = sequences[seq_dropdown.value].frames;
     if (frames[index].bellows == "pushpull") {
         opt_pushpull.checked = true;
@@ -113,24 +113,24 @@ function loadSelection (index) {
 
 function loadNextFrame() {
     let frames = sequences[seq_dropdown.value].frames;
-    if (frames[currentSelection + 1]) {
-        currentSelection++;
+    if (frames[currentFrame + 1]) {
+        currentFrame++;
     } else {
-        currentSelection = 0;
+        currentFrame = 0;
     }
-    loadSelection(currentSelection);
-    scrollToCurrentSelection();
+    loadFrame(currentFrame);
+    scrollToCurrentFrame();
 }
 
 function loadPrevFrame() {
     let frames = sequences[seq_dropdown.value].frames;
-    if (frames[currentSelection - 1]) {
-        currentSelection--;
+    if (frames[currentFrame - 1]) {
+        currentFrame--;
     } else {
-        currentSelection = frames.length - 1;
+        currentFrame = frames.length - 1;
     }
-    loadSelection(currentSelection);
-    scrollToCurrentSelection();
+    loadFrame(currentFrame);
+    scrollToCurrentFrame();
 }
 
 function populateTimeline() {
@@ -165,7 +165,7 @@ function deleteSequence() {
 
 seq_dropdown.addEventListener("change", () => {
     populateTimeline(sequences[seq_dropdown.value].frames);
-    currentSelection = -1;
+    currentFrame = -1;
     timeline.scrollLeft = 0;
 });
 seq_createBtn.addEventListener("click", () => createSequence());
@@ -178,16 +178,16 @@ frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
     if(e.target && e.target.className.includes("sequencer-frame")) {
-        currentSelection = parseInt(e.target.dataset.position);
-        loadSelection(currentSelection);
-        console.log(currentSelection);
+        currentFrame = parseInt(e.target.dataset.position);
+        loadFrame(currentFrame);
+        console.log(currentFrame);
         selectFrames();
     }
 });
 
 function selectFrames() {
     [...timeline.children].forEach((frame) => {
-        if (frame.dataset.position == currentSelection) {
+        if (frame.dataset.position == currentFrame) {
             frame.classList.add("selected");
         } else {
             frame.classList.remove("selected");
@@ -195,9 +195,9 @@ function selectFrames() {
     });
 }
 
-function scrollToCurrentSelection () {
-    if (currentSelection != -1) {
-        let el = timeline.children[currentSelection];
+function scrollToCurrentFrame () {
+    if (currentFrame != -1) {
+        let el = timeline.children[currentFrame];
         const elLeft = el.offsetLeft + el.offsetWidth;
         const elParentLeft = el.parentNode.offsetLeft + el.parentNode.offsetWidth;
     
