@@ -859,6 +859,8 @@ function selectShareLink() {
 }
 
 opt_layout.addEventListener("change", () => {
+    // can't select same button indicies on another layout and expect them to work. TODO also update mode toggle when it exists
+    selectionMode = "notes";
     selectLayout();
 });
 
