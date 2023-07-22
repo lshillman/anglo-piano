@@ -57,7 +57,7 @@ let currentFrame = -1;
 
 function saveFrame(position = sequences[seq_dropdown.value].frames.length) {
     let frames = sequences[seq_dropdown.value].frames;
-    frames.push({bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]});
+    frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
     writeSequences();
     timeline.innerHTML += `<div class="sequencer-frame" data-position="${frames.length - 1}">${frames.length}</div>`
     currentFrame = position;
@@ -66,7 +66,7 @@ function saveFrame(position = sequences[seq_dropdown.value].frames.length) {
 
 function updateFrame() {
     let frames = sequences[seq_dropdown.value].frames;
-    frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
+    frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, selection: [...selection]};
 }
 
 function deleteFrame() {
@@ -99,11 +99,9 @@ function loadFrame (index) {
         opt_pull.checked = true;
         togglePullView();
     }
-    noteSelection.length = 0;
-    buttonSelection.length = 0;
+    selection.length = 0;
     selectionMode = frames[index].mode;
-    buttonSelection.push(...frames[index].buttons)
-    noteSelection.push(...frames[index].notes);
+    selection.push(...frames[index].selection)
     deselectChordButtons();
     selectConcertinaButtons();
     selectPianoKey();
