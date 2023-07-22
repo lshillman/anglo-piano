@@ -1,8 +1,8 @@
-// sequencer elements
-const seq_dropdown = document.getElementById("sequence");
-const seq_new = document.getElementById("seq-new"); // shows the create modal
-const seq_createBtn = document.getElementById("createSequenceBtn"); // inside the create modal
-const seq_delete = document.getElementById("seq-delete");
+// composer elements
+const comp_dropdown = document.getElementById("composition");
+const comp_new = document.getElementById("comp-new"); // shows the create modal
+const comp_createBtn = document.getElementById("createCompBtn"); // inside the create modal
+const comp_delete = document.getElementById("comp-delete");
 const frame_save = document.getElementById("frame-save");
 const frame_update = document.getElementById("frame-update");
 const frame_delete = document.getElementById("frame-delete");
@@ -11,67 +11,67 @@ const frame_prev = document.getElementById("frame-prev");
 const timeline = document.getElementById("timeline");
 
 
-let sequences = {};
+let compositions = {};
 
-function loadSequences() {
-    if (localStorage.getItem("SEQUENCES") && Object.keys(JSON.parse(localStorage.getItem("SEQUENCES"))).length != 0) {
-        sequences = JSON.parse(localStorage.getItem("SEQUENCES"));
-        seq_dropdown.innerHTML = "";
-        for (let i = Object.keys(sequences).length - 1; i > -1; i--) {
-            console.log(Object.keys(sequences)[i]);
-            seq_dropdown.innerHTML += `<option value="${Object.keys(sequences)[i]}">${Object.keys(sequences)[i]}</option>`;
+function loadCompositions() {
+    if (localStorage.getItem("COMPOSITIONS") && Object.keys(JSON.parse(localStorage.getItem("COMPOSITIONS"))).length != 0) {
+        compositions = JSON.parse(localStorage.getItem("COMPOSITIONS"));
+        comp_dropdown.innerHTML = "";
+        for (let i = Object.keys(compositions).length - 1; i > -1; i--) {
+            console.log(Object.keys(compositions)[i]);
+            comp_dropdown.innerHTML += `<option value="${Object.keys(compositions)[i]}">${Object.keys(compositions)[i]}</option>`;
         }
-        populateTimeline(sequences[seq_dropdown.value].frames);
+        populateTimeline(compositions[comp_dropdown.value].frames);
     } else {
-        console.log("no sequences in localStorage")
-        // prompt user to enter a name for the new sequence
+        console.log("no compositions in localStorage")
+        // prompt user to enter a name for the new composition
     }
 }
 
-loadSequences();
+loadCompositions();
 
-function writeSequences() {
-    localStorage.setItem("SEQUENCES", JSON.stringify(sequences));
+function writeCompositions() {
+    localStorage.setItem("COMPOSITIONS", JSON.stringify(compositions));
 }
 
 function promptForTitle() {
-    document.getElementById("new-sequence-modal").style.display = "block";
+    document.getElementById("new-composition-modal").style.display = "block";
 }
 
-function createSequence() {
-    let title = document.getElementById("newSequenceTitle").value;
-    if (!sequences[title]) {
-        document.getElementById("newSequenceTitle").value = "";
+function createComposition() {
+    let title = document.getElementById("newCompTitle").value;
+    if (!compositions[title]) {
+        document.getElementById("newCompTitle").value = "";
         closeModal();
-        console.log("Creating new sequence...");
-        sequences[title] = {
+        console.log("Creating new composition...");
+        compositions[title] = {
             layout: opt_layout.value,
             frames: []
         };
-        writeSequences();
-        loadSequences();
+        writeCompositions();
+        loadCompositions();
     }
 }
 
 let currentFrame = -1;
 
-function saveFrame(position = sequences[seq_dropdown.value].frames.length) {
-    let frames = sequences[seq_dropdown.value].frames;
+function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
+    let frames = compositions[comp_dropdown.value].frames;
     frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
-    writeSequences();
-    timeline.innerHTML += `<div class="sequencer-frame" data-position="${frames.length - 1}">${frames.length}</div>`
+    writeCompositions();
+    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}">${frames.length}</div>`
     currentFrame = position;
     selectFrames();
 }
 
 function updateFrame() {
-    let frames = sequences[seq_dropdown.value].frames;
+    let frames = compositions[comp_dropdown.value].frames;
     frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, selection: [...selection]};
 }
 
 function deleteFrame() {
-    let frames = sequences[seq_dropdown.value].frames;
-    let frame = document.querySelector(".sequencer-frame.selected");
+    let frames = compositions[comp_dropdown.value].frames;
+    let frame = document.querySelector(".composer-frame.selected");
     frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
     frame.classList.remove("selected");
     frame.nextSibling && frame.nextSibling.classList.add("selected");
@@ -84,11 +84,11 @@ function deleteFrame() {
         populateTimeline();
         selectFrames();
       }, "300");
-    writeSequences();
+    writeCompositions();
 }
 
 function loadFrame (index) {
-    let frames = sequences[seq_dropdown.value].frames;
+    let frames = compositions[comp_dropdown.value].frames;
     if (frames[index].bellows == "pushpull") {
         opt_pushpull.checked = true;
         resetView();
@@ -110,7 +110,7 @@ function loadFrame (index) {
 }
 
 function loadNextFrame() {
-    let frames = sequences[seq_dropdown.value].frames;
+    let frames = compositions[comp_dropdown.value].frames;
     if (frames[currentFrame + 1]) {
         currentFrame++;
     } else {
@@ -121,7 +121,7 @@ function loadNextFrame() {
 }
 
 function loadPrevFrame() {
-    let frames = sequences[seq_dropdown.value].frames;
+    let frames = compositions[comp_dropdown.value].frames;
     if (frames[currentFrame - 1]) {
         currentFrame--;
     } else {
@@ -132,15 +132,15 @@ function loadPrevFrame() {
 }
 
 function populateTimeline() {
-    if (seq_dropdown.value) {
-        let frames = sequences[seq_dropdown.value].frames;
+    if (comp_dropdown.value) {
+        let frames = compositions[comp_dropdown.value].frames;
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
             for (let i = 0; i < frames.length; i++) {
-                timeline.innerHTML += `<div class="sequencer-frame" data-position="${i}">${i + 1}</div>`
+                timeline.innerHTML += `<div class="composer-frame" data-position="${i}">${i + 1}</div>`
             }
         }
-        opt_layout.value = sequences[seq_dropdown.value].layout;
+        opt_layout.value = compositions[comp_dropdown.value].layout;
         selectLayout();
     } else {
         timeline.innerHTML = "";
@@ -148,34 +148,34 @@ function populateTimeline() {
 }
 
 function confirmDelete() {
-    document.getElementById("confirmDeleteSequenceMsg").innerText = `Do you really want to delete "${seq_dropdown.value}"?`
-    document.getElementById("delete-sequence-modal").style.display = "block";
+    document.getElementById("confirmDeleteCompMsg").innerText = `Do you really want to delete "${comp_dropdown.value}"?`
+    document.getElementById("delete-composition-modal").style.display = "block";
 }
 
-function deleteSequence() {
-    delete sequences[seq_dropdown.value];
-    seq_dropdown.remove(seq_dropdown.selectedIndex);
-    writeSequences();
+function deleteComposition() {
+    delete compositions[comp_dropdown.value];
+    comp_dropdown.remove(comp_dropdown.selectedIndex);
+    writeCompositions();
     closeModal();
     populateTimeline();
 }
 
 
-seq_dropdown.addEventListener("change", () => {
-    populateTimeline(sequences[seq_dropdown.value].frames);
+comp_dropdown.addEventListener("change", () => {
+    populateTimeline(compositions[comp_dropdown.value].frames);
     currentFrame = -1;
     timeline.scrollLeft = 0;
 });
-seq_createBtn.addEventListener("click", () => createSequence());
-seq_new.addEventListener("click", () => promptForTitle());
-seq_delete.addEventListener("click", () => confirmDelete());
+comp_createBtn.addEventListener("click", () => createComposition());
+comp_new.addEventListener("click", () => promptForTitle());
+comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
 frame_update.addEventListener("click", () => updateFrame());
 frame_delete.addEventListener("click", () => deleteFrame());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
-    if(e.target && e.target.className.includes("sequencer-frame")) {
+    if(e.target && e.target.className.includes("composer-frame")) {
         currentFrame = parseInt(e.target.dataset.position);
         loadFrame(currentFrame);
         console.log(currentFrame);

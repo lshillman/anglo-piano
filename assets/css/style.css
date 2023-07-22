@@ -281,7 +281,7 @@ button {
 #viewer-options button,
 #editor-options button,
 .modal-actions button,
-#sequencer button {
+#composer button {
    height: 30px;
    padding-left: 0.5rem;
    padding-right: 0.5rem;
@@ -293,13 +293,13 @@ button {
 #viewer-options button:hover,
 #editor-options button:hover,
 .modal-actions button:hover,
-#sequencer button:hover {
+#composer button:hover {
    background-color: #eee;
 }
 
 #viewer-options button:active,
 #editor-options button:active,
-#sequencer button:active {
+#composer button:active {
    background-color: #333;
    color: #fff;
 }
@@ -526,9 +526,9 @@ button#addToLayoutsBtn:active {
 }
 
 
-/* ===== SEQUENCER ===== */
+/* ===== COMPOSER ===== */
 
-#sequencer {
+#composer {
    width: 100%;
    height: 8rem;
    outline: 1px solid red;
@@ -536,7 +536,7 @@ button#addToLayoutsBtn:active {
    flex-direction: column;
 }
 
-#sequencer-controls {
+#composer-controls {
    outline: 4px solid purple;
    height:3.5rem;
 }
@@ -553,7 +553,7 @@ button#addToLayoutsBtn:active {
    text-align: left;
 }
 
-.sequencer-frame {
+.composer-frame {
    display: inline-block;
    width: 3rem;
    text-align: center;
@@ -562,11 +562,11 @@ button#addToLayoutsBtn:active {
    margin-right: 1rem;
 }
 
-.sequencer-frame.selected, .sequencer-frame.selected:hover {
+.composer-frame.selected, .composer-frame.selected:hover {
    outline: 3px solid purple;
 }
 
-.sequencer-frame:hover {
+.composer-frame:hover {
    outline: 3px solid rgb(136, 97, 136);
 }
 
