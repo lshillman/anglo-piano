@@ -281,7 +281,7 @@ button {
 #viewer-options button,
 #editor-options button,
 .modal-actions button,
-#composer button {
+#composer-controls button {
    height: 30px;
    padding-left: 0.5rem;
    padding-right: 0.5rem;

@@ -59,7 +59,7 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
     frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
     writeCompositions();
-    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}">${frames.length}</div>`
+    timeline.innerHTML += `<button class="composer-frame" data-position="${frames.length - 1}">${frames.length}</button>`
     currentFrame = position;
     selectFrames();
 }
@@ -139,7 +139,7 @@ function populateTimeline() {
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
             for (let i = 0; i < frames.length; i++) {
-                timeline.innerHTML += `<div class="composer-frame" data-position="${i}">${i + 1}</div>`
+                timeline.innerHTML += `<button class="composer-frame" data-position="${i}">${i + 1}</button>`
             }
         }
         opt_layout.value = compositions[comp_dropdown.value].layout;
