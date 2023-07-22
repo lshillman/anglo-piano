@@ -34,7 +34,7 @@ const opt_layout = document.getElementById("layout");
 const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
-let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
+let opt_bellows = "pushpull"; // stores the value of the selected bellows option from pushpull, push, or pull
 const opt_sound = document.getElementById("sound");
 const opt_matchoctave = document.getElementById("matchoctave");
 const multiselect = document.getElementById("multiselect");
@@ -366,7 +366,7 @@ function resetView() {
         button.classList.remove("push-only");
         button.classList.remove("pull-only");
     }
-    opt_bellows = "";
+    opt_bellows = "pushpull";
 }
 
 function updateSelection(note, button = "any") {
