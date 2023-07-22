@@ -65,9 +65,6 @@ let buttons = [];
 // an array to keep track of all currently-displayed piano notes. Required for arrow key navigation.
 const activeNotes = [];
 
-// an array to hold the currently selected notes
-// const noteSelection = [];
-
 // an array to hold the currently-selected notes and buttons, in the format {note: "C4", button: 24}
 const selection = [];
 
