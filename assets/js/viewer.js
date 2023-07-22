@@ -444,7 +444,9 @@ function resetView() {
 // function updateSelection(note, button) {
 function updateNoteSelection(note, button = "any") {
     if (selectionMode == "notes") {
-        if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
+        if (button == "chord") {
+            selection.push({ note, button });
+        } else if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
             console.log("adding a note (first condition)");
             selection.push({ note, button });
         } else if (selection.findIndex(sel => sel.note == note) == -1) {
@@ -456,7 +458,7 @@ function updateNoteSelection(note, button = "any") {
             selection.splice(selection.findIndex(sel => sel.note == note), 1);
         }
     } else if (selectionMode == "buttons") {
-        if (button != "any") {
+        if (button != "any" && button != "chord") {
             if (selection.findIndex(sel => sel.button == button) == -1 && (multiselect.checked == true || selection.length == 0)) {
                 console.log("adding a note (first condition)");
                 selection.push({ note, button });
@@ -490,6 +492,7 @@ function updateNoteSelection(note, button = "any") {
                 allbuttons.forEach((button, i) => {
                     if (note == button.dataset.note) {
                         selection.push({ note, "button": i });
+                        addCount++;
                     }
                 });
                 if (!addCount) { // we still want to select the note even if there are no matching buttons
@@ -501,6 +504,18 @@ function updateNoteSelection(note, button = "any") {
                 selection.length = 0;
                 selection.push(...filteredSelection);
             }
+        } else if (button == "chord") {
+            let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+            let addCount = 0;
+                allbuttons.forEach((button, i) => {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                        addCount++;
+                    }
+                });
+                if (!addCount) { // we still want to select the note even if there are no matching buttons
+                    selection.push({ note, "button": "any" });
+                }
         }
     }
     selectPianoKey();
@@ -632,41 +647,41 @@ function findChord(chord) {
     switch (chord) {
         case "maj":
             console.log("finding major chord");
-            activeNotes[rootIndex + 4] && selection.push({ "note": activeNotes[rootIndex + 4], "button": "any" });
-            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
+            activeNotes[rootIndex + 4] && updateNoteSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
             deselectChordButtons();
             maj.classList.add('selected');
             break;
         case "min":
-            activeNotes[rootIndex + 3] && selection.push({ "note": activeNotes[rootIndex + 3], "button": "any" });
-            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
+            activeNotes[rootIndex + 3] && updateNoteSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
             deselectChordButtons();
             min.classList.add('selected');
             break;
         case "dim":
-            activeNotes[rootIndex + 3] && selection.push({ "note": activeNotes[rootIndex + 3], "button": "any" });
-            activeNotes[rootIndex + 6] && selection.push({ "note": activeNotes[rootIndex + 6], "button": "any" });
+            activeNotes[rootIndex + 3] && updateNoteSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 6] && updateNoteSelection(activeNotes[rootIndex + 6], "chord");
             deselectChordButtons();
             dim.classList.add('selected');
             break;
         case "7":
-            activeNotes[rootIndex + 4] && selection.push({ "note": activeNotes[rootIndex + 4], "button": "any" });
-            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
-            activeNotes[rootIndex + 10] && selection.push({ "note": activeNotes[rootIndex + 10], "button": "any" });
+            activeNotes[rootIndex + 4] && updateNoteSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 10] && updateNoteSelection(activeNotes[rootIndex + 10], "chord");
             deselectChordButtons();
             sev.classList.add('selected');
             break;
         case "maj7":
-            activeNotes[rootIndex + 4] && selection.push({ "note": activeNotes[rootIndex + 4], "button": "any" });
-            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
-            activeNotes[rootIndex + 11] && selection.push({ "note": activeNotes[rootIndex + 11], "button": "any" });
+            activeNotes[rootIndex + 4] && updateNoteSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 11] && updateNoteSelection(activeNotes[rootIndex + 11], "chord");
             deselectChordButtons();
             maj7.classList.add('selected');
             break;
         case "min7":
-            activeNotes[rootIndex + 3] && selection.push({ "note": activeNotes[rootIndex + 3], "button": "any" });
-            activeNotes[rootIndex + 7] && selection.push({ "note": activeNotes[rootIndex + 7], "button": "any" });
-            activeNotes[rootIndex + 10] && selection.push({ "note": activeNotes[rootIndex + 10], "button": "any" });
+            activeNotes[rootIndex + 3] && updateNoteSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 7] && updateNoteSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 10] && updateNoteSelection(activeNotes[rootIndex + 10], "chord");
             deselectChordButtons();
             min7.classList.add('selected');
             break;
