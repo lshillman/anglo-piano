@@ -55,21 +55,21 @@ function createSequence() {
 
 let currentSelection = -1;
 
-function saveSelection(position = sequences[seq_dropdown.value].frames.length) {
+function saveFrame(position = sequences[seq_dropdown.value].frames.length) {
     let frames = sequences[seq_dropdown.value].frames;
     frames.push({bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]});
     writeSequences();
     timeline.innerHTML += `<div class="sequencer-frame" data-position="${frames.length - 1}">${frames.length}</div>`
     currentSelection = position;
-    updateSelectedFrames();
+    selectFrames();
 }
 
-function updateSelection() {
+function updateFrame() {
     let frames = sequences[seq_dropdown.value].frames;
     frames[currentSelection] = {bellows: opt_bellows, mode: selectionMode, notes: [...selection], buttons: [...buttonSelection]};
 }
 
-function deleteSelection() {
+function deleteFrame() {
     let frames = sequences[seq_dropdown.value].frames;
     let frame = document.querySelector(".sequencer-frame.selected");
     frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
@@ -82,7 +82,7 @@ function deleteSelection() {
         frame.remove();
         frames.splice(currentSelection, 1);
         populateTimeline();
-        updateSelectedFrames();
+        selectFrames();
       }, "300");
     writeSequences();
 }
@@ -107,11 +107,11 @@ function loadSelection (index) {
     deselectChordButtons();
     selectConcertinaButtons();
     selectPianoKey();
-    updateSelectedFrames();
+    selectFrames();
     playSelection();
 }
 
-function loadNextSelection() {
+function loadNextFrame() {
     let frames = sequences[seq_dropdown.value].frames;
     if (frames[currentSelection + 1]) {
         currentSelection++;
@@ -122,7 +122,7 @@ function loadNextSelection() {
     scrollToCurrentSelection();
 }
 
-function loadPrevSelection() {
+function loadPrevFrame() {
     let frames = sequences[seq_dropdown.value].frames;
     if (frames[currentSelection - 1]) {
         currentSelection--;
@@ -171,21 +171,21 @@ seq_dropdown.addEventListener("change", () => {
 seq_createBtn.addEventListener("click", () => createSequence());
 seq_new.addEventListener("click", () => promptForTitle());
 seq_delete.addEventListener("click", () => confirmDelete());
-frame_save.addEventListener("click", () => saveSelection());
-frame_update.addEventListener("click", () => updateSelection());
-frame_delete.addEventListener("click", () => deleteSelection());
-frame_next.addEventListener("click", () => loadNextSelection());
-frame_prev.addEventListener("click", () => loadPrevSelection());
+frame_save.addEventListener("click", () => saveFrame());
+frame_update.addEventListener("click", () => updateFrame());
+frame_delete.addEventListener("click", () => deleteFrame());
+frame_next.addEventListener("click", () => loadNextFrame());
+frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
     if(e.target && e.target.className.includes("sequencer-frame")) {
         currentSelection = parseInt(e.target.dataset.position);
         loadSelection(currentSelection);
         console.log(currentSelection);
-        updateSelectedFrames();
+        selectFrames();
     }
 });
 
-function updateSelectedFrames() {
+function selectFrames() {
     [...timeline.children].forEach((frame) => {
         if (frame.dataset.position == currentSelection) {
             frame.classList.add("selected");

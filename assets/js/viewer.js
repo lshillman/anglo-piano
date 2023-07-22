@@ -806,11 +806,11 @@ document.addEventListener('keydown', function (e) {
     } else if (e.code == "Digit6" && currentMode == "view") {
         findChord('min7');
     } else if (e.code == "KeyJ" && currentMode == "view") {
-        loadPrevSelection();
+        loadPrevFrame();
     } else if (e.code == "KeyK" && currentMode == "view") {
-        loadNextSelection();
+        loadNextFrame();
     } else if (e.code == "KeyS" && e.shiftKey && currentMode == "view") {
-        saveSelection();
+        saveFrame();
     }
 });
 
