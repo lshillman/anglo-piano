@@ -66,10 +66,7 @@ let buttons = [];
 const activeNotes = [];
 
 // an array to hold the currently selected notes
-const noteSelection = [];
-
-//an array to hold the selected buttons, if in button selection mode
-const buttonSelection = [];
+// const noteSelection = [];
 
 // an array to hold the currently-selected notes and buttons, in the format {note: "C4", button: 24}
 const selection = [];
@@ -164,7 +161,6 @@ function renderAngloKeyboard() {
     colorOctaves();
     renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
 }
-
 
 
 function parseLayout(origin) {
@@ -501,7 +497,6 @@ function playSelection() {
 function moveLeft() {
     if (currentIndex > 0 && currentMode == "view") {
         currentIndex--;
-        noteSelection.length = 0;
         updateNoteSelection(activeNotes[currentIndex]);
         playNote(activeNotes[currentIndex]);
     }
@@ -581,7 +576,7 @@ function bindPianoKeys() {
             setTimeout(() => {
                 if (touch) {
                     multiselect.checked = true;
-                    if (!noteSelection.includes(e.target.dataset.note)) {
+                    if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                         playNote(e.target.dataset.note);
                     }
                     currentIndex = activeNotes.indexOf(e.target.dataset.note)
@@ -598,7 +593,7 @@ function bindPianoKeys() {
         key.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
             if (touch) {
                 touch = false;
-                if (!noteSelection.includes(e.target.dataset.note)) {
+                if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                     playNote(e.target.dataset.note);
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note)
@@ -626,7 +621,7 @@ function bindAngloButtons() {
             if (touch) {
                 console.log("long-pressed an anglo button");
                 multiselect.checked = true;
-                if (!noteSelection.includes(e.target.dataset.note)) {
+                if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                     playNote(e.target.dataset.note);
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
@@ -642,7 +637,7 @@ function bindAngloButtons() {
         if (touch) {
             console.log("Clicked an anglo button");
             touch = false;
-            if (!noteSelection.includes(e.target.dataset.note)) {
+            if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                 playNote(e.target.dataset.note);
             }
             currentIndex = activeNotes.indexOf(e.target.dataset.note);
@@ -772,10 +767,6 @@ opt_coloroctave.addEventListener("change", () => {
     colorOctaves();
 });
 
-// opt_drone.addEventListener("change", () => {
-//     renderAngloKeyboard();
-// });
-
 opt_concertinaLabels.addEventListener("change", () => {
     renderAngloKeyboard();
 });
@@ -880,7 +871,6 @@ window.onclick = function (event) {
         closeModal();
     }
 }
-
 
 
 // If we don't have layouts from URL params or localStorage, build a simple dropdown. If we have URL params or locally-stored layouts, create optgroups.
