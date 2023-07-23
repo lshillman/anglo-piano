@@ -211,3 +211,13 @@ function scrollToCurrentFrame () {
         timeline.scrollLeft = 0;
     }
 }
+
+// hastily-improvised feature flag.
+function showComposer() {
+    document.getElementById("composer-container").style.display = "block";
+    console.warn("The composer is actively being developed. Use at your own risk!")
+}
+
+if (window.location.href.includes("#comp=1")) {
+    showComposer();
+}
