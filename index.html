@@ -41,10 +41,6 @@
             <select id="layout">
                 <!-- layouts -->
             </select>
-            <!-- <div id="drone-option">
-                <input type="checkbox" id="drone" name="drone">
-                <label for="drone"> Drone key</label>
-            </div> -->
             <div>
                 <button id="editLayoutBtn">Edit layout</button>
                 <button id="getLinkBtn">Get link</button>
@@ -104,12 +100,12 @@
             </div>
         </div>
     </div>
-    <!-- <div id="sequencer-container">
-        <div id="sequencer">
-            <div id="sequencer-controls">
-                <select id="sequence"></select>
-                <button id="seq-new">New sequence</button>
-                <button id="seq-delete">Delete sequence</button>
+    <div id="composer-container">
+        <div id="composer">
+            <div id="composer-controls">
+                <select id="composition"></select>
+                <button id="comp-new">New composition</button>
+                <button id="comp-delete">Delete composition</button>
                 <button id="frame-save">Save frame</button>
                 <button id="frame-update">Update frame</button>
                 <button id="frame-delete">Delete frame</button>
@@ -117,10 +113,10 @@
                 <button id="frame-prev">Previous</button>
             </div>
             <div id="timeline">
-                frames
+                <!-- frames -->
             </div>
         </div>
-    </div> -->
+    </div>
     </div>
 
     <div id="editor">
@@ -258,28 +254,28 @@
         </div>
     </div>
 
-    <div id="new-sequence-modal" class="modal">
+    <div id="new-composition-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>New Sequence</h2>
-            <p>Enter a name for the sequence:</p>
-            <input type="text" id ="newSequenceTitle" placeholder="e.g., 'Hot Cross Buns'">
-            <span class="error-text" id="newSequenceError">Please enter a name for this sequence</span>
+            <h2>New composition</h2>
+            <p>Enter a name for the composition:</p>
+            <input type="text" id ="newCompTitle" placeholder="e.g., 'Hot Cross Buns'">
+            <span class="error-text" id="newCompError">Please enter a name for this composition</span>
             <div class="modal-actions">
-                <button id="cancelCreateSequenceBtn" onclick="closeModal()">Cancel</button>
-                <button id="createSequenceBtn" class="primary">Create sequence</button>
+                <button id="cancelCreateCompBtn" onclick="closeModal()">Cancel</button>
+                <button id="createCompBtn" class="primary">Create composition</button>
             </div>
         </div>
     </div>
 
-    <div id="delete-sequence-modal" class="modal">
+    <div id="delete-composition-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Delete sequence?</h2>
-            <p id="confirmDeleteSequenceMsg">Do you really want to delete SEQUENCE_NAME?</p>
+            <h2>Delete composition?</h2>
+            <p id="confirmDeleteCompMsg">Do you really want to delete COMPOSITION_NAME?</p>
             <div class="modal-actions">
                 <button id="cancelDeleteBtn" onclick="closeModal()">Cancel</button>
-                <button id="finalDeleteBtn" class="destructive" onclick="deleteSequence()">Delete</button>
+                <button id="finalDeleteBtn" class="destructive" onclick="deleteComposition()">Delete</button>
             </div>
         </div>
     </div>
@@ -363,7 +359,7 @@
     <script src="./assets/js/notes.js"></script>
     <script src="./assets/js/layouts.js"></script>
     <script src="./assets/js/viewer.js"></script>
-    <script src="./assets/js/sequencer.js"></script>
+    <script src="./assets/js/composer.js"></script>
     <script src="./assets/js/editor.js"></script>
 </body>
 </html>

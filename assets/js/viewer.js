@@ -31,12 +31,10 @@ const min7 = document.getElementById("minor7");
 
 // user-defined display options
 const opt_layout = document.getElementById("layout");
-// const opt_drone = document.getElementById("drone");
-// const droneDiv = document.getElementById("drone-option");
 const opt_pushpull = document.getElementById("pushpull");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
-let opt_bellows = ""; // stores the value of the selected bellows option from pushpull, push, or pull
+let opt_bellows = "pushpull"; // stores the value of the selected bellows option from pushpull, push, or pull
 const opt_sound = document.getElementById("sound");
 const opt_matchoctave = document.getElementById("matchoctave");
 const multiselect = document.getElementById("multiselect");
@@ -67,16 +65,13 @@ let buttons = [];
 // an array to keep track of all currently-displayed piano notes. Required for arrow key navigation.
 const activeNotes = [];
 
-// an array to hold the currently selected notes
-const noteSelection = [];
-
-//an array to hold the selected buttons, if in button selection mode
-const buttonSelection = [];
+// an array to hold the currently-selected notes and buttons, in the format {note: "C4", button: 24}
+const selection = [];
 
 // the key that should be selected if the user starts using arrow keys to navigate the piano
 let currentIndex = 1;
 
-// are we viewing or editing?
+// are we viewing a layout or editing a layout?
 let currentMode;
 
 // anglo keyboard calculates min / max and must be rendered first
@@ -143,16 +138,10 @@ function renderAngloKeyboard() {
             pushLabel = "&nbsp;"; // for some reason, empty string results in layout issues on non-mac browsers
             pullLabel = "&nbsp;";
         }
-        // if (button.drone) {
-        //     droneDiv.style.display = 'block';
-        //     droneclass = "drone";
-        // }
         if (button.newRow) {
             angloKeyboard.innerHTML += `<br>`;
         }
-        // if (!(button.drone && !opt_drone.checked)) {
         angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
-        // }
     }
     bindAngloButtons();
 
@@ -166,12 +155,9 @@ function renderAngloKeyboard() {
             max = allnotes.indexOf(noteNames[layoutnotes[i]]);
         }
     }
-
-    // selectDrone();
     colorOctaves();
     renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
 }
-
 
 
 function parseLayout(origin) {
@@ -221,9 +207,6 @@ function parseLayout(origin) {
             buttons = parsedLayoutFromURL;
         }
     }
-    // angloKeyboard.innerHTML = "";
-    // renderAngloKeyboard();
-    // selectConcertinaButtons();
     return newLayout;
 }
 
@@ -310,52 +293,42 @@ function encodeLayout() {
 
 function selectPianoKey() {
     for (key of keyboard.children) {
-        if (noteSelection.includes(key.dataset.note)) {
+        if (selection.findIndex(sel => sel.note == key.dataset.note) != -1) {
             key.classList.add("selected");
-            // console.log(key);
         } else {
-            key.classList.remove("selected")
+            key.classList.remove("selected");
         }
     }
 }
 
 
 function selectConcertinaButtons() {
-    let noOctaveSelection = noteSelection.map(note => note.slice(0, -1));
-    if (selectionMode == "notes" || buttonSelection.length == 0) {
-        for (button of angloKeyboard.children) {
-            for (div of button.children) {
-                for (note of div.children) {
-                    if (opt_matchoctave.checked) {
-                        if (noteSelection.includes(note.dataset.note)) {
-                            note.classList.add("selected");
-                        } else {
-                            note.classList.remove("selected");
-                        }
-                    } else {
-                        if (noOctaveSelection.includes(note.dataset.note.slice(0, -1))) {
-                            note.classList.add("selected");
-                        } else {
-                            note.classList.remove("selected");
-                        }
-                    }
-                }
-            }
-        }
-    } else if (selectionMode == "buttons") {
-        console.log("ENTERING BUTTON SELECTOR");
-        let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-        for (let i = 0; i < allbuttons.length; i++) {
-            if (noteSelection.includes(allbuttons[i].dataset.note) && buttonSelection.includes(i)) {
-                console.log("Contents of buttonSelection:" + buttonSelection)
-                console.log("selecting a button");
-                allbuttons[i].classList.add("selected");
+    let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+    if (selectionMode == "notes" || selection.length == 0) {
+    allbuttons.forEach(button => {
+        if (opt_matchoctave.checked) {
+            if (selection.findIndex(sel => sel.note == button.dataset.note) != -1) {
+                button.classList.add("selected");
             } else {
-                console.log("removing buttons");
-                allbuttons[i].classList.remove("selected");
-                // buttonSelection.splice(noteSelection.indexOf(allbuttons[i]), 1);
+                button.classList.remove("selected");
+            }
+        } else {
+            if (selection.findIndex(sel => sel.note.slice(0, -1) == button.dataset.note.slice(0, -1)) != -1) {
+                button.classList.add("selected");
+            } else {
+                button.classList.remove("selected");
             }
         }
+    });
+    } else if (selectionMode == "buttons") {
+        // console.log("ENTERING BUTTON SELECTOR");
+        allbuttons.forEach((button, i) => {
+            if (selection.findIndex(sel => sel.button == i) != -1) {
+                button.classList.add("selected");
+            } else {
+                button.classList.remove("selected");
+            }
+        });
     }
 }
 
@@ -393,70 +366,94 @@ function resetView() {
         button.classList.remove("push-only");
         button.classList.remove("pull-only");
     }
-    opt_bellows = "";
+    opt_bellows = "pushpull";
 }
 
-// removing the drone option; it's a needless complication when folks can add it via the layout editor
-// function selectDrone() {
-//     if (!opt_drone.checked && document.getElementsByClassName("drone")[0]) {
-//         document.getElementsByClassName("drone")[0].style.display = 'none';
-//     } else if (document.getElementsByClassName("drone")[0]) {
-//         document.getElementsByClassName("drone")[0].style.display = 'block';
-//     }
-// }
-
-
-function updateNoteSelection(note) {
-    if (!noteSelection.includes(note) && (multiselect.checked == true || noteSelection.length == 0)) {
-        noteSelection.push(note);
-        console.log("    added to note selection: " + noteSelection);
-    } else if (!noteSelection.includes(note)) {
-        noteSelection.length = 0;
-        noteSelection.push(note);
-        console.log("    replaced note selection: " + noteSelection);
-    } else {
-        noteSelection.splice(noteSelection.indexOf(note), 1);
-        console.log("    removed from note selection: " + noteSelection);
+function updateSelection(note, button = "any") {
+    if (selectionMode == "notes") {
+        if (button == "chord") {
+            selection.push({ note, button });
+        } else if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
+            // console.log("adding a note (first condition)");
+            selection.push({ note, button });
+        } else if (selection.findIndex(sel => sel.note == note) == -1) {
+            // console.log("replacing selection (second condition)");
+            selection.length = 0;
+            selection.push({ note, button });
+        } else {
+            // console.log("removing a note (third condition)");
+            selection.splice(selection.findIndex(sel => sel.note == note), 1);
+        }
+    } else if (selectionMode == "buttons") {
+        if (button != "any" && button != "chord") {
+            if (selection.findIndex(sel => sel.button == button) == -1 && (multiselect.checked == true || selection.length == 0)) {
+                // console.log("adding a note (first condition)");
+                selection.push({ note, button });
+            } else if (selection.findIndex(sel => sel.button == button) == -1) {
+                // console.log("replacing selection (second condition)");
+                selection.length = 0;
+                selection.push({ note, button });
+            } else {
+                // console.log("removing a button (third condition)");
+                selection.splice(selection.findIndex(sel => sel.button == button), 1);
+            }
+        } else if (button == "any") {
+            // console.log("ANY BUTTON...");
+            let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+            if (selection.findIndex(sel => sel.note == note) == -1 && (multiselect.checked == true || selection.length == 0)) {
+                // console.log("   adding buttons to selection");
+                let addCount = 0;
+                allbuttons.forEach((button, i) => {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                        addCount++
+                    }
+                });
+                if (!addCount) { // we still want to select the note even if there are no matching buttons
+                    selection.push({ note, "button": "any" });
+                }
+            } else if (selection.findIndex(sel => sel.note == note) == -1) {
+                // console.log("   replacing selection with buttons");
+                selection.length = 0;
+                let addCount = 0;
+                allbuttons.forEach((button, i) => {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                        addCount++;
+                    }
+                });
+                if (!addCount) { // we still want to select the note even if there are no matching buttons
+                    selection.push({ note, "button": "any" });
+                }
+            } else {
+                // console.log("   removing buttons from selection");
+                let filteredSelection = selection.filter(sel => sel.note != note);
+                selection.length = 0;
+                selection.push(...filteredSelection);
+            }
+        } else if (button == "chord") {
+            let allbuttons = document.querySelectorAll("#anglo-keyboard button");
+            let addCount = 0;
+                allbuttons.forEach((button, i) => {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                        addCount++;
+                    }
+                });
+                if (!addCount) { // we still want to select the note even if there are no matching buttons
+                    selection.push({ note, "button": "any" });
+                }
+        }
     }
     selectPianoKey();
-    if (selectionMode == "notes") {
-        console.log("button selection: " + buttonSelection);
-        selectConcertinaButtons();
-    }
-    if (noteSelection.length > 0) {
+    selectConcertinaButtons();
+    if (selection.length > 0) {
         chordBar.style.visibility = "visible";
     } else {
         chordBar.style.visibility = "hidden";
     }
 }
 
-function updateButtonSelection(index) {
-    //TODO add button to selection if button clicked AND in button select mode; else add all buttons matching notes
-    // let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-    if (!buttonSelection.includes(index) && (multiselect.checked == true || buttonSelection.length == 0)) {
-        buttonSelection.push(index);
-        console.log("  added to button selection: " + buttonSelection)
-    } else if (!buttonSelection.includes(index)) {
-        buttonSelection.length = 0;
-        buttonSelection.push(index);
-        console.log("  replaced button selection: " + buttonSelection)
-    } else {
-        buttonSelection.splice(buttonSelection.indexOf(index), 1);
-        console.log("  removed from button selection: " + buttonSelection)
-    }
-}
-
-// function updateButtonSelectionFromPiano(note) {
-//     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
-//     if (selection.includes(note)) {
-//         console.log("adding buttons to selection...")
-//         allbuttons.forEach((button, i) => {
-//             if (button.dataset.note == note) {
-//                 buttonSelection.push(i);
-//             }
-//         });
-//     }
-// }
 
 function deselectChordButtons() {
     for (let i = 0; i < chordBar.children.length; i++) {
@@ -470,8 +467,11 @@ function playNote(note) {
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
         let freq = notes[note];
         let fullVolume = 0;
-        if (noteSelection.length) {
-            fullVolume = -1 + 1 / noteSelection.length // avoid the utter cracklefest on webkit and mobile browsers
+        if (selection.length) {
+            let selectedNotes = new Set();
+            selection.forEach(sel => selectedNotes.add(sel.note)); // only calculate gain using unique notes
+            fullVolume = -1 + 1 / selectedNotes.size // avoid the utter cracklefest on webkit and mobile browsers
+            console.log(selectedNotes);
         }
         // console.debug(note + " (" + freq + " Hz)");
         oscillator = audioCtx.createOscillator(); // create Oscillator node
@@ -489,16 +489,15 @@ function playNote(note) {
 }
 
 function playSelection() {
-    noteSelection.forEach((note) => {
-        playNote(note);
+    selection.forEach((sel) => {
+        playNote(sel.note);
     });
 }
 
 function moveLeft() {
     if (currentIndex > 0 && currentMode == "view") {
         currentIndex--;
-        noteSelection.length = 0;
-        updateNoteSelection(activeNotes[currentIndex]);
+        updateSelection(activeNotes[currentIndex]);
         playNote(activeNotes[currentIndex]);
     }
 }
@@ -506,58 +505,58 @@ function moveLeft() {
 function moveRight() {
     if (currentIndex < activeNotes.length - 1 && currentMode == "view") {
         currentIndex++;
-        noteSelection.length = 0;
-        updateNoteSelection(activeNotes[currentIndex]);
+        selection.length = 0;
+        updateSelection(activeNotes[currentIndex]);
         playNote(activeNotes[currentIndex]);
     }
 }
 
 function findChord(chord) {
-    noteSelection.length = 1;
+    selection.length = 1;
     let rootIndex;
     for (let i = 0; i < activeNotes.length; i++) {
-        if (activeNotes[i] == noteSelection[0]) {
+        if (activeNotes[i] == selection[0].note) {
             rootIndex = i;
             break;
         }
     }
     switch (chord) {
         case "maj":
-            activeNotes[rootIndex + 4] && noteSelection.push(activeNotes[rootIndex + 4]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
+            activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
             deselectChordButtons();
             maj.classList.add('selected');
             break;
         case "min":
-            activeNotes[rootIndex + 3] && noteSelection.push(activeNotes[rootIndex + 3]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
+            activeNotes[rootIndex + 3] && updateSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
             deselectChordButtons();
             min.classList.add('selected');
             break;
         case "dim":
-            activeNotes[rootIndex + 3] && noteSelection.push(activeNotes[rootIndex + 3]);
-            activeNotes[rootIndex + 6] && noteSelection.push(activeNotes[rootIndex + 6]);
+            activeNotes[rootIndex + 3] && updateSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 6] && updateSelection(activeNotes[rootIndex + 6], "chord");
             deselectChordButtons();
             dim.classList.add('selected');
             break;
         case "7":
-            activeNotes[rootIndex + 4] && noteSelection.push(activeNotes[rootIndex + 4]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
-            activeNotes[rootIndex + 10] && noteSelection.push(activeNotes[rootIndex + 10]);
+            activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 10] && updateSelection(activeNotes[rootIndex + 10], "chord");
             deselectChordButtons();
             sev.classList.add('selected');
             break;
         case "maj7":
-            activeNotes[rootIndex + 4] && noteSelection.push(activeNotes[rootIndex + 4]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
-            activeNotes[rootIndex + 11] && noteSelection.push(activeNotes[rootIndex + 11]);
+            activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 11] && updateSelection(activeNotes[rootIndex + 11], "chord");
             deselectChordButtons();
             maj7.classList.add('selected');
             break;
         case "min7":
-            activeNotes[rootIndex + 3] && noteSelection.push(activeNotes[rootIndex + 3]);
-            activeNotes[rootIndex + 7] && noteSelection.push(activeNotes[rootIndex + 7]);
-            activeNotes[rootIndex + 10] && noteSelection.push(activeNotes[rootIndex + 10]);
+            activeNotes[rootIndex + 3] && updateSelection(activeNotes[rootIndex + 3], "chord");
+            activeNotes[rootIndex + 7] && updateSelection(activeNotes[rootIndex + 7], "chord");
+            activeNotes[rootIndex + 10] && updateSelection(activeNotes[rootIndex + 10], "chord");
             deselectChordButtons();
             min7.classList.add('selected');
             break;
@@ -576,13 +575,12 @@ function bindPianoKeys() {
             setTimeout(() => {
                 if (touch) {
                     multiselect.checked = true;
-                    if (!noteSelection.includes(e.target.dataset.note)) {
+                    if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                         playNote(e.target.dataset.note);
                     }
                     currentIndex = activeNotes.indexOf(e.target.dataset.note)
                     deselectChordButtons();
-                    updateNoteSelection(e.target.dataset.note);
-                    // updateButtonSelectionFromPiano(e.target.dataset.note);
+                    updateSelection(e.target.dataset.note);
                     multiselect.checked = false;
                     touch = false;
                 }
@@ -594,13 +592,12 @@ function bindPianoKeys() {
         key.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
             if (touch) {
                 touch = false;
-                if (!noteSelection.includes(e.target.dataset.note)) {
+                if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                     playNote(e.target.dataset.note);
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note)
                 deselectChordButtons();
-                updateNoteSelection(e.target.dataset.note);
-                // updateButtonSelectionFromPiano(e.target.dataset.note);
+                updateSelection(e.target.dataset.note);
             }
         });
     });
@@ -621,17 +618,14 @@ function bindAngloButtons() {
         touch = true
         setTimeout(() => {
             if (touch) {
-                console.log("long-pressed an anglo button");
+                // console.log("long-pressed an anglo button");
                 multiselect.checked = true;
-                if (!noteSelection.includes(e.target.dataset.note)) {
+                if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                     playNote(e.target.dataset.note);
                 }
                 currentIndex = activeNotes.indexOf(e.target.dataset.note);
                 deselectChordButtons();
-                updateNoteSelection(e.target.dataset.note);
-                if (selectionMode == "buttons") {
-                    updateButtonSelection([...allbuttons].indexOf(e.target));
-                }
+                updateSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
                 multiselect.checked = false;
                 touch = false
             }
@@ -640,18 +634,14 @@ function bindAngloButtons() {
 
     allbuttons.forEach((button) => button.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
         if (touch) {
-            console.log("Clicked an anglo button");
+            // console.log("Clicked an anglo button");
             touch = false;
-            if (!noteSelection.includes(e.target.dataset.note)) {
+            if (selection.findIndex(sel => sel.note == e.target.dataset.note) == -1) {
                 playNote(e.target.dataset.note);
             }
             currentIndex = activeNotes.indexOf(e.target.dataset.note);
             deselectChordButtons();
-            updateNoteSelection(e.target.dataset.note);
-            if (selectionMode == "buttons") {
-                updateButtonSelection([...allbuttons].indexOf(e.target));
-                selectConcertinaButtons();
-            }
+            updateSelection(e.target.dataset.note, [...allbuttons].indexOf(e.target));
         }
     }));
 
@@ -693,7 +683,7 @@ function getUrlParams() {
             layoutShortcut = legacyParam;
         } else if (legacyParam) {
             customLayoutFromURL = legacyParam;
-            console.log("parsing custom legacy layout...");
+            // console.log("parsing custom legacy layout...");
             parseLegacyLayout();
             opt_layout.value = "customFromURL";
         }
@@ -701,7 +691,7 @@ function getUrlParams() {
         let urlParam = window.location.href.split("?")[1];
         if (urlParam && LAYOUTS[urlParam]) {
             layoutShortcut = urlParam;
-            console.log("selecting a hard-coded layout from new param: " + urlParam);
+            // console.log("selecting a hard-coded layout from new param: " + urlParam);
         } else if (urlParam && urlParam.includes("&title=")) {
             customLayoutFromURL = urlParam.split("&title=")[0];
             customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
@@ -709,11 +699,11 @@ function getUrlParams() {
             opt_layout.value = "customFromURL";
         } else if (urlParam) {
             customLayoutFromURL = urlParam;
-            console.log("parsing custom new layout...");
+            // console.log("parsing custom new layout...");
             parseLayout("url");
             opt_layout.value = "customFromURL";
         } else {
-            console.log("empty param; proceeding with default");
+            // console.log("empty param; proceeding with default");
         }
     }
 }
@@ -735,6 +725,8 @@ function selectShareLink() {
 }
 
 opt_layout.addEventListener("change", () => {
+    // can't select same button indicies on another layout and expect them to work. TODO also update mode toggle when it exists
+    selectionMode = "notes";
     selectLayout();
 });
 
@@ -773,10 +765,6 @@ opt_matchoctave.addEventListener("change", () => {
 opt_coloroctave.addEventListener("change", () => {
     colorOctaves();
 });
-
-// opt_drone.addEventListener("change", () => {
-//     renderAngloKeyboard();
-// });
 
 opt_concertinaLabels.addEventListener("change", () => {
     renderAngloKeyboard();
@@ -820,11 +808,11 @@ document.addEventListener('keydown', function (e) {
     } else if (e.code == "Digit6" && currentMode == "view") {
         findChord('min7');
     } else if (e.code == "KeyJ" && currentMode == "view") {
-        loadPrevSelection();
+        loadPrevFrame();
     } else if (e.code == "KeyK" && currentMode == "view") {
-        loadNextSelection();
+        loadNextFrame();
     } else if (e.code == "KeyS" && e.shiftKey && currentMode == "view") {
-        saveSelection();
+        saveFrame();
     }
 });
 
@@ -882,7 +870,6 @@ window.onclick = function (event) {
         closeModal();
     }
 }
-
 
 
 // If we don't have layouts from URL params or localStorage, build a simple dropdown. If we have URL params or locally-stored layouts, create optgroups.
