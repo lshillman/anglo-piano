@@ -512,7 +512,6 @@ function moveRight() {
 }
 
 function findChord(chord) {
-    selection.length = 1;
     let rootIndex;
     for (let i = 0; i < activeNotes.length; i++) {
         if (activeNotes[i] == selection[0].note) {
@@ -520,6 +519,8 @@ function findChord(chord) {
             break;
         }
     }
+    selection.length = 0;
+    updateSelection(activeNotes[rootIndex], "chord");
     switch (chord) {
         case "maj":
             activeNotes[rootIndex + 4] && updateSelection(activeNotes[rootIndex + 4], "chord");
