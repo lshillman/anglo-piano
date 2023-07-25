@@ -471,7 +471,6 @@ function playNote(note) {
             let selectedNotes = new Set();
             selection.forEach(sel => selectedNotes.add(sel.note)); // only calculate gain using unique notes
             fullVolume = -1 + 1 / selectedNotes.size // avoid the utter cracklefest on webkit and mobile browsers
-            console.log(selectedNotes);
         }
         // console.debug(note + " (" + freq + " Hz)");
         oscillator = audioCtx.createOscillator(); // create Oscillator node
@@ -797,17 +796,25 @@ document.addEventListener('keydown', function (e) {
     } else if (e.code == "Escape") {
         closeModal();
     } else if (e.code == "Digit1" && currentMode == "view") {
-        findChord('maj');
+        chordBar.children[0] && chordBar.children[0].click();
     } else if (e.code == "Digit2" && currentMode == "view") {
-        findChord('min');
+        chordBar.children[1] && chordBar.children[1].click();
     } else if (e.code == "Digit3" && currentMode == "view") {
-        findChord('dim');
+        chordBar.children[2] && chordBar.children[2].click();
     } else if (e.code == "Digit4" && currentMode == "view") {
-        findChord('7');
+        chordBar.children[3] && chordBar.children[3].click();
     } else if (e.code == "Digit5" && currentMode == "view") {
-        findChord('maj7');
+        chordBar.children[4] && chordBar.children[4].click();
     } else if (e.code == "Digit6" && currentMode == "view") {
-        findChord('min7');
+        chordBar.children[5] && chordBar.children[5].click();
+    } else if (e.code == "Digit7" && currentMode == "view") {
+        chordBar.children[6] && chordBar.children[6].click();
+    } else if (e.code == "Digit8" && currentMode == "view") {
+        chordBar.children[7] && chordBar.children[7].click();
+    } else if (e.code == "Digit9" && currentMode == "view") {
+        chordBar.children[8] && chordBar.children[8].click();
+    } else if (e.code == "Digit0" && currentMode == "view") {
+        chordBar.children[9] && chordBar.children[9].click();
     } else if (e.code == "KeyJ" && currentMode == "view") {
         loadPrevFrame();
     } else if (e.code == "KeyK" && currentMode == "view") {

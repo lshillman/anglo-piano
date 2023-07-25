@@ -180,7 +180,7 @@ timeline.addEventListener("click", (e) => {
     if(e.target && e.target.className.includes("composer-frame")) {
         currentFrame = parseInt(e.target.dataset.position);
         loadFrame(currentFrame);
-        console.log(currentFrame);
+        // console.log(currentFrame);
         selectFrames();
     }
 });
