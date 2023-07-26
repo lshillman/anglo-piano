@@ -67,6 +67,7 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
     frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, selection: [...selection]};
+    writeCompositions();
 }
 
 function deleteFrame() {
