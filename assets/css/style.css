@@ -543,11 +543,18 @@ button#addToLayoutsBtn:active {
 #composer-controls {
    outline: 4px solid purple;
    display: flex;
+   justify-content: space-between;
+   gap: 2rem;
+   overflow-x: auto;
    /* height:3.5rem; */
 }
 
-#composition {
-   width: 100%;
+#composer-controls div {
+   white-space: nowrap;
+}
+
+#timeline-container {
+   display: flex;
 }
 
 #timeline {
@@ -560,6 +567,17 @@ button#addToLayoutsBtn:active {
    overflow-y: hidden;
    white-space: nowrap;
    text-align: left;
+   /* flex-basis: 70%; */
+}
+
+#playback-controls {
+   /* flex-basis: 30%; */
+   white-space: nowrap;
+}
+
+#playback-controls button {
+   height: 100%;
+   padding: 0 1rem;
 }
 
 .composer-frame {
