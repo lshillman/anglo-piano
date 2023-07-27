@@ -305,14 +305,15 @@ select {
    border: 1px solid #767676;
    border-radius: 0%;
    margin-bottom: 0.5rem;
+   cursor: pointer;
+}
+
+select:hover {
+   background-color: #eee;
 }
 
 #layout {
    width: 100%;
-}
-
-#layout:hover {
-   background-color: #eee;
 }
 
 #editLayoutBtn {
