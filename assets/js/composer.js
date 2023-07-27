@@ -67,6 +67,7 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
     frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, selection: [...selection]};
+    writeCompositions();
 }
 
 function deleteFrame() {
@@ -74,16 +75,38 @@ function deleteFrame() {
     let frame = document.querySelector(".composer-frame.selected");
     frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
     frame.classList.remove("selected");
-    frame.nextSibling && frame.nextSibling.classList.add("selected");
+
     frame.style.padding = 0;
     frame.style.width = 0;
     frame.style.opacity = 0;
-    setTimeout(() => {
-        frame.remove();
-        frames.splice(currentFrame, 1);
-        populateTimeline();
-        selectFrames();
-      }, "300");
+
+    if (frame.nextSibling) {
+        frame.nextSibling.classList.add("selected");
+        setTimeout(() => {
+            frame.remove();
+            frames.splice(currentFrame, 1);
+            populateTimeline();
+            selectFrames();
+          }, "300");
+    } else if (frame.previousSibling) {
+        frame.previousSibling.classList.add("selected");
+        currentFrame--;
+        setTimeout(() => {
+            frame.remove();
+            frames.splice(currentFrame+1, 1);
+            populateTimeline();
+            selectFrames();
+          }, "300");
+    } else {
+        setTimeout(() => {
+            frame.remove();
+            frames.length = 0;
+            populateTimeline();
+            selectFrames();
+          }, "300");
+    }
+    // frame.nextSibling && frame.nextSibling.classList.add("selected");
+
     writeCompositions();
 }
 

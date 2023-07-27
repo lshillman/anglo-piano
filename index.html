@@ -100,23 +100,36 @@
             </div>
         </div>
     </div>
+    </div>
+
     <div id="composer-container">
         <div id="composer">
             <div id="composer-controls">
-                <select id="composition"></select>
-                <button id="comp-new">New composition</button>
-                <button id="comp-delete">Delete composition</button>
-                <button id="frame-save">Save frame</button>
-                <button id="frame-update">Update frame</button>
-                <button id="frame-delete">Delete frame</button>
-                <button id="frame-next">Next</button>
-                <button id="frame-prev">Previous</button>
+                <div>
+                    <select id="composition"></select>
+                    <button id="comp-new">New composition</button>
+                    <button id="comp-import">Import...</button>
+                    <button id="comp-export">Export...</button>
+                </div>
+                <div>
+                    <button id="frame-save">Save frame</button>
+                    <button id="frame-update">Update frame</button>
+                    <button id="frame-delete" class="light-destructive">Delete frame</button>
+                </div>
+                <div>
+                    <button id="comp-delete" class="light-destructive">Delete composition</button>
+                </div>
             </div>
-            <div id="timeline">
-                <!-- frames -->
+            <div id="timeline-container">
+                <div id="timeline">
+                    <!-- frames -->
+                </div>
+                <div id="playback-controls">
+                    <button id="frame-prev">Prev</button>
+                    <button id="frame-next">Next</button>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 
     <div id="editor">
