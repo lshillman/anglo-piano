@@ -121,6 +121,7 @@ button {
 .natural {
    border: 1px solid #767676;
    border-left: none;
+   border-radius: 0;
    position: relative;
    height: 150px;
    width: 40px;
@@ -149,6 +150,7 @@ button {
    border-top: none;
    height: 80px;
    width: 25px;
+   padding: 0;
    background-color: #000;
    color: #fff;
    margin-left: -12.5px;
@@ -238,6 +240,7 @@ button {
    border-right: none;
    border-top: none;
    border-bottom: none;
+   border-radius: 0;
    cursor: pointer;
 }
 
@@ -278,10 +281,7 @@ button {
    margin-top: 1rem;
 }
 
-#viewer-options button,
-#editor-options button,
-.modal-actions button,
-#composer-controls button {
+button {
    height: 30px;
    padding-left: 0.5rem;
    padding-right: 0.5rem;
@@ -290,16 +290,11 @@ button {
    cursor: pointer;
 }
 
-#viewer-options button:hover,
-#editor-options button:hover,
-.modal-actions button:hover,
-#composer button:hover {
+button:hover {
    background-color: #eee;
 }
 
-#viewer-options button:active,
-#editor-options button:active,
-#composer button:active {
+button:active {
    background-color: #333;
    color: #fff;
 }
@@ -570,18 +565,21 @@ button#addToLayoutsBtn:active {
 .composer-frame {
    display: inline-block;
    width: 3rem;
+   height: 100%;
    text-align: center;
    background-color: #ddd;
+   border: none;
    line-height: 4;
    margin-right: 1rem;
 }
 
 .composer-frame.selected, .composer-frame.selected:hover {
-   outline: 3px solid purple;
+   background-color: #8400FF;
+   color: #fff;
 }
 
 .composer-frame:hover {
-   outline: 3px solid rgb(136, 97, 136);
+   outline: 3px solid #8400FF;
 }
 
 
@@ -917,6 +915,16 @@ button#addToLayoutsBtn:active {
    visibility: hidden;
    display: block;
    margin-bottom: 0.5rem;
+}
+
+.light-destructive {
+   border-color: #A30014;
+   color: #A30014;
+}
+
+.light-destructive:hover {
+   background-color: #A30014;
+   color: #fff;
 }
 
 /* close button */
