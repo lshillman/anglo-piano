@@ -185,6 +185,20 @@ function deleteComposition() {
     populateTimeline();
 }
 
+function exportComposition() {
+    let data = compositions;
+    let downloadLink = document.createElement("a");
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    let json = JSON.stringify(data);
+    let blob = new Blob([json], {type: "octet/stream"});
+    let url = window.URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = "exported_sequences.txt";
+    downloadLink.click();
+    window.URL.revokeObjectURL(url);
+}
+
 
 comp_dropdown.addEventListener("change", () => {
     populateTimeline(compositions[comp_dropdown.value].frames);
