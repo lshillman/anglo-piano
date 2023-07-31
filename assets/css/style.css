@@ -37,6 +37,7 @@ header h1 {
 #keyboardShortcutsBtn {
    background: transparent url(../images/ic-keyboard.svg) no-repeat center;
    border: none;
+   border-radius: 0;
    width: 60px;
    height: 50px;
    cursor: pointer;
@@ -44,10 +45,12 @@ header h1 {
 }
 
 #about {
+   height: 100%;
    line-height: 50px;
    background-color: transparent;
    color: #fff;
    border: none;
+   border-radius: 0;
    padding: 0 1rem;
    text-decoration: none;
    font-size: 1rem;
