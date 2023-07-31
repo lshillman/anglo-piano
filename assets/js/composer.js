@@ -185,6 +185,50 @@ function deleteComposition() {
     populateTimeline();
 }
 
+function exportComposition() {
+    let data = compositions;
+    let downloadLink = document.createElement("a");
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    let json = JSON.stringify(data);
+    let blob = new Blob([json], {type: "octet/stream"});
+    let url = window.URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = "exported_sequences.txt";
+    downloadLink.click();
+    window.URL.revokeObjectURL(url);
+}
+
+// TODO validate compositions when importing. Allow user to rename if duplicate exists.
+function importCompositionFromFile(e) {
+    e.preventDefault();
+    let newComp = document.getElementById("file").files[0];
+    let fileReader = new FileReader();
+    fileReader.readAsText(newComp);
+    fileReader.onload = () => {
+        // console.log(fileReader.result);
+        let compToImport = JSON.parse(fileReader.result);
+        // console.log(compToImport);
+        let importCount = 0;
+        Object.keys(compToImport).forEach((key) => {
+            if (!compositions[key]) {
+                console.log("adding a composition");
+                compositions[key] = compToImport[key]
+                importCount++;
+            } else {
+                console.log("skipping import of existing composition");
+            }
+        });
+        if (importCount) {
+            writeCompositions();
+            loadCompositions();
+        }
+        document.getElementById("file").value = "";
+        closeModal();
+    }
+    fileReader.onerror = () => console.error(fileReader.error);
+}
+
 
 comp_dropdown.addEventListener("change", () => {
     populateTimeline(compositions[comp_dropdown.value].frames);
@@ -192,6 +236,9 @@ comp_dropdown.addEventListener("change", () => {
     timeline.scrollLeft = 0;
 });
 comp_createBtn.addEventListener("click", () => createComposition());
+document.getElementById("comp-import").addEventListener("click", () => document.getElementById("import-compositions-modal").style.display = "block");
+document.getElementById("importCompFileBtn").addEventListener("click", (e) => importCompositionFromFile(e));
+document.getElementById("cancelImportCompBtn").addEventListener("click", (e) => closeModal(e));
 comp_new.addEventListener("click", () => promptForTitle());
 comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
