@@ -863,7 +863,8 @@ keyboardShortcutsBtn.onclick = function () {
     document.getElementById("keyboard-shortcuts-modal").style.display = "block";
 }
 
-function closeModal() {
+function closeModal(e) {
+    e && e.preventDefault();
     [...document.getElementsByClassName("modal")].forEach((element) => element.style.display = "none");
     [...document.querySelectorAll(".modal .error-text")].forEach((element) => element.style.visibility = "hidden");
     [...document.querySelectorAll(".modal .success-text")].forEach((element) => element.style.visibility = "hidden");

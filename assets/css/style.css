@@ -942,7 +942,8 @@ button#addToLayoutsBtn:active {
 }
 
 .light-destructive:hover {
-   background-color: #A30014;
+   background-color: #eb0000;
+   border-color: #eb0000;
    color: #fff;
 }
 
