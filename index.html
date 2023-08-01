@@ -302,13 +302,29 @@
                     <label for="file">Choose a file to import</label>
                     <input type="file" id="file" name="file" accept=".txt,.json" />
                 </div>
-                <div>
-                    <div class="modal-actions">
-                        <button id="cancelImportCompBtn">Cancel</button>
-                        <button id="importCompFileBtn" class="primary" onclick="">Import</button>
-                    </div>
+                <div class="modal-actions">
+                    <button id="cancelImportCompBtn">Cancel</button>
+                    <button id="importCompFileBtn" class="primary" onclick="">Import</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="export-compositions-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Export compositions</h2>
+            <p>Do you want to export all compositions, or the current one only?</p>
+            <div>
+                <input type="radio" id="currentComp" name="export-selection" value="current" checked>
+                <label for="currentComp">Current composition</label><br>
+                <input type="radio" id="allComp" name="export-selection" value="all">
+                <label for="allComp">All compositions</label>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeModal()">Cancel</button>
+                <button id="exportCompBtn" class="primary">Export</button>
+            </div>
         </div>
     </div>
 

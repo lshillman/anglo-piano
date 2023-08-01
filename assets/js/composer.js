@@ -237,8 +237,10 @@ comp_dropdown.addEventListener("change", () => {
 });
 comp_createBtn.addEventListener("click", () => createComposition());
 document.getElementById("comp-import").addEventListener("click", () => document.getElementById("import-compositions-modal").style.display = "block");
+document.getElementById("comp-export").addEventListener("click", () => document.getElementById("export-compositions-modal").style.display = "block");
 document.getElementById("importCompFileBtn").addEventListener("click", (e) => importCompositionFromFile(e));
 document.getElementById("cancelImportCompBtn").addEventListener("click", (e) => closeModal(e));
+document.getElementById("exportCompBtn").addEventListener("click", () => exportComposition());
 comp_new.addEventListener("click", () => promptForTitle());
 comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
