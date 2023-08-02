@@ -305,6 +305,7 @@ function scrollToCurrentFrame () {
 // hastily-improvised feature flag.
 function showComposer() {
     document.getElementById("composer-container").style.display = "block";
+    document.getElementById("default-view-container").style.paddingBottom = "8rem";
     console.warn("The composer is actively being developed. Use at your own risk!")
 }
 

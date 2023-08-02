@@ -91,9 +91,9 @@ body {
    text-align: center;
 }
 
-#viewer {
+/* #viewer {
    min-height: calc(100vh - 15rem);
-}
+} */
 
 button {
    padding: 0;
@@ -533,6 +533,11 @@ button#addToLayoutsBtn:active {
 
 #composer-container {
    display: none;
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #fff;
    margin-top: 2rem;
 }
 
