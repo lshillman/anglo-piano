@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/style.css" />
     <link rel="icon" href="./assets/images/favicon.ico" type="image/x-icon" />
-	<meta name="description" content="Anglo Piano is a learning and composition tool for Anglo concertina players. Select a note or chord on the piano keyboard to see it highlighted on the Anglo keyboard.">
+    <meta name="description"
+        content="Anglo Piano is a learning and composition tool for Anglo concertina players. Select a note or chord on the piano keyboard to see it highlighted on the Anglo keyboard.">
     <title>Anglo Piano</title>
 </head>
+
 <body>
     <header>
         <div>
-            <image id="logo" src="./assets/images/logo.svg"/>
+            <image id="logo" src="./assets/images/logo.svg" />
             <h1>Anglo Piano</h1>
         </div>
         <div>
@@ -21,115 +24,124 @@
         </div>
     </header>
     <div id="viewer">
-    <div id="keyboard-container">
-        <div id="keyboard">
-            <!-- piano keys -->
-        </div>
-    </div>
-    <div id="chords">
-        <button id="major" class="selected" onclick="findChord('maj')">Maj</button><button id="minor" onclick="findChord('min')">min</button><button id="diminished" onclick="findChord('dim')">dim</button><button id="seventh" onclick="findChord('7')">7</button><button id="major7" onclick="findChord('maj7')">Maj7</button><button id="minor7" onclick="findChord('min7')">min7</button>
-    </div>
+        <div id="default-view-container">
+            <div id="keyboard-container">
+                <div id="keyboard">
+                    <!-- piano keys -->
+                </div>
+            </div>
+            <div id="chords">
+                <button id="major" class="selected" onclick="findChord('maj')">Maj</button><button id="minor"
+                    onclick="findChord('min')">min</button><button id="diminished"
+                    onclick="findChord('dim')">dim</button><button id="seventh"
+                    onclick="findChord('7')">7</button><button id="major7"
+                    onclick="findChord('maj7')">Maj7</button><button id="minor7"
+                    onclick="findChord('min7')">min7</button>
+            </div>
 
-    <div id="anglo-container">
-        <div id="anglo-keyboard">
-            <!-- concertina buttons -->
-        </div>
-    </div>
+            <div id="anglo-container">
+                <div id="anglo-keyboard">
+                    <!-- concertina buttons -->
+                </div>
+            </div>
 
-    <div id="viewer-options">
-        <div>
-            <select id="layout">
-                <!-- layouts -->
-            </select>
-            <div>
-                <button id="editLayoutBtn">Edit layout</button>
-                <button id="getLinkBtn">Get link</button>
-            </div>
-            <div>
-                <button id="addToLayoutsBtn">Add to your layouts</button>
-                <button id="removeFromLayoutsBtn">Remove from your layouts</button>
-            </div>
-        </div>
-        <div>
-            <div>
-                <input type="radio" id="pushpull" name="bellows" value="pushpull" checked>
-                <label for="pushpull">push or pull</label>
-            </div>
-            <div>
-                <input type="radio" id="push" name="bellows" value="push">
-                <label for="push">push only</label>
-            </div>
-            <div>
-                <input type="radio" id="pull" name="bellows" value="pull">
-                <label for="pull">pull only</label>
-            </div>
-            <div id="sound-option">
-                <input type="checkbox" id="sound" name="sound" checked="checked">
-                <label for="sound"> Sound</label>
-            </div>
-        </div>
-
-        <div>
-            <div>
-                <input type="checkbox" id="matchoctave" name="matchoctave" checked="checked">
-                <label for="matchoctave"> Match octave</label>
-            </div>
-            <div>
-                <input type="checkbox" id="multiselect" name="multiselect" value="false">
-                <label for="multiselect">Select multiple notes [long-press]</label>
-            </div>
-            <div>
-                <input type="checkbox" id="coloroctave" name="coloroctave" value="false">
-                <label for="coloroctave">Color octaves</label>
-            </div>
-            <div>
-                <input type="checkbox" id="absent-notes" name="absent-notes" value="true" checked="checked">
-                <label for="absent-notes">Gray out absent notes</label>
-            </div>
-            <div>
-                <input type="checkbox" id="concertina-labels" name="concertina-labels" value="true" checked="checked">
-                <label for="concertina-labels">Concertina labels</label>
-            </div>
-            <div>
-                <input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">
-                <label for="piano-labels">Piano labels</label>
-            </div>
-            <div>
-                <input type="checkbox" id="accidentals" name="accidentals" value="true">
-                <label for="accidentals">Alternate accidental spellings</label>
-            </div>
-        </div>
-    </div>
-    </div>
-
-    <div id="composer-container">
-        <div id="composer">
-            <div id="composer-controls">
+            <div id="viewer-options">
                 <div>
-                    <select id="composition"></select>
-                    <button id="comp-new">New composition</button>
-                    <button id="comp-import">Import...</button>
-                    <button id="comp-export">Export...</button>
+                    <select id="layout">
+                        <!-- layouts -->
+                    </select>
+                    <div>
+                        <button id="editLayoutBtn">Edit layout</button>
+                        <button id="getLinkBtn">Get link</button>
+                    </div>
+                    <div>
+                        <button id="addToLayoutsBtn">Add to your layouts</button>
+                        <button id="removeFromLayoutsBtn">Remove from your layouts</button>
+                    </div>
                 </div>
                 <div>
-                    <button id="frame-save">Save frame</button>
-                    <button id="frame-update">Update frame</button>
-                    <button id="frame-delete" class="light-destructive">Delete frame</button>
+                    <div>
+                        <input type="radio" id="pushpull" name="bellows" value="pushpull" checked>
+                        <label for="pushpull">push or pull</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="push" name="bellows" value="push">
+                        <label for="push">push only</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="pull" name="bellows" value="pull">
+                        <label for="pull">pull only</label>
+                    </div>
+                    <div id="sound-option">
+                        <input type="checkbox" id="sound" name="sound" checked="checked">
+                        <label for="sound"> Sound</label>
+                    </div>
                 </div>
+
                 <div>
-                    <button id="comp-delete" class="light-destructive">Delete composition</button>
-                </div>
-            </div>
-            <div id="timeline-container">
-                <div id="timeline">
-                    <!-- frames -->
-                </div>
-                <div id="playback-controls">
-                    <button id="frame-prev">Prev</button>
-                    <button id="frame-next">Next</button>
+                    <div>
+                        <input type="checkbox" id="matchoctave" name="matchoctave" checked="checked">
+                        <label for="matchoctave"> Match octave</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="multiselect" name="multiselect" value="false">
+                        <label for="multiselect">Select multiple notes [long-press]</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="coloroctave" name="coloroctave" value="false">
+                        <label for="coloroctave">Color octaves</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="absent-notes" name="absent-notes" value="true" checked="checked">
+                        <label for="absent-notes">Gray out absent notes</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="concertina-labels" name="concertina-labels" value="true"
+                            checked="checked">
+                        <label for="concertina-labels">Concertina labels</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">
+                        <label for="piano-labels">Piano labels</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="accidentals" name="accidentals" value="true">
+                        <label for="accidentals">Alternate accidental spellings</label>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div id="composer-container">
+            <div id="composer">
+                <div id="composer-controls">
+                    <div>
+                        <select id="composition"></select>
+                        <button id="comp-new">New composition</button>
+                        <button id="comp-import">Import...</button>
+                        <button id="comp-export">Export...</button>
+                    </div>
+                    <div>
+                        <button id="frame-save">Save frame</button>
+                        <button id="frame-update">Update frame</button>
+                        <button id="frame-delete" class="light-destructive">Delete frame</button>
+                    </div>
+                    <div>
+                        <button id="comp-delete" class="light-destructive">Delete composition</button>
+                    </div>
+                </div>
+                <div id="timeline-container">
+                    <div id="timeline">
+                        <!-- frames -->
+                    </div>
+                    <div id="playback-controls">
+                        <button id="frame-prev">Prev</button>
+                        <button id="frame-next">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div id="editor">
@@ -141,15 +153,17 @@
             </div>
         </div>
         <div id="editor-error">
-            <span class="error-text">Please correct the notes outlined in red. Buttons must have a valid push note and pull note in the range of D2 - D7. Notes must include octave numbers. Use ‘b’ for flat and ‘#’ for sharp.</span>
+            <span class="error-text">Please correct the notes outlined in red. Buttons must have a valid push note and
+                pull note in the range of D2 - D7. Notes must include octave numbers. Use ‘b’ for flat and ‘#’ for
+                sharp.</span>
         </div>
         <div id="editor-anglo-container">
             <div id="editor-anglo-keyboard">
                 <!-- button text inputs -->
             </div>
         </div>
-        
-        <div id ="editor-options-container">
+
+        <div id="editor-options-container">
             <div id="mobile-note-picker">
                 <div>
                     <div id="mobile-notes">
@@ -181,33 +195,36 @@
                     </div>
                 </div>
             </div>
-        <div id="editor-options">
-            <div>
-                <span>Note:</span>
-                <button id="noteUp" title="Transpose note up [up]"><span class="arrow up"></button>
-                <button id="noteDown" title="Transpose note down [down]"><span class="arrow down"></span></button>
+            <div id="editor-options">
+                <div>
+                    <span>Note:</span>
+                    <button id="noteUp" title="Transpose note up [up]"><span class="arrow up"></button>
+                    <button id="noteDown" title="Transpose note down [down]"><span class="arrow down"></span></button>
+                </div>
+                <div>
+                    <span>Button:</span>
+                    <button id="moveLeftBtn" title="Move button left [shift + left]"><span
+                            class="arrow left"></span></button>
+                    <button id="moveRightBtn" title="Move button right [shift + right]"><span
+                            class="arrow right"></span></button>
+                </div>
+                <div>
+                    <span>Insert...</span>
+                    <button id="insertLeftBtn" title="Insert a button to the left">Button left</button>
+                    <button id="insertRightBtn" title="Insert a button to the right">Button right</button>
+                    <button id="newRowBtn" title="Insert a new row">New row</button>
+                </div>
+                <div>
+                    <span>Delete</span>
+                    <button id="deleteBtn" title="Delete current button [shift + backspace]">Delete button</button>
+                </div>
+                <div>
+                    <span>Layout:</span>
+                    <button id="layoutUp" title="Transpose entire layout up"><span class="arrow up"></button>
+                    <button id="layoutDown" title="Transpose entire layout down"><span
+                            class="arrow down"></span></button>
+                </div>
             </div>
-            <div>
-                <span>Button:</span>
-                <button id="moveLeftBtn" title="Move button left [shift + left]"><span class="arrow left"></span></button>
-                <button id="moveRightBtn" title="Move button right [shift + right]"><span class="arrow right"></span></button>
-            </div>
-            <div>
-                <span>Insert...</span>
-                <button id="insertLeftBtn" title="Insert a button to the left">Button left</button>
-                <button id="insertRightBtn" title="Insert a button to the right">Button right</button>
-                <button id="newRowBtn" title="Insert a new row">New row</button>
-            </div>
-            <div>
-                <span>Delete</span>
-                <button id="deleteBtn" title="Delete current button [shift + backspace]">Delete button</button>
-            </div>
-            <div>
-                <span>Layout:</span>
-                <button id="layoutUp" title="Transpose entire layout up"><span class="arrow up"></button>
-                <button id="layoutDown" title="Transpose entire layout down"><span class="arrow down"></span></button>
-            </div>
-        </div>
         </div>
     </div>
 
@@ -219,10 +236,19 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>About Anglo Piano</h2>
             <p class="copyright">&copy; MMXXII Luke Hillman</p>
-            <p>Anglo Piano is a learning, composition, and layout exploration tool for Anglo concertina players. You can use it to figure out how to play difficult melodies and chords, design and share your ideal keyboard layout, or just use it as a reference to compare different concertinas.</p>
-            <p>However you end up using it, I’d love to know so I can make improvements! Contact me via <a href="https://www.concertina.net/forums/index.php?/topic/24636-anglo-piano-webapp/" target="_blank" rel="noreferrer noopener">concertina.net</a>, <a rel="me noreferrer noopener" href="https://wandering.shop/@luke" target="_blank">mastodon</a>, <a href="https://www.youtube.com/lshillman" target="_blank" rel="noreferrer noopener">youtube</a>, or email to ‘hi’ at this domain.</p>
-            <p>If you feel like it, you can <a href="https://ko-fi.com/luuke" target="_blank" rel="noreferrer noopener">buy me a coffee</a>.</p>
-            <p>Or <a href="https://linkedin.com/in/lshillman/" target="_blank" rel="noreferrer noopener">offer me a job</a>.</p>
+            <p>Anglo Piano is a learning, composition, and layout exploration tool for Anglo concertina players. You can
+                use it to figure out how to play difficult melodies and chords, design and share your ideal keyboard
+                layout, or just use it as a reference to compare different concertinas.</p>
+            <p>However you end up using it, I’d love to know so I can make improvements! Contact me via <a
+                    href="https://www.concertina.net/forums/index.php?/topic/24636-anglo-piano-webapp/" target="_blank"
+                    rel="noreferrer noopener">concertina.net</a>, <a rel="me noreferrer noopener"
+                    href="https://wandering.shop/@luke" target="_blank">mastodon</a>, <a
+                    href="https://www.youtube.com/lshillman" target="_blank" rel="noreferrer noopener">youtube</a>, or
+                email to ‘hi’ at this domain.</p>
+            <p>If you feel like it, you can <a href="https://ko-fi.com/luuke" target="_blank"
+                    rel="noreferrer noopener">buy me a coffee</a>.</p>
+            <p>Or <a href="https://linkedin.com/in/lshillman/" target="_blank" rel="noreferrer noopener">offer me a
+                    job</a>.</p>
         </div>
 
     </div>
@@ -244,7 +270,7 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Add layout</h2>
             <p>What do you want to call this layout?</p>
-            <input type="text" id ="newLayoutName" placeholder="e.g., 'My custom 38b C/G'">
+            <input type="text" id="newLayoutName" placeholder="e.g., 'My custom 38b C/G'">
             <span class="error-text" id="addLayoutError">Please enter a name for this layout</span>
             <div class="modal-actions">
                 <button id="cancelAddBtn" onclick="closeModal()">Cancel</button>
@@ -258,7 +284,7 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Get link</h2>
             <p>You can share or bookmark this link:</p>
-            <input type="text" id ="shareLink" readonly onclick="selectShareLink()">
+            <input type="text" id="shareLink" readonly onclick="selectShareLink()">
             <span class="success-text" id="copySuccessMsg">Link copied to clipboard.</span>
             <div class="modal-actions">
                 <button onclick="closeModal()">Close</button>
@@ -272,7 +298,7 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>New composition</h2>
             <p>Enter a name for the composition:</p>
-            <input type="text" id ="newCompTitle" placeholder="e.g., 'Hot Cross Buns'">
+            <input type="text" id="newCompTitle" placeholder="e.g., 'Hot Cross Buns'">
             <span class="error-text" id="newCompError">Please enter a name for this composition</span>
             <div class="modal-actions">
                 <button id="cancelCreateCompBtn" onclick="closeModal()">Cancel</button>
@@ -302,13 +328,29 @@
                     <label for="file">Choose a file to import</label>
                     <input type="file" id="file" name="file" accept=".txt,.json" />
                 </div>
-                <div>
-                    <div class="modal-actions">
-                        <button id="cancelImportCompBtn">Cancel</button>
-                        <button id="importCompFileBtn" class="primary" onclick="">Import</button>
-                    </div>
+                <div class="modal-actions">
+                    <button id="cancelImportCompBtn">Cancel</button>
+                    <button id="importCompFileBtn" class="primary" onclick="">Import</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="export-compositions-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Export compositions</h2>
+            <p>Do you want to export all compositions, or the current one only?</p>
+            <div>
+                <input type="radio" id="currentComp" name="export-selection" value="current" checked>
+                <label for="currentComp">Current composition</label><br>
+                <input type="radio" id="allComp" name="export-selection" value="all">
+                <label for="allComp">All compositions</label>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeModal()">Cancel</button>
+                <button id="exportCompBtn" class="primary">Export</button>
+            </div>
         </div>
     </div>
 
@@ -317,7 +359,8 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Error reading layout</h2>
             <p>I did everything I could, but something feels wrong.</p>
-            <p>Some buttons may be incorrect or missing. If you pasted a link from somewhere, make sure you copied the whole thing.</p>
+            <p>Some buttons may be incorrect or missing. If you pasted a link from somewhere, make sure you copied the
+                whole thing.</p>
             <div class="modal-actions">
                 <button onclick="closeModal()">Roger roger</button>
             </div>
@@ -371,7 +414,8 @@
             </div>
             <div class="keyboard-shortcut">
                 <div>
-                    <span class="keyboard-button">shift</span> + <span class="keyboard-button">left</span> / <span class="keyboard-button">right</span>
+                    <span class="keyboard-button">shift</span> + <span class="keyboard-button">left</span> / <span
+                        class="keyboard-button">right</span>
                 </div>
                 <div>
                     move the current button left / right
@@ -394,4 +438,5 @@
     <script src="./assets/js/composer.js"></script>
     <script src="./assets/js/editor.js"></script>
 </body>
+
 </html>

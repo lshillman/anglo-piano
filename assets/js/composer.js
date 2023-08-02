@@ -40,7 +40,7 @@ function promptForTitle() {
 
 function createComposition() {
     let title = document.getElementById("newCompTitle").value;
-    if (!compositions[title]) {
+    if (!compositions[title] && title != "") {
         document.getElementById("newCompTitle").value = "";
         closeModal();
         console.log("Creating new composition...");
@@ -50,6 +50,12 @@ function createComposition() {
         };
         writeCompositions();
         loadCompositions();
+    } else if (compositions[title]) {
+        document.getElementById("newCompError").innerHTML = "You already have a composition with this name.<br />Please choose another.";
+        document.getElementById("newCompError").style.visibility = "visible";
+    } else {
+        document.getElementById("newCompError").innerText = "Please type a name for your composition";
+        document.getElementById("newCompError").style.visibility = "visible";
     }
 }
 
@@ -186,7 +192,14 @@ function deleteComposition() {
 }
 
 function exportComposition() {
-    let data = compositions;
+    let data = {};
+    let fileName = "compositions.txt";
+    if (document.getElementById("currentComp").checked) {
+        data[comp_dropdown.value] = compositions[comp_dropdown.value];
+        fileName = `${comp_dropdown.value}.txt`;
+    } else {
+        data = compositions;
+    }
     let downloadLink = document.createElement("a");
     downloadLink.style.display = "none";
     document.body.appendChild(downloadLink);
@@ -194,9 +207,11 @@ function exportComposition() {
     let blob = new Blob([json], {type: "octet/stream"});
     let url = window.URL.createObjectURL(blob);
     downloadLink.href = url;
-    downloadLink.download = "exported_sequences.txt";
+    downloadLink.download = fileName;
     downloadLink.click();
     window.URL.revokeObjectURL(url);
+    downloadLink.remove();
+    closeModal();
 }
 
 // TODO validate compositions when importing. Allow user to rename if duplicate exists.
@@ -237,8 +252,13 @@ comp_dropdown.addEventListener("change", () => {
 });
 comp_createBtn.addEventListener("click", () => createComposition());
 document.getElementById("comp-import").addEventListener("click", () => document.getElementById("import-compositions-modal").style.display = "block");
+document.getElementById("comp-export").addEventListener("click", () => {
+    document.querySelector("label[for=currentComp]").innerText = comp_dropdown.value;
+    document.getElementById("export-compositions-modal").style.display = "block"
+});
 document.getElementById("importCompFileBtn").addEventListener("click", (e) => importCompositionFromFile(e));
 document.getElementById("cancelImportCompBtn").addEventListener("click", (e) => closeModal(e));
+document.getElementById("exportCompBtn").addEventListener("click", () => exportComposition());
 comp_new.addEventListener("click", () => promptForTitle());
 comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
@@ -285,6 +305,7 @@ function scrollToCurrentFrame () {
 // hastily-improvised feature flag.
 function showComposer() {
     document.getElementById("composer-container").style.display = "block";
+    document.getElementById("default-view-container").style.paddingBottom = "8rem";
     console.warn("The composer is actively being developed. Use at your own risk!")
 }
 
