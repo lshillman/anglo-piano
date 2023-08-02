@@ -910,6 +910,7 @@ button#addToLayoutsBtn:active {
    display: flex;
    justify-content: right;
    gap: 0.5rem;
+   padding-top: .5rem;
 }
 
 .modal-actions .destructive {
