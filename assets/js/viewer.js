@@ -5,6 +5,8 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let customLayoutFromURL;
 let customTitleFromURL;
 let layoutShortcut;
+let highlights;
+let urlParams = {};
 let parsedLayoutFromURL = [];
 let parsedWithErrors = false;
 
@@ -675,38 +677,50 @@ function selectLayout() {
 }
 
 
-
 function getUrlParams() {
-    if (window.location.href.includes("#layout=")) {
-        let legacyParam = window.location.href.split("#layout=")[1];
-        if (legacyParam && LAYOUTS[legacyParam]) {
-            layoutShortcut = legacyParam;
-        } else if (legacyParam) {
-            customLayoutFromURL = legacyParam;
-            // console.log("parsing custom legacy layout...");
-            parseLegacyLayout();
-            opt_layout.value = "customFromURL";
-        }
-    } else if (window.location.href.includes("?")) {
-        let urlParam = window.location.href.split("?")[1];
-        if (urlParam && LAYOUTS[urlParam]) {
-            layoutShortcut = urlParam;
-            // console.log("selecting a hard-coded layout from new param: " + urlParam);
-        } else if (urlParam && urlParam.includes("&title=")) {
-            customLayoutFromURL = urlParam.split("&title=")[0];
-            customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
-            parseLayout("url")
-            opt_layout.value = "customFromURL";
-        } else if (urlParam) {
-            customLayoutFromURL = urlParam;
-            // console.log("parsing custom new layout...");
-            parseLayout("url");
-            opt_layout.value = "customFromURL";
-        } else {
-            // console.log("empty param; proceeding with default");
-        }
+    if (window.location.href.includes("?")) {
+        let querystring = window.location.href.split("?")[1];
+        let params = querystring.split("&");
+        params.forEach(param => {
+            let pair = param.split("=");
+            urlParams[pair[0]] = pair[1];
+        });
     }
 }
+
+
+
+// function getUrlParams() {
+//     if (window.location.href.includes("#layout=")) {
+//         let legacyParam = window.location.href.split("#layout=")[1];
+//         if (legacyParam && LAYOUTS[legacyParam]) {
+//             layoutShortcut = legacyParam;
+//         } else if (legacyParam) {
+//             customLayoutFromURL = legacyParam;
+//             // console.log("parsing custom legacy layout...");
+//             parseLegacyLayout();
+//             opt_layout.value = "customFromURL";
+//         }
+//     } else if (window.location.href.includes("?")) {
+//         let urlParam = window.location.href.split("?")[1];
+//         if (urlParam && LAYOUTS[urlParam]) {
+//             layoutShortcut = urlParam;
+//             // console.log("selecting a hard-coded layout from new param: " + urlParam);
+//         } else if (urlParam && urlParam.includes("&title=")) {
+//             customLayoutFromURL = urlParam.split("&title=")[0];
+//             customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
+//             parseLayout("url")
+//             opt_layout.value = "customFromURL";
+//         } else if (urlParam) {
+//             customLayoutFromURL = urlParam;
+//             // console.log("parsing custom new layout...");
+//             parseLayout("url");
+//             opt_layout.value = "customFromURL";
+//         } else {
+//             // console.log("empty param; proceeding with default");
+//         }
+//     }
+// }
 
 function addToDropdown(value, title, origin) {
     let newOption = document.createElement("option");

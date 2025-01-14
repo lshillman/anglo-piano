@@ -367,7 +367,6 @@ button#addToLayoutsBtn:active {
    width: 60px;
    height: 60px;
    white-space: normal;
-   /* background-color: pink; */
 }
 
 .top {
@@ -455,6 +454,11 @@ button#addToLayoutsBtn:active {
 
 .button.pull-only .top {
    display: none;
+}
+
+.button.highlighted {
+   outline: 2px solid red;
+   outline-offset: -3px;
 }
 
 /* ===== VIEWER OPTIONS ===== */

@@ -63,7 +63,8 @@ let currentFrame = -1;
 
 function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
-    frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    frames.splice(currentFrame, 0, {bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
     writeCompositions();
     timeline.innerHTML += `<button class="composer-frame" data-position="${frames.length - 1}">${frames.length}</button>`
     currentFrame = position;
@@ -268,10 +269,14 @@ frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
     if(e.target && e.target.className.includes("composer-frame")) {
-        currentFrame = parseInt(e.target.dataset.position);
-        loadFrame(currentFrame);
-        // console.log(currentFrame);
-        selectFrames();
+        if (!e.shiftKey) {
+            currentFrame = parseInt(e.target.dataset.position);
+            loadFrame(currentFrame);
+            // console.log(currentFrame);
+            selectFrames();
+        } else {
+            
+        }
     }
 });
 
