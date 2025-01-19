@@ -158,6 +158,7 @@ function renderAngloKeyboard() {
         }
     }
     colorOctaves();
+    applyHighlights();
     renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
 }
 
@@ -684,7 +685,7 @@ function getUrlParams() {
         urlParams.legacy = true;
         querystring = window.location.href.split("#")[1];
     }
-    if (window.location.href.includes("?")) {
+    if (window.location.href.includes("?")) {                   // TODO handle layout strings directly following "?"
         querystring = window.location.href.split("?")[1];
     }
     let params = querystring.split("&");
@@ -708,7 +709,7 @@ function getUrlParams() {
 }
 
 function applyHighlights() {
-    if (urlParams.highlight) {
+    if (opt_layout.value == "customFromURL" && urlParams.highlight) {
         urlParams.highlight.split("-").forEach(button => {
             angloKeyboard.children[button].classList.add("highlighted");
         })
