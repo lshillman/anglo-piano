@@ -707,6 +707,14 @@ function getUrlParams() {
     }
 }
 
+function applyHighlights() {
+    if (urlParams.highlight) {
+        urlParams.highlight.split("-").forEach(button => {
+            angloKeyboard.children[button].classList.add("highlighted");
+        })
+    }
+}
+
 
 
 // function getUrlParams() {
