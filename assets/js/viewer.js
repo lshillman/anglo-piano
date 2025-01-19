@@ -166,8 +166,8 @@ function parseLayout(origin) {
     let layout;
     let title;
     if (origin == "url") {
-        layout = customLayoutFromURL;
-        title = customTitleFromURL;
+        layout = urlParams.layout;
+        title = urlParams.title;
     } else if (origin == "editor") {
         layout = customLayoutFromEditor;
         title = customTitleFromEditor;
@@ -657,6 +657,7 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
+    // if (opt_layout.value == "customFromURL") {
     if (opt_layout.value == "customFromURL") {
         buttons = parsedLayoutFromURL;
         addToLayoutsBtn.style.display = "block";
@@ -687,12 +688,22 @@ function getUrlParams() {
         querystring = window.location.href.split("?")[1];
     }
     let params = querystring.split("&");
+    // add each param to the global urlParams object
     params.forEach(param => {
         let pair = param.split("=");
-        urlParams[pair[0]] = pair[1];
+        urlParams[pair[0]] = decodeURIComponent(pair[1]);
     });
     if (urlParams.layout && LAYOUTS[urlParams.layout]) {
         urlParams.shortcut = true;
+    }
+    // Finished figuring out params. Now, do some stuff (YES I KNOW this should be a separate function, SHEESH):
+    if (urlParams.layout && urlParams.legacy) {
+        parseLegacyLayout();
+        opt_layout.value = "customFromURL";
+    } else if (urlParams.layout) {
+        console.log("sending new layout to parser");
+        parseLayout("url");
+        opt_layout.value = "customFromURL";   
     }
 }
 
@@ -906,18 +917,19 @@ window.onclick = function (event) {
 // If we don't have layouts from URL params or localStorage, build a simple dropdown. If we have URL params or locally-stored layouts, create optgroups.
 function buildLayoutDropdown() {
     opt_layout.innerHTML = "";
-    if (!customLayoutFromURL && (!localStorage.getItem("USER_LAYOUTS") || Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length == 0)) {
+    if (!urlParams.layout && (!localStorage.getItem("USER_LAYOUTS") || Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length == 0)) {
         for (layout of Object.keys(LAYOUTS)) {
             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
         }
-        if (layoutShortcut) {
-            opt_layout.value = layoutShortcut;
+        if (urlParams.shortcut) {
+            opt_layout.value = urlParams.layout;
         }
         selectLayout();
         return;
     }
-    if (customLayoutFromURL) {
+    if (urlParams.layout) {
         // create optgroup "Shared via URL"
+        console.log("adding layout from link to dropdown...");
         if (!layoutShortcut) {
             let urlGroup = document.createElement("optgroup");
             urlGroup.label = "Shared via link";
@@ -925,7 +937,7 @@ function buildLayoutDropdown() {
 
             let urlOption = document.createElement("option");
             urlOption.value = "customFromURL";
-            urlOption.text = customTitleFromURL || "Untitled layout";
+            urlOption.text = urlParams.title || "Untitled layout";
             urlGroup.appendChild(urlOption);
         }
     }
@@ -954,9 +966,9 @@ function buildLayoutDropdown() {
         standardGroup.appendChild(stdOption);
         //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
     }
-    if (layoutShortcut) {
-        opt_layout.value = layoutShortcut;
-    } else if (customLayoutFromURL) {
+    if (urlParams.shortcut) {
+        opt_layout.value = urlParams.layout;
+    } else if (urlParams.layout) {
         opt_layout.value = "customFromURL";
     } else if (Object.keys(USER_LAYOUTS)[0]) {
         opt_layout.value = "USER_LAYOUT_" + Object.keys(USER_LAYOUTS)[Object.keys(USER_LAYOUTS).length - 1];

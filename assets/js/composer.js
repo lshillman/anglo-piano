@@ -18,7 +18,7 @@ function loadCompositions() {
         compositions = JSON.parse(localStorage.getItem("COMPOSITIONS"));
         comp_dropdown.innerHTML = "";
         for (let i = Object.keys(compositions).length - 1; i > -1; i--) {
-            console.log(Object.keys(compositions)[i]);
+            // console.log(Object.keys(compositions)[i]);
             comp_dropdown.innerHTML += `<option value="${Object.keys(compositions)[i]}">${Object.keys(compositions)[i]}</option>`;
         }
         populateTimeline(compositions[comp_dropdown.value].frames);
@@ -163,6 +163,7 @@ function loadPrevFrame() {
     scrollToCurrentFrame();
 }
 
+//TODO invoke this only when composer is shown. Commenting out selectLayout() for now.
 function populateTimeline() {
     if (comp_dropdown.value) {
         let frames = compositions[comp_dropdown.value].frames;
@@ -172,8 +173,8 @@ function populateTimeline() {
                 timeline.innerHTML += `<button class="composer-frame" data-position="${i}">${i + 1}</button>`
             }
         }
-        opt_layout.value = compositions[comp_dropdown.value].layout;
-        selectLayout();
+        // opt_layout.value = compositions[comp_dropdown.value].layout;
+        // selectLayout();
     } else {
         timeline.innerHTML = "";
     }
