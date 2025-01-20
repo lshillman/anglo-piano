@@ -715,7 +715,7 @@ function getUrlParams() {
 }
 
 function applyHighlights() {
-    if (opt_layout.value == "customFromURL" && urlParams.highlight) {
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
         urlParams.highlight.split("-").forEach(button => {
             angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted");
         })
@@ -942,7 +942,7 @@ function buildLayoutDropdown() {
         selectLayout();
         return;
     }
-    if (urlParams.layout) {
+    if (urlParams.layout && !urlParams.shortcut) {
         // create optgroup "Shared via URL"
         console.log("adding layout from link to dropdown...");
         if (!layoutShortcut) {
