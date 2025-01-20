@@ -689,7 +689,7 @@ function getUrlParams() {
         querystring = window.location.href.split("?")[1];
     }
     let params = querystring.split("&");
-    // handle layout strings directly following "?"
+    // assume an unnamed param directly following "?" is a layout
     if (!params[0].includes("=")) {
         params[0] = "layout=" + params[0];
     }
@@ -715,7 +715,7 @@ function getUrlParams() {
 function applyHighlights() {
     if (opt_layout.value == "customFromURL" && urlParams.highlight) {
         urlParams.highlight.split("-").forEach(button => {
-            angloKeyboard.children[button].classList.add("highlighted");
+            angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted");
         })
     }
 }
