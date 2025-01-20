@@ -685,10 +685,14 @@ function getUrlParams() {
         urlParams.legacy = true;
         querystring = window.location.href.split("#")[1];
     }
-    if (window.location.href.includes("?")) {                   // TODO handle layout strings directly following "?"
+    if (window.location.href.includes("?")) {
         querystring = window.location.href.split("?")[1];
     }
     let params = querystring.split("&");
+    // handle layout strings directly following "?"
+    if (!params[0].includes("=")) {
+        params[0] = "layout=" + params[0];
+    }
     // add each param to the global urlParams object
     params.forEach(param => {
         let pair = param.split("=");
