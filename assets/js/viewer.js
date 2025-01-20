@@ -702,7 +702,9 @@ function getUrlParams() {
         urlParams.shortcut = true;
     }
     // Finished figuring out params. Now, do some stuff (YES I KNOW this should be a separate function, SHEESH):
-    if (urlParams.layout && urlParams.legacy) {
+    if (urlParams.layout && urlParams.shortcut) {
+        opt_layout.value = "customFromURL";
+    } else if (urlParams.layout && urlParams.legacy) {
         parseLegacyLayout();
         opt_layout.value = "customFromURL";
     } else if (urlParams.layout) {
