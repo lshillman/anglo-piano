@@ -216,7 +216,7 @@ function parseLayout(origin) {
 
 // to render layouts from the old Anglo Piano that assumed a 14-column grid
 function parseLegacyLayout() {
-    let layout = customLayoutFromURL;
+    let layout = urlParams.layout;
     let newLayout = [];
     let buttonCount = 0;
     while (layout.length > 0) {
@@ -225,15 +225,19 @@ function parseLegacyLayout() {
         let pull;
         let newRow = false;
         if (layout[0] == "_") {
-            x = layout.substring(1, layout.indexOf('_', 1));
-            push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
-            pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
-            if (buttonCount % 14 === 0 && buttonCount != 0) {
-                newRow = true;
+            if (noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)]) {
+                x = layout.substring(1, layout.indexOf('_', 1));
+                push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
+                pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
+                if (buttonCount % 14 === 0 && buttonCount != 0) {
+                    newRow = true;
+                }
+                newLayout.push({ push, pull, x, newRow });
+                buttonCount++;
+                layout = layout.slice(layout.indexOf('_', 1) + 3);
+            } else {
+                layout = layout.slice(layout.indexOf('_', 1) + 1);
             }
-            newLayout.push({ push, pull, x, newRow });
-            buttonCount++;
-            layout = layout.slice(layout.indexOf('_', 1) + 3);
         } else if (layout[0] == ".") {
             buttonCount++;
             layout = layout.slice(2);
@@ -244,9 +248,16 @@ function parseLegacyLayout() {
             if (buttonCount % 14 === 0 && buttonCount != 0) {
                 newRow = true;
             }
-            newLayout.push({ push, pull, x, newRow });
-            buttonCount++;
-            layout = layout.slice(2);
+            if (push && pull) {
+                newLayout.push({ push, pull, x, newRow });
+                buttonCount++;
+                layout = layout.slice(2);
+            } else {
+                layout = "";
+                parsedWithErrors = true;
+                document.getElementById("parse-error-modal").style.display = "block";
+                console.error("Error while parsing legacy layout!")
+            }
         }
     }
     parsedLayoutFromURL = newLayout;
@@ -701,16 +712,11 @@ function getUrlParams() {
     if (urlParams.layout && LAYOUTS[urlParams.layout]) {
         urlParams.shortcut = true;
     }
-    // Finished figuring out params. Now, do some stuff (YES I KNOW this should be a separate function, SHEESH):
-    if (urlParams.layout && urlParams.shortcut) {
-        opt_layout.value = "customFromURL";
-    } else if (urlParams.layout && urlParams.legacy) {
+    // Finished figuring out params. Now send layouts to relevant parser:
+    if (urlParams.layout && urlParams.legacy && !urlParams.shortcut) {
         parseLegacyLayout();
-        opt_layout.value = "customFromURL";
-    } else if (urlParams.layout) {
-        console.log("sending new layout to parser");
+    } else if (urlParams.layout && !urlParams.shortcut) {
         parseLayout("url");
-        opt_layout.value = "customFromURL";   
     }
 }
 
