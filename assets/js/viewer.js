@@ -712,6 +712,9 @@ function getUrlParams() {
     if (urlParams.layout && LAYOUTS[urlParams.layout]) {
         urlParams.shortcut = true;
     }
+    if (urlParams.highlight) {
+        parseHighlights();
+    }
     // Finished figuring out params. Now send layouts to relevant parser:
     if (urlParams.layout && urlParams.legacy && !urlParams.shortcut) {
         parseLegacyLayout();
@@ -722,30 +725,29 @@ function getUrlParams() {
 
 function applyHighlights() {
     if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
-        urlParams.highlight.split("-").forEach(button => {
-            angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted");
-        })
+        // urlParams.highlight.split("-").forEach(button => {
+        //     angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted");
+        // });
+        // Object.keys(urlParams.highlight).forEach(color => {
+            // TODO write this functionality
+        // })
     }
 }
 
 // could parse highlights this way...
-// str = "1-2-3-pink-4-5-67-green-11-12-13-orange-17"
-
-// highlights = str.split("-");
-
-// const highlighted = {};
-// if (!"red orange green blue pink purple".includes(highlights[0])) {
-//   highlighted.red = [];
-// }
-// let currentcolor = "red";
-// for (let i = 0; i < highlights.length; i++) {
-// 	if ("red orange green blue pink purple".includes(highlights[i])) {
-// 		currentcolor = highlights[i];
-// 		highlighted[highlights[i]] = [];
-// 	} else {
-// 		highlighted[currentcolor].push(highlights[i]);
-// 	}
-// }
+function parseHighlights() {
+    let highlights = urlParams.highlight.split("-");
+    let highlighted = {"red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": []};
+    let currentcolor = "red";
+    for (let i = 0; i < highlights.length; i++) {
+        if ("red orange green blue pink purple".includes(highlights[i])) {
+            currentcolor = highlights[i];
+        } else {
+            highlighted[currentcolor].push(highlights[i]);
+        }
+    }
+    urlParams.highlight = highlighted;
+}
 
 
 
