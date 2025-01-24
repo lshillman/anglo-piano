@@ -461,6 +461,26 @@ button#addToLayoutsBtn:active {
    outline-offset: -3px;
 }
 
+.button.highlighted.orange {
+   outline-color: orange;
+}
+
+.button.highlighted.green {
+   outline-color: green;
+}
+
+.button.highlighted.blue {
+   outline-color: blue;
+}
+
+.button.highlighted.pink {
+   outline-color: magenta;
+}
+
+.button.highlighted.purple {
+   outline-color: purple;
+}
+
 /* ===== VIEWER OPTIONS ===== */
 
 
