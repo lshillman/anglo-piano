@@ -2,7 +2,6 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 // store a custom layout passed in via the URL
-let customLayoutFromURL;
 let urlParams = {};
 let parsedLayoutFromURL = [];
 let parsedWithErrors = false;
