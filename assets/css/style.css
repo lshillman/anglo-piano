@@ -483,7 +483,9 @@ button#addToLayoutsBtn:active {
 
 /* ===== VIEWER OPTIONS ===== */
 
-
+#viewer-options #highlight-option {
+   display: none;
+}
 
 
 /* ===== OCTAVE COLORS ===== */

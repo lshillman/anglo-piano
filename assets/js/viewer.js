@@ -675,6 +675,11 @@ function selectLayout() {
         buttons = parsedLayoutFromURL;
         addToLayoutsBtn.style.display = "block";
         removeFromLayoutsBtn.style.display = "none";
+        if (urlParams.highlight) {
+            document.querySelector("#highlight-option").style.display = "flex";
+        } else {
+            document.querySelector("#highlight-option").style.display = "none";
+        }
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
     } else if (opt_layout.value.includes("USER_LAYOUT_")) {
