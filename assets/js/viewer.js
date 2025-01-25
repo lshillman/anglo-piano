@@ -725,16 +725,17 @@ function getUrlParams() {
 
 function applyHighlights() {
     if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
-        // urlParams.highlight.split("-").forEach(button => {
-        //     angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted");
-        // });
-        // Object.keys(urlParams.highlight).forEach(color => {
-            // TODO write this functionality
-        // })
+        let colors = Object.keys(urlParams.highlight);
+        for (let i in colors) {
+            if (urlParams.highlight[colors[i]]) {
+                urlParams.highlight[colors[i]].forEach(button => {
+                    angloKeyboard.querySelectorAll(".button")[button] && angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted", colors[i]);
+                });
+            }
+        }
     }
 }
 
-// could parse highlights this way...
 function parseHighlights() {
     let highlights = urlParams.highlight.split("-");
     let highlighted = {"red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": []};
