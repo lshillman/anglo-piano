@@ -670,16 +670,15 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    // if (opt_layout.value == "customFromURL") {
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
+        document.querySelector("#highlight-option").style.display = "flex";
+    } else {
+        document.querySelector("#highlight-option").style.display = "none";
+    }
     if (opt_layout.value == "customFromURL") {
         buttons = parsedLayoutFromURL;
         addToLayoutsBtn.style.display = "block";
         removeFromLayoutsBtn.style.display = "none";
-        if (urlParams.highlight) {
-            document.querySelector("#highlight-option").style.display = "flex";
-        } else {
-            document.querySelector("#highlight-option").style.display = "none";
-        }
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
     } else if (opt_layout.value.includes("USER_LAYOUT_")) {
@@ -823,8 +822,8 @@ getLinkBtn.onclick = function () {
     let linkField = document.getElementById("shareLink");
     if (opt_layout.value == "customFromURL") {
         let title = ""
-        if (customTitleFromURL) {
-            title = "&title=" + encodeURI(customTitleFromURL);
+        if (urlParams.title) {
+            title = "&title=" + encodeURI(urlParams.title);
         }
         linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + title;
     } else if (opt_layout.value.includes("USER_LAYOUT")) {
@@ -925,7 +924,7 @@ document.addEventListener('keyup', function (e) {
 
 addToLayoutsBtn.onclick = function () {
     let newLayoutName = document.getElementById("newLayoutName");
-    newLayoutName.value = customTitleFromURL || "";
+    newLayoutName.value = urlParams.title || "";
     document.getElementById("add-modal").style.display = "block";
     newLayoutName.focus();
     newLayoutName.select();

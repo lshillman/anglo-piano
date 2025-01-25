@@ -38,8 +38,8 @@ function renderEditor() {
     currentMode = "edit"
     editorSection.style.display = "block";
     viewerSection.style.display = "none";
-    if (opt_layout.value == "customFromURL" && customTitleFromURL) {
-        layoutTitle.value = customTitleFromURL;
+    if (opt_layout.value == "customFromURL" && urlParams.title) {
+        layoutTitle.value = urlParams.title;
     } else if (opt_layout.value.includes("USER_LAYOUT")) {
         layoutTitle.value = opt_layout.value.slice(12);
     }
