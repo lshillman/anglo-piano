@@ -1,6 +1,3 @@
-// create web audio api context
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
 // store a custom layout, title, highlights, etc passed in via the URL
 let urlParams = {};
 let parsedLayoutFromURL = [];
@@ -474,6 +471,7 @@ function deselectChordButtons() {
 
 function playNote(note) {
     if (opt_sound.checked) {
+        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let oscillator;
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
         let freq = notes[note];
