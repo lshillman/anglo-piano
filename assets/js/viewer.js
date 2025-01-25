@@ -45,6 +45,7 @@ const opt_concertinaLabels = document.getElementById("concertina-labels");
 const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
+const opt_highlights = document.getElementById("highlights");
 
 
 // modals
@@ -725,13 +726,19 @@ function getUrlParams() {
 
 function applyHighlights() {
     if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
-        let colors = Object.keys(urlParams.highlight);
-        for (let i in colors) {
-            if (urlParams.highlight[colors[i]]) {
-                urlParams.highlight[colors[i]].forEach(button => {
-                    angloKeyboard.querySelectorAll(".button")[button] && angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted", colors[i]);
-                });
+        if (opt_highlights.checked) {
+            let colors = Object.keys(urlParams.highlight);
+            for (let i in colors) {
+                if (urlParams.highlight[colors[i]]) {
+                    urlParams.highlight[colors[i]].forEach(button => {
+                        angloKeyboard.querySelectorAll(".button")[button] && angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted", colors[i]);
+                    });
+                }
             }
+        } else {
+            angloKeyboard.querySelectorAll(".button").forEach(button => {
+                button.classList.remove("highlighted");
+            })
         }
     }
 }
@@ -859,6 +866,9 @@ opt_absentNotes.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 
+opt_highlights.addEventListener("change", () => {
+    applyHighlights();
+});
 
 document.addEventListener('keydown', function (e) {
     // console.log(e.code);
