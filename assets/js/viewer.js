@@ -3,8 +3,6 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 // store a custom layout passed in via the URL
 let customLayoutFromURL;
-let customTitleFromURL;
-let layoutShortcut;
 let highlights;
 let urlParams = {};
 let parsedLayoutFromURL = [];
@@ -988,16 +986,14 @@ function buildLayoutDropdown() {
     if (urlParams.layout && !urlParams.shortcut) {
         // create optgroup "Shared via URL"
         console.log("adding layout from link to dropdown...");
-        if (!layoutShortcut) {
-            let urlGroup = document.createElement("optgroup");
-            urlGroup.label = "Shared via link";
-            opt_layout.appendChild(urlGroup);
+        let urlGroup = document.createElement("optgroup");
+        urlGroup.label = "Shared via link";
+        opt_layout.appendChild(urlGroup);
 
-            let urlOption = document.createElement("option");
-            urlOption.value = "customFromURL";
-            urlOption.text = urlParams.title || "Untitled layout";
-            urlGroup.appendChild(urlOption);
-        }
+        let urlOption = document.createElement("option");
+        urlOption.value = "customFromURL";
+        urlOption.text = urlParams.title || "Untitled layout";
+        urlGroup.appendChild(urlOption);
     }
     if (localStorage.getItem("USER_LAYOUTS") && !!Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length) {
         //create optgroup "Your layouts"
