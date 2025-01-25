@@ -1,7 +1,7 @@
 // create web audio api context
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// store a custom layout passed in via the URL
+// store a custom layout, title, highlights, etc passed in via the URL
 let urlParams = {};
 let parsedLayoutFromURL = [];
 let parsedWithErrors = false;
@@ -757,40 +757,6 @@ function parseHighlights() {
     urlParams.highlight = highlighted;
 }
 
-
-
-
-// function getUrlParams() {
-//     if (window.location.href.includes("#layout=")) {
-//         let legacyParam = window.location.href.split("#layout=")[1];
-//         if (legacyParam && LAYOUTS[legacyParam]) {
-//             layoutShortcut = legacyParam;                                // detect shortcut from legacy param
-//         } else if (legacyParam) {
-//             customLayoutFromURL = legacyParam;
-//             // console.log("parsing custom legacy layout...");
-//             parseLegacyLayout();                                         // parse custom legacy layout
-//             opt_layout.value = "customFromURL";                          // select param layout in dropdown
-//         }
-//     } else if (window.location.href.includes("?")) {
-//         let urlParam = window.location.href.split("?")[1];
-//         if (urlParam && LAYOUTS[urlParam]) {
-//             layoutShortcut = urlParam;                                   // detect shortcut from param
-//             // console.log("selecting a hard-coded layout from new param: " + urlParam);
-//         } else if (urlParam && urlParam.includes("&title=")) {
-//             customLayoutFromURL = urlParam.split("&title=")[0];
-//             customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);    // parse title from param
-//             parseLayout("url")                                               // parse layout
-//             opt_layout.value = "customFromURL";                              // select param layout in dropdown
-//         } else if (urlParam) {                                           // handle titleless layout
-//             customLayoutFromURL = urlParam;
-//             // console.log("parsing custom new layout...");
-//             parseLayout("url");
-//             opt_layout.value = "customFromURL";
-//         } else {                                                         // handle empty param
-//             // console.log("empty param; proceeding with default");
-//         }
-//     }
-// }
 
 function addToDropdown(value, title, origin) {
     let newOption = document.createElement("option");
