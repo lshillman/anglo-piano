@@ -74,7 +74,7 @@ let currentMode;
 function renderPianoKeyboard(min, max, layoutnotes, pushnotes, pullnotes) {
     keyboard.innerHTML = "";
     activeNotes.length = 0;
-    let allnotes = Object.keys(notes); // get an array of notes from the note object
+    let allnotes = Object.keys(notes); // get an array of notes from the note object, and also add the novelty symbol
     for (let i = min; i < max; i++) {
         let note = allnotes[i];
         let label = note;
@@ -117,13 +117,14 @@ function renderAngloKeyboard() {
     // droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
-
-        layoutnotes.push(button.push);
-        layoutnotes.push(button.pull);
-        // if (!(button.drone && !opt_drone.checked)) {
-        pushnotes.push(button.push);
-        pullnotes.push(button.pull);
-        // }
+        if (button.push != "~") {
+            layoutnotes.push(button.push);
+            pushnotes.push(button.push);
+        }
+        if (button.pull != "~") {
+            layoutnotes.push(button.pull);
+            pullnotes.push(button.pull);
+        }
         let pushLabel = button.push;
         let pullLabel = button.pull;
         if (opt_accidentals.checked) {
