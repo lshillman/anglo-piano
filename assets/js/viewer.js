@@ -1,10 +1,5 @@
-// create web audio api context
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-// store a custom layout passed in via the URL
-let customLayoutFromURL;
-let customTitleFromURL;
-let layoutShortcut;
+// store a custom layout, title, highlights, etc passed in via the URL
+let urlParams = {};
 let parsedLayoutFromURL = [];
 let parsedWithErrors = false;
 
@@ -43,6 +38,7 @@ const opt_concertinaLabels = document.getElementById("concertina-labels");
 const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
+const opt_highlights = document.getElementById("highlights");
 
 
 // modals
@@ -156,6 +152,7 @@ function renderAngloKeyboard() {
         }
     }
     colorOctaves();
+    applyHighlights();
     renderPianoKeyboard(min, max + 1, layoutnotes, pushnotes, pullnotes);
 }
 
@@ -164,8 +161,8 @@ function parseLayout(origin) {
     let layout;
     let title;
     if (origin == "url") {
-        layout = customLayoutFromURL;
-        title = customTitleFromURL;
+        layout = urlParams.layout;
+        title = urlParams.title;
     } else if (origin == "editor") {
         layout = customLayoutFromEditor;
         title = customTitleFromEditor;
@@ -213,7 +210,7 @@ function parseLayout(origin) {
 
 // to render layouts from the old Anglo Piano that assumed a 14-column grid
 function parseLegacyLayout() {
-    let layout = customLayoutFromURL;
+    let layout = urlParams.layout;
     let newLayout = [];
     let buttonCount = 0;
     while (layout.length > 0) {
@@ -222,15 +219,19 @@ function parseLegacyLayout() {
         let pull;
         let newRow = false;
         if (layout[0] == "_") {
-            x = layout.substring(1, layout.indexOf('_', 1));
-            push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
-            pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
-            if (buttonCount % 14 === 0 && buttonCount != 0) {
-                newRow = true;
+            if (noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)]) {
+                x = layout.substring(1, layout.indexOf('_', 1));
+                push = noteCodes[layout.substr(layout.indexOf('_', 1) + 1, 1)];
+                pull = noteCodes[layout.substr(layout.indexOf('_', 1) + 2, 1)];
+                if (buttonCount % 14 === 0 && buttonCount != 0) {
+                    newRow = true;
+                }
+                newLayout.push({ push, pull, x, newRow });
+                buttonCount++;
+                layout = layout.slice(layout.indexOf('_', 1) + 3);
+            } else {
+                layout = layout.slice(layout.indexOf('_', 1) + 1);
             }
-            newLayout.push({ push, pull, x, newRow });
-            buttonCount++;
-            layout = layout.slice(layout.indexOf('_', 1) + 3);
         } else if (layout[0] == ".") {
             buttonCount++;
             layout = layout.slice(2);
@@ -241,9 +242,16 @@ function parseLegacyLayout() {
             if (buttonCount % 14 === 0 && buttonCount != 0) {
                 newRow = true;
             }
-            newLayout.push({ push, pull, x, newRow });
-            buttonCount++;
-            layout = layout.slice(2);
+            if (push && pull) {
+                newLayout.push({ push, pull, x, newRow });
+                buttonCount++;
+                layout = layout.slice(2);
+            } else {
+                layout = "";
+                parsedWithErrors = true;
+                document.getElementById("parse-error-modal").style.display = "block";
+                console.error("Error while parsing legacy layout!")
+            }
         }
     }
     parsedLayoutFromURL = newLayout;
@@ -463,6 +471,7 @@ function deselectChordButtons() {
 
 function playNote(note) {
     if (opt_sound.checked) {
+        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let oscillator;
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
         let freq = notes[note];
@@ -655,6 +664,11 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
+        document.querySelector("#highlight-option").style.display = "flex";
+    } else {
+        document.querySelector("#highlight-option").style.display = "none";
+    }
     if (opt_layout.value == "customFromURL") {
         buttons = parsedLayoutFromURL;
         addToLayoutsBtn.style.display = "block";
@@ -675,38 +689,72 @@ function selectLayout() {
 }
 
 
-
 function getUrlParams() {
+    let querystring = "";
     if (window.location.href.includes("#layout=")) {
-        let legacyParam = window.location.href.split("#layout=")[1];
-        if (legacyParam && LAYOUTS[legacyParam]) {
-            layoutShortcut = legacyParam;
-        } else if (legacyParam) {
-            customLayoutFromURL = legacyParam;
-            // console.log("parsing custom legacy layout...");
-            parseLegacyLayout();
-            opt_layout.value = "customFromURL";
-        }
-    } else if (window.location.href.includes("?")) {
-        let urlParam = window.location.href.split("?")[1];
-        if (urlParam && LAYOUTS[urlParam]) {
-            layoutShortcut = urlParam;
-            // console.log("selecting a hard-coded layout from new param: " + urlParam);
-        } else if (urlParam && urlParam.includes("&title=")) {
-            customLayoutFromURL = urlParam.split("&title=")[0];
-            customTitleFromURL = decodeURI(urlParam.split("&title=")[1]);
-            parseLayout("url")
-            opt_layout.value = "customFromURL";
-        } else if (urlParam) {
-            customLayoutFromURL = urlParam;
-            // console.log("parsing custom new layout...");
-            parseLayout("url");
-            opt_layout.value = "customFromURL";
+        urlParams.legacy = true;
+        querystring = window.location.href.split("#")[1];
+    }
+    if (window.location.href.includes("?")) {
+        querystring = window.location.href.split("?")[1];
+    }
+    let params = querystring.split("&");
+    // assume an unnamed param directly following "?" is a layout
+    if (!params[0].includes("=")) {
+        params[0] = "layout=" + params[0];
+    }
+    // add each param to the global urlParams object
+    params.forEach(param => {
+        let pair = param.split("=");
+        urlParams[pair[0]] = decodeURIComponent(pair[1]);
+    });
+    if (urlParams.layout && LAYOUTS[urlParams.layout]) {
+        urlParams.shortcut = true;
+    }
+    if (urlParams.highlight) {
+        parseHighlights();
+    }
+    // Finished figuring out params. Now send layouts to relevant parser:
+    if (urlParams.layout && urlParams.legacy && !urlParams.shortcut) {
+        parseLegacyLayout();
+    } else if (urlParams.layout && !urlParams.shortcut) {
+        parseLayout("url");
+    }
+}
+
+function applyHighlights() {
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
+        if (opt_highlights.checked) {
+            let colors = Object.keys(urlParams.highlight);
+            for (let i in colors) {
+                if (urlParams.highlight[colors[i]]) {
+                    urlParams.highlight[colors[i]].forEach(button => {
+                        angloKeyboard.querySelectorAll(".button")[button] && angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted", colors[i]);
+                    });
+                }
+            }
         } else {
-            // console.log("empty param; proceeding with default");
+            angloKeyboard.querySelectorAll(".button").forEach(button => {
+                button.classList.remove("highlighted");
+            })
         }
     }
 }
+
+function parseHighlights() {
+    let highlights = urlParams.highlight.split("-");
+    let highlighted = {"red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": []};
+    let currentcolor = "red";
+    for (let i = 0; i < highlights.length; i++) {
+        if ("red orange green blue pink purple".includes(highlights[i])) {
+            currentcolor = highlights[i];
+        } else {
+            highlighted[currentcolor].push(highlights[i]);
+        }
+    }
+    urlParams.highlight = highlighted;
+}
+
 
 function addToDropdown(value, title, origin) {
     let newOption = document.createElement("option");
@@ -734,8 +782,8 @@ getLinkBtn.onclick = function () {
     let linkField = document.getElementById("shareLink");
     if (opt_layout.value == "customFromURL") {
         let title = ""
-        if (customTitleFromURL) {
-            title = "&title=" + encodeURI(customTitleFromURL);
+        if (urlParams.title) {
+            title = "&title=" + encodeURI(urlParams.title);
         }
         linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + title;
     } else if (opt_layout.value.includes("USER_LAYOUT")) {
@@ -782,6 +830,9 @@ opt_absentNotes.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 
+opt_highlights.addEventListener("change", () => {
+    applyHighlights();
+});
 
 document.addEventListener('keydown', function (e) {
     // console.log(e.code);
@@ -833,7 +884,7 @@ document.addEventListener('keyup', function (e) {
 
 addToLayoutsBtn.onclick = function () {
     let newLayoutName = document.getElementById("newLayoutName");
-    newLayoutName.value = customTitleFromURL || "";
+    newLayoutName.value = urlParams.title || "";
     document.getElementById("add-modal").style.display = "block";
     newLayoutName.focus();
     newLayoutName.select();
@@ -884,28 +935,27 @@ window.onclick = function (event) {
 // If we don't have layouts from URL params or localStorage, build a simple dropdown. If we have URL params or locally-stored layouts, create optgroups.
 function buildLayoutDropdown() {
     opt_layout.innerHTML = "";
-    if (!customLayoutFromURL && (!localStorage.getItem("USER_LAYOUTS") || Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length == 0)) {
+    if (!urlParams.layout && (!localStorage.getItem("USER_LAYOUTS") || Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length == 0)) {
         for (layout of Object.keys(LAYOUTS)) {
             addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
         }
-        if (layoutShortcut) {
-            opt_layout.value = layoutShortcut;
+        if (urlParams.shortcut) {
+            opt_layout.value = urlParams.layout;
         }
         selectLayout();
         return;
     }
-    if (customLayoutFromURL) {
+    if (urlParams.layout && !urlParams.shortcut) {
         // create optgroup "Shared via URL"
-        if (!layoutShortcut) {
-            let urlGroup = document.createElement("optgroup");
-            urlGroup.label = "Shared via link";
-            opt_layout.appendChild(urlGroup);
+        console.log("adding layout from link to dropdown...");
+        let urlGroup = document.createElement("optgroup");
+        urlGroup.label = "Shared via link";
+        opt_layout.appendChild(urlGroup);
 
-            let urlOption = document.createElement("option");
-            urlOption.value = "customFromURL";
-            urlOption.text = customTitleFromURL || "Untitled layout";
-            urlGroup.appendChild(urlOption);
-        }
+        let urlOption = document.createElement("option");
+        urlOption.value = "customFromURL";
+        urlOption.text = urlParams.title || "Untitled layout";
+        urlGroup.appendChild(urlOption);
     }
     if (localStorage.getItem("USER_LAYOUTS") && !!Object.keys(JSON.parse(localStorage.getItem("USER_LAYOUTS"))).length) {
         //create optgroup "Your layouts"
@@ -932,9 +982,9 @@ function buildLayoutDropdown() {
         standardGroup.appendChild(stdOption);
         //addToDropdown(layout, LAYOUTS[layout].title, "LAYOUTS");
     }
-    if (layoutShortcut) {
-        opt_layout.value = layoutShortcut;
-    } else if (customLayoutFromURL) {
+    if (urlParams.shortcut) {
+        opt_layout.value = urlParams.layout;
+    } else if (urlParams.layout) {
         opt_layout.value = "customFromURL";
     } else if (Object.keys(USER_LAYOUTS)[0]) {
         opt_layout.value = "USER_LAYOUT_" + Object.keys(USER_LAYOUTS)[Object.keys(USER_LAYOUTS).length - 1];

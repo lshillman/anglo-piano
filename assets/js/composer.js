@@ -18,7 +18,7 @@ function loadCompositions() {
         compositions = JSON.parse(localStorage.getItem("COMPOSITIONS"));
         comp_dropdown.innerHTML = "";
         for (let i = Object.keys(compositions).length - 1; i > -1; i--) {
-            console.log(Object.keys(compositions)[i]);
+            // console.log(Object.keys(compositions)[i]);
             comp_dropdown.innerHTML += `<option value="${Object.keys(compositions)[i]}">${Object.keys(compositions)[i]}</option>`;
         }
         populateTimeline(compositions[comp_dropdown.value].frames);
@@ -63,7 +63,8 @@ let currentFrame = -1;
 
 function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
-    frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    frames.splice(currentFrame, 0, {bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
     writeCompositions();
     timeline.innerHTML += `<button class="composer-frame" data-position="${frames.length - 1}">${frames.length}</button>`
     currentFrame = position;
@@ -162,8 +163,9 @@ function loadPrevFrame() {
     scrollToCurrentFrame();
 }
 
+//TODO invoke this only when composer is shown. For now, requiring feature flag
 function populateTimeline() {
-    if (comp_dropdown.value) {
+    if (urlParams.composer && comp_dropdown.value) {
         let frames = compositions[comp_dropdown.value].frames;
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
@@ -268,10 +270,14 @@ frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
     if(e.target && e.target.className.includes("composer-frame")) {
-        currentFrame = parseInt(e.target.dataset.position);
-        loadFrame(currentFrame);
-        // console.log(currentFrame);
-        selectFrames();
+        if (!e.shiftKey) {
+            currentFrame = parseInt(e.target.dataset.position);
+            loadFrame(currentFrame);
+            // console.log(currentFrame);
+            selectFrames();
+        } else {
+            
+        }
     }
 });
 
@@ -309,6 +315,6 @@ function showComposer() {
     console.warn("The composer is actively being developed. Use at your own risk!")
 }
 
-if (window.location.href.includes("#comp=1")) {
+if (urlParams.composer) {
     showComposer();
 }

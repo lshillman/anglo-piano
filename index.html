@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/style.css?1" />
     <link rel="icon" href="./assets/images/favicon.ico" type="image/x-icon" />
     <meta name="description"
         content="Anglo Piano is a learning and composition tool for Anglo concertina players. Select a note or chord on the piano keyboard to see it highlighted on the Anglo keyboard.">
@@ -107,6 +107,10 @@
                     <div>
                         <input type="checkbox" id="accidentals" name="accidentals" value="true">
                         <label for="accidentals">Alternate accidental spellings</label>
+                    </div>
+                    <div id="highlight-option">
+                        <input type="checkbox" id="highlights" name="highlights" value="true" checked="checked">
+                        <label for="highlights">User highlights</label>
                     </div>
                 </div>
             </div>
@@ -235,7 +239,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>About Anglo Piano</h2>
-            <p class="copyright">&copy; MMXXII Luke Hillman</p>
+            <p class="copyright">&copy; 2022-2025 Luke Hillman</p>
             <p>Anglo Piano is a learning, composition, and layout exploration tool for Anglo concertina players. You can
                 use it to figure out how to play difficult melodies and chords, design and share your ideal keyboard
                 layout, or just use it as a reference to compare different concertinas.</p>
