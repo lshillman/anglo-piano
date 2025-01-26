@@ -790,11 +790,16 @@ getLinkBtn.onclick = function () {
         if (urlParams.title) {
             title = "&title=" + encodeURI(urlParams.title);
         }
-        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + title;
+        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + encodeLayout() + title;
     } else if (opt_layout.value.includes("USER_LAYOUT")) {
-        linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url;
+        // make sure we're sharing a link using the current url param convention!
+        if (!USER_LAYOUTS[opt_layout.value.slice(12)].url.includes("?layout=")) {
+            linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url.replace("?", "?layout=");
+        } else {
+            linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url;
+        }
     } else {
-        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + opt_layout.value;
+        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + opt_layout.value;
     }
     document.getElementById("share-modal").style.display = "block";
     linkField.focus();
@@ -1008,7 +1013,7 @@ function removeUserLayout() {
 function addUserLayout() {
     let newName = document.getElementById("newLayoutName").value;
     if (newName.trim() && !USER_LAYOUTS[newName]) {
-        let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?" + encodeLayout() + "&title=" + encodeURI(newName.trim());
+        let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + encodeLayout() + "&title=" + encodeURI(newName.trim());
         USER_LAYOUTS[newName] = { layout: buttons, url };
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         document.getElementById("addLayoutError").style.display = "visible";
