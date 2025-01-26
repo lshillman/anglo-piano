@@ -145,10 +145,12 @@ function renderAngloKeyboard() {
     let min = allnotes.indexOf(layoutnotes[0]);
     let max = allnotes.indexOf(layoutnotes[0]);
     for (let i = 1; i < layoutnotes.length; i++) {
-        if (allnotes.indexOf(noteNames[layoutnotes[i]]) < min) {
-            min = allnotes.indexOf(noteNames[layoutnotes[i]]);
-        } else if (allnotes.indexOf(noteNames[layoutnotes[i]]) > max) {
-            max = allnotes.indexOf(noteNames[layoutnotes[i]]);
+        if (layoutnotes[i] != "~") {
+            if (allnotes.indexOf(noteNames[layoutnotes[i]]) < min) {
+                min = allnotes.indexOf(noteNames[layoutnotes[i]]);
+            } else if (allnotes.indexOf(noteNames[layoutnotes[i]]) > max) {
+                max = allnotes.indexOf(noteNames[layoutnotes[i]]);
+            }
         }
     }
     colorOctaves();
@@ -378,6 +380,9 @@ function resetView() {
 }
 
 function updateSelection(note, button = "any") {
+    if (note == "~") {
+        return;
+    }
     if (selectionMode == "notes") {
         if (button == "chord") {
             selection.push({ note, button });
@@ -470,7 +475,7 @@ function deselectChordButtons() {
 }
 
 function playNote(note) {
-    if (opt_sound.checked) {
+    if (opt_sound.checked && note != "~") {
         let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let oscillator;
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
@@ -493,6 +498,18 @@ function playNote(note) {
         gainNode.gain.linearRampToValueAtTime(-1, audioCtx.currentTime + 0.5); // fade the volume all the way out in 0.5 seconds
         oscillator.start(audioCtx.currentTime);
         oscillator.stop(audioCtx.currentTime + 0.5);
+    } else if (opt_sound.checked && note == "~") {
+        // let's play a fun novelty sound!
+        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let oscillator;
+        oscillator = audioCtx.createOscillator(); // create Oscillator node
+        oscillator.type = "square";
+        oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // value in hertz
+        oscillator.connect(audioCtx.destination);
+        oscillator.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+        oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.15);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.3);
     }
 }
 
