@@ -706,7 +706,12 @@ function getUrlParams() {
     // add each param to the global urlParams object
     params.forEach(param => {
         let pair = param.split("=");
-        urlParams[pair[0]] = decodeURIComponent(pair[1]);
+        try {
+            urlParams[pair[0]] = decodeURIComponent(pair[1]);
+        } catch (error) {
+            console.error(error);
+            urlParams[pair[0]] = pair[1];
+        }
     });
     if (urlParams.layout && LAYOUTS[urlParams.layout]) {
         urlParams.shortcut = true;
@@ -746,10 +751,10 @@ function parseHighlights() {
     let highlighted = {"red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": []};
     let currentcolor = "red";
     for (let i = 0; i < highlights.length; i++) {
-        if ("red orange green blue pink purple".includes(highlights[i])) {
+        if (highlights[i] && "red orange green blue pink purple".includes(highlights[i])) {
             currentcolor = highlights[i];
         } else {
-            highlighted[currentcolor].push(highlights[i]);
+            highlights[i] && highlighted[currentcolor].push(highlights[i]);
         }
     }
     urlParams.highlight = highlighted;
