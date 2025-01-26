@@ -163,9 +163,9 @@ function loadPrevFrame() {
     scrollToCurrentFrame();
 }
 
-//TODO invoke this only when composer is shown. Commenting out selectLayout() for now.
+//TODO invoke this only when composer is shown. For now, requiring feature flag
 function populateTimeline() {
-    if (comp_dropdown.value) {
+    if (urlParams.composer && comp_dropdown.value) {
         let frames = compositions[comp_dropdown.value].frames;
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
@@ -173,8 +173,8 @@ function populateTimeline() {
                 timeline.innerHTML += `<button class="composer-frame" data-position="${i}">${i + 1}</button>`
             }
         }
-        // opt_layout.value = compositions[comp_dropdown.value].layout;
-        // selectLayout();
+        opt_layout.value = compositions[comp_dropdown.value].layout;
+        selectLayout();
     } else {
         timeline.innerHTML = "";
     }
@@ -315,6 +315,6 @@ function showComposer() {
     console.warn("The composer is actively being developed. Use at your own risk!")
 }
 
-if (window.location.href.includes("#comp=1")) {
+if (urlParams.composer) {
     showComposer();
 }

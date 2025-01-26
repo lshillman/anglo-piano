@@ -690,7 +690,7 @@ function selectLayout() {
 
 
 function getUrlParams() {
-    let querystring;
+    let querystring = "";
     if (window.location.href.includes("#layout=")) {
         urlParams.legacy = true;
         querystring = window.location.href.split("#")[1];
