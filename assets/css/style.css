@@ -77,7 +77,7 @@ header h1 {
    white-space: nowrap;
 }
 
-.keyboard-button {
+kbd {
    background-color: #ddd;
    border: 1px solid #767676;
    border-radius: 4px;
