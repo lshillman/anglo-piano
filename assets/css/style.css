@@ -1010,6 +1010,10 @@ button#addToLayoutsBtn:active {
 	text-align: center;
 }
 
+#version a, #version a:visited {
+   color: #fff;
+}
+
 
 /* ===== ARROWS ===== */
 
