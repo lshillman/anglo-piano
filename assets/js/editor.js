@@ -327,6 +327,7 @@ function insertButton(where) {
 
 
 function pickNote(e) {
+    let unspecified = notePicker.querySelector("#unspecified");
     if (e.target.id == "prev-field" || e.target.parentNode.id == "prev-field") {
         let inputs = document.querySelectorAll("#editor-anglo-keyboard input");
         for ( i=0; i < inputs.length; i++) {
@@ -345,12 +346,23 @@ function pickNote(e) {
                 break;
              }
         }   
+    } else if (e.target.id == "unspecified") {
+        [...document.querySelectorAll("#mobile-notes button")].forEach((button) => {
+            button.classList.remove("selected");
+        });
+        [...document.querySelectorAll("#mobile-octave button")].forEach((button) => {
+            button.classList.remove("selected");
+        });
+        [...document.querySelectorAll("#mobile-accidental button")].forEach((button) => {
+            button.classList.remove("selected");
+        });
+        e.target.classList.add("selected");
     } else if ("CDEFGABC".includes(e.target.innerText)) {
         [...document.querySelectorAll("#mobile-notes button")].forEach((button) => {
             button.classList.remove("selected");
         });
         e.target.classList.add("selected");
-    } else if ("♭♯".includes(e.target.innerText)) {
+    } else if ("♭♯".includes(e.target.innerText) && !unspecified.classList.contains("selected")) {
         if (e.target.classList.contains("selected")) {
             e.target.classList.remove("selected");
         } else {
@@ -359,7 +371,7 @@ function pickNote(e) {
             });
             e.target.classList.add("selected");
         }
-    } else if ("234567".includes(e.target.innerText)) {
+    } else if ("234567".includes(e.target.innerText) && !unspecified.classList.contains("selected")) {
         [...document.querySelectorAll("#mobile-octave button")].forEach((button) => {
             button.classList.remove("selected");
         });
