@@ -50,6 +50,18 @@
             max-width: 700px;
         }
 
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        h2 {
+            margin: 0;
+        }
+
         ul, ol:not(>ol) {
             padding: 0.5rem;
         }
@@ -67,7 +79,10 @@
     <main>
         <h1>Changelog</h1>
         <hr>
-        <h2>Version 4.0.1</h2>
+        <div class="entry-header">
+            <h2>Version 4.0.1</h2>
+            <time datetime="2025-03-22">22 March 2025</time>
+        </div>
         <p>This version addresses some architectural issues and lays the groundwork for upcoming new features.</p>
         <ul>
             <li>Get serious about versioning and create this changelog 😃</li>
