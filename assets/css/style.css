@@ -392,6 +392,7 @@ button#addToLayoutsBtn:active {
 .button .bottom button:hover,
 .natural:hover {
    background-color: #eee;
+   color: #333;
 }
 
 .button .bottom button {
