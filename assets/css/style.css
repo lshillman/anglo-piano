@@ -2,6 +2,10 @@
    font-family: sans-serif;
 }
 
+:root {
+   --highlightColor: red;
+}
+
 header {
    height: 50px;
    background-color: #333;
@@ -458,7 +462,7 @@ button#addToLayoutsBtn:active {
 }
 
 .highlightable:not(.highlighted):hover {
-   outline: 2px solid salmon;
+   outline: 2px dotted var(--highlightColor);
    outline-offset: -3px;
 }
 

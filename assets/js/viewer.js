@@ -316,21 +316,21 @@ function selectPianoKey() {
 function selectConcertinaButtons() {
     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
     if (selectionMode == "notes" || selection.length == 0) {
-    allbuttons.forEach(button => {
-        if (opt_matchoctave.checked) {
-            if (selection.findIndex(sel => sel.note == button.dataset.note) != -1) {
-                button.classList.add("selected");
+        allbuttons.forEach(button => {
+            if (opt_matchoctave.checked) {
+                if (selection.findIndex(sel => sel.note == button.dataset.note) != -1) {
+                    button.classList.add("selected");
+                } else {
+                    button.classList.remove("selected");
+                }
             } else {
-                button.classList.remove("selected");
+                if (selection.findIndex(sel => sel.note.slice(0, -1) == button.dataset.note.slice(0, -1)) != -1) {
+                    button.classList.add("selected");
+                } else {
+                    button.classList.remove("selected");
+                }
             }
-        } else {
-            if (selection.findIndex(sel => sel.note.slice(0, -1) == button.dataset.note.slice(0, -1)) != -1) {
-                button.classList.add("selected");
-            } else {
-                button.classList.remove("selected");
-            }
-        }
-    });
+        });
     } else if (selectionMode == "buttons") {
         // console.log("ENTERING BUTTON SELECTOR");
         allbuttons.forEach((button, i) => {
@@ -448,15 +448,15 @@ function updateSelection(note, button = "any") {
         } else if (button == "chord") {
             let allbuttons = document.querySelectorAll("#anglo-keyboard button");
             let addCount = 0;
-                allbuttons.forEach((button, i) => {
-                    if (note == button.dataset.note) {
-                        selection.push({ note, "button": i });
-                        addCount++;
-                    }
-                });
-                if (!addCount) { // we still want to select the note even if there are no matching buttons
-                    selection.push({ note, "button": "any" });
+            allbuttons.forEach((button, i) => {
+                if (note == button.dataset.note) {
+                    selection.push({ note, "button": i });
+                    addCount++;
                 }
+            });
+            if (!addCount) { // we still want to select the note even if there are no matching buttons
+                selection.push({ note, "button": "any" });
+            }
         }
     }
     selectPianoKey();
@@ -500,17 +500,17 @@ function playNote(note) {
         oscillator.start(audioCtx.currentTime);
         oscillator.stop(audioCtx.currentTime + 0.5);
     } // else if (opt_sound.checked && note == "~") {
-        // let's NOT play a fun novelty sound!
-        // let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        // let oscillator;
-        // oscillator = audioCtx.createOscillator(); // create Oscillator node
-        // oscillator.type = "square";
-        // oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // value in hertz
-        // oscillator.connect(audioCtx.destination);
-        // oscillator.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.1);
-        // oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.15);
-        // oscillator.start();
-        // oscillator.stop(audioCtx.currentTime + 0.3);
+    // let's NOT play a fun novelty sound!
+    // let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // let oscillator;
+    // oscillator = audioCtx.createOscillator(); // create Oscillator node
+    // oscillator.type = "square";
+    // oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // value in hertz
+    // oscillator.connect(audioCtx.destination);
+    // oscillator.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+    // oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.15);
+    // oscillator.start();
+    // oscillator.stop(audioCtx.currentTime + 0.3);
     // }
 }
 
@@ -745,21 +745,35 @@ function getUrlParams() {
     }
 }
 
+// TODO connect this to color picker
+let highlightColor = "red";
+
+function setHighlightColor() {
+    // TODO flesh this out
+    document.querySelector(':root').style.setProperty('--highlightColor', highlightColor);
+}
+
+function toggleButtonHighlight(e) {
+    e.target.classList.toggle("highlighted");
+    e.target.classList.toggle(highlightColor);
+}
+
+// TODO make a way to exit highlight mode
 function allowHighlights() {
     document.querySelectorAll("#anglo-keyboard button").forEach(button => {
         button.disabled = true;
-        button.style.pointerEvents = "none";
-      });
-      
-      document.querySelectorAll("#anglo-keyboard .button").forEach(button => {
+    });
+
+    document.querySelectorAll("#anglo-keyboard .button > div").forEach(div => {
+        div.style.pointerEvents = "none";
+    });
+
+    document.querySelectorAll("#anglo-keyboard .button").forEach(button => {
         button.classList.add("highlightable");
-      });
-      
-      document.querySelectorAll("#anglo-keyboard .button").forEach(button => {
-        button.addEventListener("click", function allowHighlights() {
-          button.classList.toggle("highlighted");
-        });
-      });
+        button.tabIndex = 0;
+    });
+
+    angloKeyboard.addEventListener("click", toggleButtonHighlight);
 }
 
 function applyHighlights() {
@@ -783,7 +797,7 @@ function applyHighlights() {
 
 function parseHighlights() {
     let highlights = urlParams.highlight.split("-");
-    let highlighted = {"red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": []};
+    let highlighted = { "red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": [] };
     let currentcolor = "red";
     for (let i = 0; i < highlights.length; i++) {
         if (highlights[i] && "red orange green blue pink purple".includes(highlights[i])) {
