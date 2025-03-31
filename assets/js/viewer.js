@@ -745,6 +745,23 @@ function getUrlParams() {
     }
 }
 
+function allowHighlights() {
+    document.querySelectorAll("#anglo-keyboard button").forEach(button => {
+        button.disabled = true;
+        button.style.pointerEvents = "none";
+      });
+      
+      document.querySelectorAll("#anglo-keyboard .button").forEach(button => {
+        button.classList.add("highlightable");
+      });
+      
+      document.querySelectorAll("#anglo-keyboard .button").forEach(button => {
+        button.addEventListener("click", function allowHighlights() {
+          button.classList.toggle("highlighted");
+        });
+      });
+}
+
 function applyHighlights() {
     if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
         if (opt_highlights.checked) {

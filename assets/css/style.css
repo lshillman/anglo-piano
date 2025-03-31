@@ -457,6 +457,11 @@ button#addToLayoutsBtn:active {
    display: none;
 }
 
+.highlightable:not(.highlighted):hover {
+   outline: 2px solid salmon;
+   outline-offset: -3px;
+}
+
 .button.highlighted {
    outline: 2px solid red;
    outline-offset: -3px;
