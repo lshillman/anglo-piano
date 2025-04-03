@@ -468,6 +468,13 @@ function updateSelection(note, button = "any") {
     }
 }
 
+function clearSelection() {
+    selection.length = 0
+    selectConcertinaButtons()
+    deselectChordButtons()
+    selectPianoKey()
+    chordBar.style.visibility = "hidden";
+}
 
 function deselectChordButtons() {
     for (let i = 0; i < chordBar.children.length; i++) {
@@ -748,32 +755,63 @@ function getUrlParams() {
 // TODO connect this to color picker
 let highlightColor = "red";
 
-function setHighlightColor() {
+function setHighlightColor(color = highlightColor) {
     // TODO flesh this out
-    document.querySelector(':root').style.setProperty('--highlightColor', highlightColor);
+    document.querySelector(':root').style.setProperty('--highlightColor', color);
+    highlightColor = color;
 }
+
+document.getElementById("highlight-colors").addEventListener("change", (e) => {
+    console.log(e.target.id);
+    setHighlightColor(e.target.id);
+});
+
+document.getElementById("stop-highlighting").addEventListener("click", () => stopHighlighting());
 
 function toggleButtonHighlight(e) {
     e.target.classList.toggle("highlighted");
     e.target.classList.toggle(highlightColor);
 }
 
-// TODO make a way to exit highlight mode
-function allowHighlights() {
-    document.querySelectorAll("#anglo-keyboard button").forEach(button => {
+function startHighlighting() {
+    clearSelection();
+    angloKeyboard.querySelectorAll("button").forEach(button => {
         button.disabled = true;
     });
 
-    document.querySelectorAll("#anglo-keyboard .button > div").forEach(div => {
+    angloKeyboard.querySelectorAll(".button > div").forEach(div => {
         div.style.pointerEvents = "none";
     });
 
-    document.querySelectorAll("#anglo-keyboard .button").forEach(button => {
+    angloKeyboard.querySelectorAll(".button").forEach(button => {
         button.classList.add("highlightable");
         button.tabIndex = 0;
     });
 
+    document.getElementById("highlight-controls").style.display = "flex";
+    document.getElementById("viewer-options").style.display = "none";
+
     angloKeyboard.addEventListener("click", toggleButtonHighlight);
+}
+
+function stopHighlighting() {
+    angloKeyboard.querySelectorAll("button").forEach(button => {
+        button.disabled = false;
+    });
+
+    angloKeyboard.querySelectorAll(".button > div").forEach(div => {
+        div.style.pointerEvents = "auto";
+    });
+
+    angloKeyboard.querySelectorAll(".button").forEach(button => {
+        button.classList.remove("highlightable");
+        button.removeAttribute("tabIndex");
+    });
+
+    document.getElementById("highlight-controls").style.display = "none";
+    document.getElementById("viewer-options").style.display = "flex";
+
+    angloKeyboard.removeEventListener("click", toggleButtonHighlight);
 }
 
 function applyHighlights() {

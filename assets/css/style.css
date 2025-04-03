@@ -461,6 +461,63 @@ button#addToLayoutsBtn:active {
    display: none;
 }
 
+/*========== HIGHLIGHT CONTROLS ============*/
+
+#highlight-controls {
+   display: none;
+   text-align: left;
+   max-width: fit-content;
+   margin: 2rem auto;
+   gap: 1rem;
+   flex-wrap: wrap;
+   align-items: center;
+}
+
+#highlight-colors {
+   margin: 1rem;
+   display: flex;
+   gap: 0.5rem
+ }
+ #highlight-colors input[type="radio"] {
+   appearance: none;
+ }
+ #highlight-colors label {
+   height: 100%;
+   height: 2rem;
+   width: 2rem;
+   border-radius: 1rem;
+   cursor: pointer;
+ }
+
+ #highlight-colors input[type="radio"]:checked + label {
+   outline: 2px solid black;
+   outline-offset: 2px;
+ }
+ 
+ #highlight-colors #red + label {
+   background-color: red;
+ }
+ 
+ #highlight-colors #orange + label {
+   background-color: orange;
+ }
+ 
+ #highlight-colors #green + label {
+   background-color: green;
+ }
+ 
+ #highlight-colors #blue + label {
+   background-color: blue;
+ }
+ 
+ #highlight-colors #pink + label {
+   background-color: magenta;
+ }
+ 
+ #highlight-colors #purple + label {
+   background-color: purple;
+ }
+
 .highlightable:not(.highlighted):hover {
    outline: 2px dotted var(--highlightColor);
    outline-offset: -3px;
