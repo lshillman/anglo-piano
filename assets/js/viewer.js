@@ -39,6 +39,7 @@ const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
 const opt_highlights = document.getElementById("highlights");
+let highlightColor = "red";
 
 
 // modals
@@ -752,12 +753,13 @@ function getUrlParams() {
     }
 }
 
-// TODO connect this to color picker
-let highlightColor = "red";
 
 function setHighlightColor(color = highlightColor) {
-    // TODO flesh this out
-    document.querySelector(':root').style.setProperty('--highlightColor', color);
+    if (color == "pink") {
+        document.querySelector(':root').style.setProperty('--highlightColor', "magenta");
+    } else {
+        document.querySelector(':root').style.setProperty('--highlightColor', color);
+    }
     highlightColor = color;
 }
 
@@ -767,14 +769,21 @@ document.getElementById("highlight-colors").addEventListener("change", (e) => {
 });
 
 document.getElementById("stop-highlighting").addEventListener("click", () => stopHighlighting());
+document.getElementById("editHighlightsBtn").addEventListener("click", () => startHighlighting());
 
 function toggleButtonHighlight(e) {
-    e.target.classList.toggle("highlighted");
-    e.target.classList.toggle(highlightColor);
+    if (e.target.classList.contains("highlighted")) {
+        e.target.classList.remove("highlighted", "red", "orange", "green", "blue", "pink", "purple");
+    } else {
+        e.target.classList.add("highlighted", highlightColor);
+    }
 }
 
 function startHighlighting() {
     clearSelection();
+    document.getElementById("red").checked = true;
+    setHighlightColor("red");
+
     angloKeyboard.querySelectorAll("button").forEach(button => {
         button.disabled = true;
     });

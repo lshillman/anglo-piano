@@ -463,6 +463,20 @@ button#addToLayoutsBtn:active {
 
 /*========== HIGHLIGHT CONTROLS ============*/
 
+button#editHighlightsBtn {
+   font-size: 1rem;
+   padding: 0;
+   margin-left: 1.5rem;
+   border-color: transparent;
+   background-color: transparent;
+   cursor: pointer;
+}
+
+button#editHighlightsBtn:hover, button#edit-highlights:active {
+   text-decoration: underline;
+   color: #333;
+}
+
 #highlight-controls {
    display: none;
    text-align: left;
