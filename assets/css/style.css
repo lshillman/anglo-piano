@@ -467,6 +467,7 @@ button#editHighlightsBtn {
    font-size: 1rem;
    padding: 0;
    margin-left: 1.5rem;
+   color: #222;
    border-color: transparent;
    background-color: transparent;
    cursor: pointer;

@@ -1,3 +1,6 @@
+// store the base URL of this page for building share URLs
+let baseURL = "";
+
 // store a custom layout, title, highlights, etc passed in via the URL
 let urlParams = {};
 let parsedLayoutFromURL = [];
@@ -817,6 +820,8 @@ function stopHighlighting() {
         button.removeAttribute("tabIndex");
     });
 
+    // TODO encode the highlighted buttons and store with the layout
+
     document.getElementById("highlight-controls").style.display = "none";
     document.getElementById("viewer-options").style.display = "flex";
 
@@ -886,7 +891,7 @@ getLinkBtn.onclick = function () {
         if (urlParams.title) {
             title = "&title=" + encodeURI(urlParams.title);
         }
-        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + encodeLayout() + title;
+        linkField.value = baseURL + "?layout=" + encodeLayout() + title;
     } else if (opt_layout.value.includes("USER_LAYOUT")) {
         // make sure we're sharing a link using the current url param convention!
         if (!USER_LAYOUTS[opt_layout.value.slice(12)].url.includes("?layout=")) {
@@ -895,7 +900,7 @@ getLinkBtn.onclick = function () {
             linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url;
         }
     } else {
-        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + opt_layout.value;
+        linkField.value = baseURL + "?layout=" + opt_layout.value;
     }
     document.getElementById("share-modal").style.display = "block";
     linkField.focus();
@@ -1109,7 +1114,7 @@ function removeUserLayout() {
 function addUserLayout() {
     let newName = document.getElementById("newLayoutName").value;
     if (newName.trim() && !USER_LAYOUTS[newName]) {
-        let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + encodeLayout() + "&title=" + encodeURI(newName.trim());
+        let url = baseURL + "?layout=" + encodeLayout() + "&title=" + encodeURI(newName.trim());
         USER_LAYOUTS[newName] = { layout: buttons, url };
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         document.getElementById("addLayoutError").style.display = "visible";
@@ -1135,6 +1140,11 @@ function init() {
         keyboardShortcutsBtn.style.display = "block"
         document.querySelector('[for="multiselect"]').innerText = "Select multiple notes [shift]";
     }
+    let port = "";
+    if (window.location.port){
+        port = ":" + window.location.port;
+    }
+    baseURL = window.location.protocol + "//" + window.location.hostname + port + window.location.pathname;
     getUrlParams();
     buildLayoutDropdown();
 }
