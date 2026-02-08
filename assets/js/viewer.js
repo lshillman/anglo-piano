@@ -1200,6 +1200,9 @@ function addUserLayout() {
     if (newName.trim() && !USER_LAYOUTS[newName]) {
         let url = baseURL + "?layout=" + encodeLayout() + "&title=" + encodeURI(newName.trim());
         USER_LAYOUTS[newName] = { layout: buttons, url };
+        if (encodeHighlights()) {
+            USER_LAYOUTS[newName].highlight = encodeHighlights();
+        }
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         document.getElementById("addLayoutError").style.display = "visible";
         closeModal();
