@@ -1,3 +1,6 @@
+// store the base URL of this page for building share URLs
+let baseURL = "";
+
 // store a custom layout, title, highlights, etc passed in via the URL
 let urlParams = {};
 let parsedLayoutFromURL = [];
@@ -39,6 +42,7 @@ const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
 const opt_highlights = document.getElementById("highlights");
+let highlightColor = "red";
 
 
 // modals
@@ -316,21 +320,21 @@ function selectPianoKey() {
 function selectConcertinaButtons() {
     let allbuttons = document.querySelectorAll("#anglo-keyboard button");
     if (selectionMode == "notes" || selection.length == 0) {
-    allbuttons.forEach(button => {
-        if (opt_matchoctave.checked) {
-            if (selection.findIndex(sel => sel.note == button.dataset.note) != -1) {
-                button.classList.add("selected");
+        allbuttons.forEach(button => {
+            if (opt_matchoctave.checked) {
+                if (selection.findIndex(sel => sel.note == button.dataset.note) != -1) {
+                    button.classList.add("selected");
+                } else {
+                    button.classList.remove("selected");
+                }
             } else {
-                button.classList.remove("selected");
+                if (selection.findIndex(sel => sel.note.slice(0, -1) == button.dataset.note.slice(0, -1)) != -1) {
+                    button.classList.add("selected");
+                } else {
+                    button.classList.remove("selected");
+                }
             }
-        } else {
-            if (selection.findIndex(sel => sel.note.slice(0, -1) == button.dataset.note.slice(0, -1)) != -1) {
-                button.classList.add("selected");
-            } else {
-                button.classList.remove("selected");
-            }
-        }
-    });
+        });
     } else if (selectionMode == "buttons") {
         // console.log("ENTERING BUTTON SELECTOR");
         allbuttons.forEach((button, i) => {
@@ -448,15 +452,15 @@ function updateSelection(note, button = "any") {
         } else if (button == "chord") {
             let allbuttons = document.querySelectorAll("#anglo-keyboard button");
             let addCount = 0;
-                allbuttons.forEach((button, i) => {
-                    if (note == button.dataset.note) {
-                        selection.push({ note, "button": i });
-                        addCount++;
-                    }
-                });
-                if (!addCount) { // we still want to select the note even if there are no matching buttons
-                    selection.push({ note, "button": "any" });
+            allbuttons.forEach((button, i) => {
+                if (note == button.dataset.note) {
+                    selection.push({ note, "button": i });
+                    addCount++;
                 }
+            });
+            if (!addCount) { // we still want to select the note even if there are no matching buttons
+                selection.push({ note, "button": "any" });
+            }
         }
     }
     selectPianoKey();
@@ -468,6 +472,13 @@ function updateSelection(note, button = "any") {
     }
 }
 
+function clearSelection() {
+    selection.length = 0
+    selectConcertinaButtons()
+    deselectChordButtons()
+    selectPianoKey()
+    chordBar.style.visibility = "hidden";
+}
 
 function deselectChordButtons() {
     for (let i = 0; i < chordBar.children.length; i++) {
@@ -500,17 +511,17 @@ function playNote(note) {
         oscillator.start(audioCtx.currentTime);
         oscillator.stop(audioCtx.currentTime + 0.5);
     } // else if (opt_sound.checked && note == "~") {
-        // let's NOT play a fun novelty sound!
-        // let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        // let oscillator;
-        // oscillator = audioCtx.createOscillator(); // create Oscillator node
-        // oscillator.type = "square";
-        // oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // value in hertz
-        // oscillator.connect(audioCtx.destination);
-        // oscillator.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.1);
-        // oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.15);
-        // oscillator.start();
-        // oscillator.stop(audioCtx.currentTime + 0.3);
+    // let's NOT play a fun novelty sound!
+    // let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // let oscillator;
+    // oscillator = audioCtx.createOscillator(); // create Oscillator node
+    // oscillator.type = "square";
+    // oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // value in hertz
+    // oscillator.connect(audioCtx.destination);
+    // oscillator.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+    // oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.15);
+    // oscillator.start();
+    // oscillator.stop(audioCtx.currentTime + 0.3);
     // }
 }
 
@@ -682,7 +693,7 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
         document.querySelector("#highlight-option").style.display = "flex";
     } else {
         document.querySelector("#highlight-option").style.display = "none";
@@ -745,13 +756,149 @@ function getUrlParams() {
     }
 }
 
+
+function setHighlightColor(color = highlightColor) {
+    if (color == "pink") {
+        document.querySelector(':root').style.setProperty('--highlightColor', "magenta");
+    } else {
+        document.querySelector(':root').style.setProperty('--highlightColor', color);
+    }
+    highlightColor = color;
+}
+
+document.getElementById("highlight-colors").addEventListener("change", (e) => {
+    console.log(e.target.id);
+    setHighlightColor(e.target.id);
+});
+
+document.getElementById("stop-highlighting").addEventListener("click", () => stopHighlighting());
+document.getElementById("editHighlightsBtn").addEventListener("click", () => startHighlighting());
+
+function toggleButtonHighlight(e) {
+    if (e.target.classList.contains("highlighted")) {
+        e.target.classList.remove("highlighted", "red", "orange", "green", "blue", "pink", "purple");
+    } else {
+        e.target.classList.add("highlighted", highlightColor);
+    }
+}
+
+function startHighlighting() {
+    clearSelection();
+    document.getElementById("red").checked = true;
+    setHighlightColor("red");
+
+    angloKeyboard.querySelectorAll("button").forEach(button => {
+        button.disabled = true;
+    });
+
+    angloKeyboard.querySelectorAll(".button > div").forEach(div => {
+        div.style.pointerEvents = "none";
+    });
+
+    angloKeyboard.querySelectorAll(".button").forEach(button => {
+        button.classList.add("highlightable");
+        button.tabIndex = 0;
+    });
+
+    opt_highlights.checked = true;
+    document.getElementById("highlight-controls").style.display = "flex";
+    document.getElementById("viewer-options").style.display = "none";
+
+    angloKeyboard.addEventListener("click", toggleButtonHighlight);
+}
+
+function stopHighlighting() {
+    angloKeyboard.querySelectorAll("button").forEach(button => {
+        button.disabled = false;
+    });
+
+    angloKeyboard.querySelectorAll(".button > div").forEach(div => {
+        div.style.pointerEvents = "auto";
+    });
+
+    angloKeyboard.querySelectorAll(".button").forEach(button => {
+        button.classList.remove("highlightable");
+        button.removeAttribute("tabIndex");
+    });
+
+    if (opt_layout.value.includes("USER_LAYOUT")) {
+        USER_LAYOUTS[opt_layout.value.slice(12)].highlight = encodeHighlights();
+        localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+    }
+
+    document.getElementById("highlight-controls").style.display = "none";
+    document.querySelector("#highlight-option").style.display = "flex";
+    document.getElementById("viewer-options").style.display = "flex";
+
+    angloKeyboard.removeEventListener("click", toggleButtonHighlight);
+}
+
+function encodeHighlights() {
+    let param = "";
+    let highlights = {red: [], orange: [], green: [], blue: [], pink: [], purple: []};
+    let monochrome = [];
+    let multicolor = false;
+    document.querySelectorAll("#anglo-keyboard .button").forEach(function (button, i) {
+        if (button.classList.contains("highlighted")) {
+            monochrome.push(i);
+            if (button.classList.contains("orange")) {
+                highlights.orange.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("green")) {
+                highlights.green.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("blue")) {
+                highlights.blue.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("pink")) {
+                highlights.pink.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("purple")) {
+                highlights.purple.push(i);
+                multicolor = true;
+            } else {
+                highlights.red.push(i);
+            }
+        }
+    });
+    if (multicolor) {
+        if (highlights.red.length) {
+            param += "red-" + highlights.red.join("-");
+        }
+        if (highlights.orange.length) {
+            if (param) {param += "-"}
+            param += "orange-" + highlights.orange.join("-");
+        }
+        if (highlights.green.length) {
+            if (param) {param += "-"}
+            param += "green-" + highlights.green.join("-");
+        }
+        if (highlights.blue.length) {
+            if (param) {param += "-"}
+            param += "blue-" + highlights.blue.join("-");
+        }
+        if (highlights.pink.length) {
+            if (param) {param += "-"}
+            param += "pink-" + highlights.pink.join("-");
+        }
+        if (highlights.purple.length) {
+            if (param) {param += "-"}
+            param += "purple-" + highlights.purple.join("-");
+        }
+    } else {
+        param = monochrome.join("-");
+    }
+    return param;
+}
+
 function applyHighlights() {
-    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
+    let highlights = parseHighlights();
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
         if (opt_highlights.checked) {
-            let colors = Object.keys(urlParams.highlight);
+            let colors = Object.keys(highlights);
             for (let i in colors) {
-                if (urlParams.highlight[colors[i]]) {
-                    urlParams.highlight[colors[i]].forEach(button => {
+                if (highlights[colors[i]]) {
+                    highlights[colors[i]].forEach(button => {
                         angloKeyboard.querySelectorAll(".button")[button] && angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted", colors[i]);
                     });
                 }
@@ -765,17 +912,25 @@ function applyHighlights() {
 }
 
 function parseHighlights() {
-    let highlights = urlParams.highlight.split("-");
-    let highlighted = {"red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": []};
-    let currentcolor = "red";
-    for (let i = 0; i < highlights.length; i++) {
-        if (highlights[i] && "red orange green blue pink purple".includes(highlights[i])) {
-            currentcolor = highlights[i];
-        } else {
-            highlights[i] && highlighted[currentcolor].push(highlights[i]);
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
+        let highlights;
+        if (opt_layout.value == "customFromURL" && urlParams.highlight) {
+            highlights = urlParams.highlight.split("-");
+        } else if (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight) {
+            highlights = USER_LAYOUTS[opt_layout.value.slice(12)].highlight.split("-");
         }
+        let highlighted = { "red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": [] };
+        let currentcolor = "red";
+        for (let i = 0; i < highlights.length; i++) {
+            if (highlights[i] && "red orange green blue pink purple".includes(highlights[i])) {
+                currentcolor = highlights[i];
+            } else {
+                highlights[i] && highlighted[currentcolor].push(highlights[i]);
+            }
+        }
+        return highlighted;
+        // urlParams.highlight = highlighted;
     }
-    urlParams.highlight = highlighted;
 }
 
 
@@ -801,14 +956,18 @@ opt_layout.addEventListener("change", () => {
     selectLayout();
 });
 
-getLinkBtn.onclick = function () {
+getLinkBtn.addEventListener("click", () => {
+    showShareModal()
+});
+
+function showShareModal () {
     let linkField = document.getElementById("shareLink");
     if (opt_layout.value == "customFromURL") {
         let title = ""
         if (urlParams.title) {
             title = "&title=" + encodeURI(urlParams.title);
         }
-        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + encodeLayout() + title;
+        linkField.value = baseURL + "?layout=" + encodeLayout() + title;
     } else if (opt_layout.value.includes("USER_LAYOUT")) {
         // make sure we're sharing a link using the current url param convention!
         if (!USER_LAYOUTS[opt_layout.value.slice(12)].url.includes("?layout=")) {
@@ -817,7 +976,15 @@ getLinkBtn.onclick = function () {
             linkField.value = USER_LAYOUTS[opt_layout.value.slice(12)].url;
         }
     } else {
-        linkField.value = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + opt_layout.value;
+        linkField.value = baseURL + "?layout=" + opt_layout.value;
+    }
+    if (document.querySelectorAll("#anglo-keyboard .highlighted").length) {
+        document.getElementById("share-highlights-preference").style.display = "block";
+    } else {
+        document.getElementById("share-highlights-preference").style.display = "none";
+    }
+    if ((document.getElementById("share-highlights-preference").style.display == "block") && (document.getElementById("share-highlights").checked)) {
+        linkField.value += "&highlight=" + encodeHighlights();
     }
     document.getElementById("share-modal").style.display = "block";
     linkField.focus();
@@ -859,7 +1026,7 @@ opt_absentNotes.addEventListener("change", () => {
 });
 
 opt_highlights.addEventListener("change", () => {
-    applyHighlights();
+    applyHighlights(parseHighlights());
 });
 
 document.addEventListener('keydown', function (e) {
@@ -1031,7 +1198,7 @@ function removeUserLayout() {
 function addUserLayout() {
     let newName = document.getElementById("newLayoutName").value;
     if (newName.trim() && !USER_LAYOUTS[newName]) {
-        let url = window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + encodeLayout() + "&title=" + encodeURI(newName.trim());
+        let url = baseURL + "?layout=" + encodeLayout() + "&title=" + encodeURI(newName.trim());
         USER_LAYOUTS[newName] = { layout: buttons, url };
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         document.getElementById("addLayoutError").style.display = "visible";
@@ -1057,6 +1224,11 @@ function init() {
         keyboardShortcutsBtn.style.display = "block"
         document.querySelector('[for="multiselect"]').innerText = "Select multiple notes [shift]";
     }
+    let port = "";
+    if (window.location.port){
+        port = ":" + window.location.port;
+    }
+    baseURL = window.location.protocol + "//" + window.location.hostname + port + window.location.pathname;
     getUrlParams();
     buildLayoutDropdown();
 }

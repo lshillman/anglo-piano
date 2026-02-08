@@ -123,7 +123,7 @@ function encodeLayoutFromEditor () {
             console.log(encodedTitle);
         }
         cleanUpEditor();
-        USER_LAYOUTS[customTitleFromEditor] = {layout: parseLayout("editor"), url: window.location.href.slice(0, window.location.href.lastIndexOf("/")) + "/?layout=" + encodedLayout + encodedTitle}
+        USER_LAYOUTS[customTitleFromEditor] = {layout: parseLayout("editor"), url: baseURL + "?layout=" + encodedLayout + encodedTitle}
         localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
         buildLayoutDropdown();
         opt_layout.value = "USER_LAYOUT_" + customTitleFromEditor;
