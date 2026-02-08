@@ -315,6 +315,10 @@
             <p>You can share or bookmark this link:</p>
             <input type="text" id="shareLink" readonly onclick="selectShareLink()">
             <span class="success-text" id="copySuccessMsg">Link copied to clipboard.</span>
+            <div id="share-highlights-preference">
+                        <input type="checkbox" id="share-highlights" name="share-highlights" checked="checked" onchange="showShareModal()">
+                        <label for="share-highlights"> include highlights</label>
+                    </div>
             <div class="modal-actions">
                 <button onclick="closeModal()">Close</button>
                 <button id="copyLinkBtn" class="primary" onclick="copyToClipboard()">Copy link</button>

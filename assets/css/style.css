@@ -1067,6 +1067,10 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    color: #fff;
 }
 
+#share-highlights-preference {
+   display: none;
+}
+
 /* close button */
 .close {
    color: #aaaaaa;

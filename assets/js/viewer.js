@@ -883,7 +883,7 @@ function encodeHighlights() {
     } else {
         param = monochrome.join("-");
     }
-    console.log(param);
+    return param;
 }
 
 function applyHighlights() {
@@ -942,7 +942,11 @@ opt_layout.addEventListener("change", () => {
     selectLayout();
 });
 
-getLinkBtn.onclick = function () {
+getLinkBtn.addEventListener("click", () => {
+    showShareModal()
+});
+
+function showShareModal () {
     let linkField = document.getElementById("shareLink");
     if (opt_layout.value == "customFromURL") {
         let title = ""
@@ -959,6 +963,14 @@ getLinkBtn.onclick = function () {
         }
     } else {
         linkField.value = baseURL + "?layout=" + opt_layout.value;
+    }
+    if (document.querySelectorAll("#anglo-keyboard .highlighted").length) {
+        document.getElementById("share-highlights-preference").style.display = "block";
+    } else {
+        document.getElementById("share-highlights-preference").style.display = "none";
+    }
+    if ((document.getElementById("share-highlights-preference").style.display == "block") && (document.getElementById("share-highlights").checked)) {
+        linkField.value += "&highlight=" + encodeHighlights();
     }
     document.getElementById("share-modal").style.display = "block";
     linkField.focus();
