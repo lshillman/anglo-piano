@@ -693,7 +693,7 @@ function bindAngloButtons() {
 
 
 function selectLayout() {
-    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
         document.querySelector("#highlight-option").style.display = "flex";
     } else {
         document.querySelector("#highlight-option").style.display = "none";
@@ -800,6 +800,7 @@ function startHighlighting() {
         button.tabIndex = 0;
     });
 
+    opt_highlights.checked = true;
     document.getElementById("highlight-controls").style.display = "flex";
     document.getElementById("viewer-options").style.display = "none";
 
@@ -820,9 +821,13 @@ function stopHighlighting() {
         button.removeAttribute("tabIndex");
     });
 
-    // TODO encode the highlighted buttons and store with the layout
+    if (opt_layout.value.includes("USER_LAYOUT")) {
+        USER_LAYOUTS[opt_layout.value.slice(12)].highlight = encodeHighlights();
+        localStorage.setItem("USER_LAYOUTS", JSON.stringify(USER_LAYOUTS));
+    }
 
     document.getElementById("highlight-controls").style.display = "none";
+    document.querySelector("#highlight-option").style.display = "flex";
     document.getElementById("viewer-options").style.display = "flex";
 
     angloKeyboard.removeEventListener("click", toggleButtonHighlight);
@@ -887,12 +892,13 @@ function encodeHighlights() {
 }
 
 function applyHighlights() {
-    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
+    let highlights = parseHighlights();
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
         if (opt_highlights.checked) {
-            let colors = Object.keys(urlParams.highlight);
+            let colors = Object.keys(highlights);
             for (let i in colors) {
-                if (urlParams.highlight[colors[i]]) {
-                    urlParams.highlight[colors[i]].forEach(button => {
+                if (highlights[colors[i]]) {
+                    highlights[colors[i]].forEach(button => {
                         angloKeyboard.querySelectorAll(".button")[button] && angloKeyboard.querySelectorAll(".button")[button].classList.add("highlighted", colors[i]);
                     });
                 }
@@ -906,17 +912,25 @@ function applyHighlights() {
 }
 
 function parseHighlights() {
-    let highlights = urlParams.highlight.split("-");
-    let highlighted = { "red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": [] };
-    let currentcolor = "red";
-    for (let i = 0; i < highlights.length; i++) {
-        if (highlights[i] && "red orange green blue pink purple".includes(highlights[i])) {
-            currentcolor = highlights[i];
-        } else {
-            highlights[i] && highlighted[currentcolor].push(highlights[i]);
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
+        let highlights;
+        if (opt_layout.value == "customFromURL" && urlParams.highlight) {
+            highlights = urlParams.highlight.split("-");
+        } else if (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight) {
+            highlights = USER_LAYOUTS[opt_layout.value.slice(12)].highlight.split("-");
         }
+        let highlighted = { "red": [], "orange": [], "green": [], "blue": [], "pink": [], "purple": [] };
+        let currentcolor = "red";
+        for (let i = 0; i < highlights.length; i++) {
+            if (highlights[i] && "red orange green blue pink purple".includes(highlights[i])) {
+                currentcolor = highlights[i];
+            } else {
+                highlights[i] && highlighted[currentcolor].push(highlights[i]);
+            }
+        }
+        return highlighted;
+        // urlParams.highlight = highlighted;
     }
-    urlParams.highlight = highlighted;
 }
 
 
@@ -1012,7 +1026,7 @@ opt_absentNotes.addEventListener("change", () => {
 });
 
 opt_highlights.addEventListener("change", () => {
-    applyHighlights();
+    applyHighlights(parseHighlights());
 });
 
 document.addEventListener('keydown', function (e) {
