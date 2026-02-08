@@ -828,6 +828,64 @@ function stopHighlighting() {
     angloKeyboard.removeEventListener("click", toggleButtonHighlight);
 }
 
+function encodeHighlights() {
+    let param = "";
+    let highlights = {red: [], orange: [], green: [], blue: [], pink: [], purple: []};
+    let monochrome = [];
+    let multicolor = false;
+    document.querySelectorAll("#anglo-keyboard .button").forEach(function (button, i) {
+        if (button.classList.contains("highlighted")) {
+            monochrome.push(i);
+            if (button.classList.contains("orange")) {
+                highlights.orange.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("green")) {
+                highlights.green.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("blue")) {
+                highlights.blue.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("pink")) {
+                highlights.pink.push(i);
+                multicolor = true;
+            } else if (button.classList.contains("purple")) {
+                highlights.purple.push(i);
+                multicolor = true;
+            } else {
+                highlights.red.push(i);
+            }
+        }
+    });
+    if (multicolor) {
+        if (highlights.red.length) {
+            param += "red-" + highlights.red.join("-");
+        }
+        if (highlights.orange.length) {
+            if (param) {param += "-"}
+            param += "orange-" + highlights.orange.join("-");
+        }
+        if (highlights.green.length) {
+            if (param) {param += "-"}
+            param += "green-" + highlights.green.join("-");
+        }
+        if (highlights.blue.length) {
+            if (param) {param += "-"}
+            param += "blue-" + highlights.blue.join("-");
+        }
+        if (highlights.pink.length) {
+            if (param) {param += "-"}
+            param += "pink-" + highlights.pink.join("-");
+        }
+        if (highlights.purple.length) {
+            if (param) {param += "-"}
+            param += "purple-" + highlights.purple.join("-");
+        }
+    } else {
+        param = monochrome.join("-");
+    }
+    console.log(param);
+}
+
 function applyHighlights() {
     if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight)) {
         if (opt_highlights.checked) {
