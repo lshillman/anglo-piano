@@ -912,9 +912,9 @@ function applyHighlights() {
 }
 
 function parseHighlights() {
-    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
+    if ((opt_layout.value == "customFromURL" && urlParams.highlight) || (opt_layout.value == urlParams.layout && urlParams.highlight) || (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight)) {
         let highlights;
-        if (opt_layout.value == "customFromURL" && urlParams.highlight) {
+        if ((opt_layout.value == "customFromURL" || opt_layout.value == urlParams.layout) && urlParams.highlight) {
             highlights = urlParams.highlight.split("-");
         } else if (USER_LAYOUTS[opt_layout.value.slice(12)] && USER_LAYOUTS[opt_layout.value.slice(12)].highlight) {
             highlights = USER_LAYOUTS[opt_layout.value.slice(12)].highlight.split("-");
