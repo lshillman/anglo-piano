@@ -424,14 +424,22 @@ button#addToLayoutsBtn:active {
    border-right-color: #fff;
 }
 
-.top button.selected,
-.top button.selected:hover {
+.pushpull .top button.selected,
+.pushpull .top button.selected:hover,
+.pullpush .bottom button.selected,
+.pullpush .bottom button.selected:hover,
+.push-only button.selected,
+.push-only button.selected:hover {
    background-color: #0000FF;
    color: white;
 }
 
-.bottom button.selected,
-.bottom button.selected:hover {
+.pushpull .bottom button.selected,
+.pushpull .bottom button.selected:hover,
+.pullpush .top button.selected,
+.pullpush .top button.selected:hover,
+.pull-only button.selected,
+.pull-only button.selected:hover {
    background-color: #A30014;
    color: white;
 }
