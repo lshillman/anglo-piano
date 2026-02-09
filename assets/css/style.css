@@ -424,14 +424,22 @@ button#addToLayoutsBtn:active {
    border-right-color: #fff;
 }
 
-.top button.selected,
-.top button.selected:hover {
+.pushpull .top button.selected,
+.pushpull .top button.selected:hover,
+.pullpush .bottom button.selected,
+.pullpush .bottom button.selected:hover,
+.push-only button.selected,
+.push-only button.selected:hover {
    background-color: #0000FF;
    color: white;
 }
 
-.bottom button.selected,
-.bottom button.selected:hover {
+.pushpull .bottom button.selected,
+.pushpull .bottom button.selected:hover,
+.pullpush .top button.selected,
+.pullpush .top button.selected:hover,
+.pull-only button.selected,
+.pull-only button.selected:hover {
    background-color: #A30014;
    color: white;
 }
@@ -828,11 +836,11 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    border-radius: 5px 5px 0 0;
 }
 
-.editor-button .top input:focus {
+.editor-button input[placeholder=push]:focus {
    border: 2px solid #0000FF;
 }
 
-.editor-button .top input:hover {
+.editor-button input[placeholder=push]:hover {
    background-color: #E9E9FF;
 }
 
@@ -840,11 +848,11 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    border-radius: 0 0 5px 5px;
 }
 
-.editor-button .bottom input:focus {
+.editor-button input[placeholder=pull]:focus {
    border: 2px solid #A30014;
 }
 
-.editor-button .bottom input:hover {
+.editor-button input[placeholder=pull]:hover {
    background-color: #FFE7EA;
 }
 
