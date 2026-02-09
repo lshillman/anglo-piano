@@ -98,9 +98,9 @@ function renderPianoKeyboard(min, max, layoutnotes, pushnotes, pullnotes) {
         if (opt_absentNotes.checked) {
             if ((opt_bellows == "pushpull" || opt_bellows == "pullpush") && !layoutnotes.includes(note)) {
                 noteclasses += " absent";
-            } else if (opt_bellows == "push" && !pushnotes.includes(note)) {
+            } else if (opt_bellows == "push-only" && !pushnotes.includes(note)) {
                 noteclasses += " absent";
-            } else if (opt_bellows == "pull" && !pullnotes.includes(note)) {
+            } else if (opt_bellows == "pull-only" && !pullnotes.includes(note)) {
                 noteclasses += " absent";
             }
         }
@@ -1252,6 +1252,7 @@ function init() {
     if (window.location.port){
         port = ":" + window.location.port;
     }
+    opt_pushpull.checked = true;
     baseURL = window.location.protocol + "//" + window.location.hostname + port + window.location.pathname;
     getUrlParams();
     buildLayoutDropdown();
