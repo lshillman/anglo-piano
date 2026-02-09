@@ -121,7 +121,7 @@ function loadFrame (index) {
     let frames = compositions[comp_dropdown.value].frames;
     if (frames[index].bellows == "pushpull") {
         opt_pushpull.checked = true;
-        resetView();
+        togglePushPullView();
     } else if (frames[index].bellows == "push-only") {
         opt_push.checked = true;
         togglePushView();

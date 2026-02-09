@@ -30,9 +30,10 @@ const min7 = document.getElementById("minor7");
 // user-defined display options
 const opt_layout = document.getElementById("layout");
 const opt_pushpull = document.getElementById("pushpull");
+const opt_pullpush = document.getElementById("pullpush");
 const opt_push = document.getElementById("push");
 const opt_pull = document.getElementById("pull");
-let opt_bellows = "pushpull"; // stores the value of the selected bellows option from pushpull, push, or pull
+let opt_bellows = "pushpull"; // stores the value of the selected bellows option from pushpull, pullpush, push, or pull
 const opt_sound = document.getElementById("sound");
 const opt_matchoctave = document.getElementById("matchoctave");
 const multiselect = document.getElementById("multiselect");
@@ -95,11 +96,11 @@ function renderPianoKeyboard(min, max, layoutnotes, pushnotes, pullnotes) {
         }
         noteclasses += ` o${note.substr(-1)}`
         if (opt_absentNotes.checked) {
-            if (opt_pushpull.checked && !layoutnotes.includes(note)) {
+            if ((opt_bellows == "pushpull" || opt_bellows == "pullpush") && !layoutnotes.includes(note)) {
                 noteclasses += " absent";
-            } else if (opt_push.checked && !pushnotes.includes(note)) {
+            } else if (opt_bellows == "push" && !pushnotes.includes(note)) {
                 noteclasses += " absent";
-            } else if (opt_pull.checked && !pullnotes.includes(note)) {
+            } else if (opt_bellows == "pull" && !pullnotes.includes(note)) {
                 noteclasses += " absent";
             }
         }
@@ -142,7 +143,17 @@ function renderAngloKeyboard() {
         if (button.newRow) {
             angloKeyboard.innerHTML += `<br>`;
         }
-        angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + noteNames[button.push].substr(-1)}"><button data-note="${noteNames[button.push]}">${pushLabel}</button></div><div class="bottom ${"o" + noteNames[button.pull].substr(-1)}"><button data-note="${noteNames[button.pull]}">${pullLabel}</button></div></div>`;
+        let topNote = noteNames[button.push];
+        let bottomNote = noteNames[button.pull];
+        let topLabel = pushLabel;
+        let bottomLabel = pullLabel;
+        if (opt_bellows == "pullpush") {
+            topNote = noteNames[button.pull];
+            bottomNote = noteNames[button.push];
+            topLabel = pullLabel;
+            bottomLabel = pushLabel;
+        }
+        angloKeyboard.innerHTML += `<div class="button ${opt_bellows}" style="margin-left:${button.x}px"><div class="top ${"o" + topNote.substr(-1)}"><button data-note="${topNote}">${topLabel}</button></div><div class="bottom ${"o" + bottomNote.substr(-1)}"><button data-note="${bottomNote}">${bottomLabel}</button></div></div>`;
     }
     bindAngloButtons();
 
@@ -358,30 +369,37 @@ function colorOctaves() {
 }
 
 function togglePushView() {
+    opt_bellows = "push-only";
     renderAngloKeyboard();
     for (button of angloKeyboard.children) {
-        button.classList.remove("pull-only");
+        button.classList.remove("pull-only", "pushpull", "pullpush");
         button.classList.add("push-only");
     }
-    opt_bellows = "push-only";
 }
 
 function togglePullView() {
+    opt_bellows = "pull-only";
     renderAngloKeyboard();
     for (button of angloKeyboard.children) {
-        button.classList.remove("push-only");
+        button.classList.remove("push-only", "pushpull", "pullpush");
         button.classList.add("pull-only");
     }
-    opt_bellows = "pull-only";
 }
 
-function resetView() {
+function togglePushPullView() {
+    opt_bellows = "pushpull";
     renderAngloKeyboard();
     for (button of angloKeyboard.children) {
-        button.classList.remove("push-only");
-        button.classList.remove("pull-only");
+        button.classList.remove("push-only", "pull-only", "pullpush");
     }
-    opt_bellows = "pushpull";
+}
+
+function togglePullPushView() {
+    opt_bellows = "pullpush";
+    renderAngloKeyboard();
+    for (button of angloKeyboard.children) {
+        button.classList.remove("push-only", "pull-only", "pushpull");
+    }
 }
 
 function updateSelection(note, button = "any") {
@@ -992,7 +1010,10 @@ function showShareModal () {
 }
 
 opt_pushpull.addEventListener("change", () => {
-    resetView();
+    togglePushPullView();
+});
+opt_pullpush.addEventListener("change", () => {
+    togglePullPushView();
 });
 opt_push.addEventListener("change", () => {
     togglePushView();
