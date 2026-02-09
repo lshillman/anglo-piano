@@ -51,12 +51,20 @@ function renderEditor() {
         notePicker.style.display = "none";
     }
     for (button of buttons) {
-        let pushLabel = button.push;
-        let pullLabel = button.pull;
+        let topValue = button.push;
+        let bottomValue = button.pull;
+        let topPlaceholder = "push";
+        let bottomPlaceholder = "pull";
+        if (opt_bellows == "pullpush") {
+            topValue = button.pull;
+            bottomValue = button.push;
+            topPlaceholder = "pull";
+            bottomPlaceholder = "push";
+        }
         if (button.newRow) {
             editorKeyboard.innerHTML += `<br>`;
         }
-        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" placeholder="push"${readonly} value="${pushLabel}"></div><div class="bottom"><input type=text maxlength="3"  placeholder="pull"${readonly} value="${pullLabel}"></div></div>`;
+        editorKeyboard.innerHTML += `<div class="editor-button" style="margin-left:${button.x}px"><div class="top"><input type=text maxlength="3" placeholder=${topPlaceholder}${readonly} value="${topValue}"></div><div class="bottom"><input type=text maxlength="3"  placeholder=${bottomPlaceholder}${readonly} value="${bottomValue}"></div></div>`;
     }
     bindInputs("all");
     currentField = document.querySelectorAll("#editor-anglo-keyboard input")[0];
@@ -104,10 +112,15 @@ function encodeLayoutFromEditor () {
                 if (element.style.marginLeft != "0px") {
                     encodedLayout += `_${element.style.marginLeft.replace("px", "")}_`
                 }
-                for (div of element.children) {
-                    for (input of div.children) {
-                        encodedLayout += encoder[input.value];
+                if (opt_bellows != "pullpush") {
+                    for (div of element.children) {
+                        for (input of div.children) {
+                            encodedLayout += encoder[input.value];
+                        }
                     }
+                } else {
+                    encodedLayout += encoder[element.children[1].children[0].value];
+                    encodedLayout += encoder[element.children[0].children[0].value];
                 }
             } else if (element != editorKeyboard.lastChild){
                 encodedLayout += ".";
