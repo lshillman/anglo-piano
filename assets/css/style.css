@@ -836,11 +836,11 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    border-radius: 5px 5px 0 0;
 }
 
-.editor-button .top input:focus {
+.editor-button input[placeholder=push]:focus {
    border: 2px solid #0000FF;
 }
 
-.editor-button .top input:hover {
+.editor-button input[placeholder=push]:hover {
    background-color: #E9E9FF;
 }
 
@@ -848,11 +848,11 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    border-radius: 0 0 5px 5px;
 }
 
-.editor-button .bottom input:focus {
+.editor-button input[placeholder=pull]:focus {
    border: 2px solid #A30014;
 }
 
-.editor-button .bottom input:hover {
+.editor-button input[placeholder=pull]:hover {
    background-color: #FFE7EA;
 }
 
