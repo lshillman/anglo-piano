@@ -43,6 +43,7 @@ const opt_pianoLabels = document.getElementById("piano-labels");
 const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
 const opt_highlights = document.getElementById("highlights");
+const editHighlightsBtn = document.getElementById("editHighlightsBtn");
 let highlightColor = "red";
 
 
@@ -720,16 +721,19 @@ function selectLayout() {
         buttons = parsedLayoutFromURL;
         addToLayoutsBtn.style.display = "block";
         removeFromLayoutsBtn.style.display = "none";
+        editHighlightsBtn.style.display = "none";
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
     } else if (opt_layout.value.includes("USER_LAYOUT_")) {
         buttons = USER_LAYOUTS[opt_layout.value.slice(12)].layout;
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "block";
+        editHighlightsBtn.style.display = "block";
     } else if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "none";
+        editHighlightsBtn.style.display = "none";
     }
     renderAngloKeyboard();
     opt_layout.blur();

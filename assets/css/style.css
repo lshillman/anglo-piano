@@ -542,13 +542,15 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
  }
 
 .highlightable:not(.highlighted):hover {
-   outline: 2px dotted var(--highlightColor);
+   outline: 2px solid var(--highlightColor);
    outline-offset: -3px;
+   border-radius: 100%;
 }
 
 .button.highlighted {
-   outline: 2px solid red;
-   outline-offset: -3px;
+   outline: 4px solid red;
+   outline-offset: -5px;
+   border-radius: 100%;
 }
 
 .button.highlighted.orange {
