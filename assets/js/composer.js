@@ -170,7 +170,12 @@ function populateTimeline() {
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
             for (let i = 0; i < frames.length; i++) {
-                timeline.innerHTML += `<button class="composer-frame" data-position="${i}">${i + 1}</button>`
+                let newFrame = `<div class="composer-frame" data-position="${i}"><button>${i + 1}</button>`;
+                if (frames[i].marker) {
+                    newFrame += `<span class="marker">${frames[i].marker}</span>`;
+                }
+                newFrame += `</div>`;
+                timeline.innerHTML += newFrame;
             }
         }
         opt_layout.value = compositions[comp_dropdown.value].layout;
@@ -269,9 +274,10 @@ frame_delete.addEventListener("click", () => deleteFrame());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
-    if(e.target && e.target.className.includes("composer-frame")) {
+    console.log(e.target.nodeName);
+    if(e.target && (e.target.nodeName == "BUTTON" || e.target.nodeName == "SPAN")) {
         if (!e.shiftKey) {
-            currentFrame = parseInt(e.target.dataset.position);
+            currentFrame = parseInt(e.target.parentNode.dataset.position);
             loadFrame(currentFrame);
             // console.log(currentFrame);
             selectFrames();

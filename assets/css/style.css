@@ -695,6 +695,10 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    /* flex-basis: 70%; */
 }
 
+#timeline:has(.composer-frame):has(.marker) {
+	padding-top: 2rem;
+}
+
 #playback-controls {
    /* flex-basis: 30%; */
    white-space: nowrap;
@@ -707,6 +711,11 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 
 .composer-frame {
    display: inline-block;
+   position: relative;
+}
+
+.composer-frame button{
+   display: inline-block;
    width: 3rem;
    height: 100%;
    text-align: center;
@@ -716,13 +725,29 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    margin-right: 1rem;
 }
 
-.composer-frame.selected, .composer-frame.selected:hover {
+.composer-frame.selected button, .composer-frame.selected button:hover {
    background-color: #8400FF;
    color: #fff;
 }
 
-.composer-frame:hover {
+.composer-frame button:hover {
    outline: 3px solid #8400FF;
+}
+
+.marker {
+  display: inline-block;
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  outline: 2px solid white;
+  background-color: blue;
+  color: #fff;
+  padding: 0 .5rem;
+  border-radius: 3px;
+}
+
+.composer-frame.selected .marker {
+   background-color: #8400FF;
 }
 
 
