@@ -76,8 +76,9 @@ function editMarker(action) {
     }
     closeModal();
     writeCompositions();
-    populateTimeline();
+    populateTimeline(); // TODO find a lighter-weight way of doing this. populateTimeline() also selects a layout -_-
     selectFrames();
+    updateMarkerBtn();
 }
 
 function createComposition() {
@@ -106,7 +107,7 @@ let currentFrame = -1;
 function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
     // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
-    frames.splice(currentFrame + 1, 0, {bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
     writeCompositions();
     timeline.innerHTML += `<button class="composer-frame" data-position="${frames.length - 1}">${frames.length}</button>`
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
@@ -161,16 +162,16 @@ function deleteFrame() {
 
 function loadFrame (index) {
     let frames = compositions[comp_dropdown.value].frames;
-    if (frames[index].bellows == "pushpull") {
-        opt_pushpull.checked = true;
-        togglePushPullView();
-    } else if (frames[index].bellows == "push-only") {
-        opt_push.checked = true;
-        togglePushView();
-    } else if (frames[index].bellows == "pull-only") {
-        opt_pull.checked = true;
-        togglePullView();
-    }
+    // if (frames[index].bellows == "pushpull") {
+    //     opt_pushpull.checked = true;
+    //     togglePushPullView();
+    // } else if (frames[index].bellows == "push-only") {
+    //     opt_push.checked = true;
+    //     togglePushView();
+    // } else if (frames[index].bellows == "pull-only") {
+    //     opt_pull.checked = true;
+    //     togglePullView();
+    // }
     selection.length = 0;
     if (opt_layout.value == compositions[comp_dropdown.value].layout) {
         selectionMode = frames[index].mode;
