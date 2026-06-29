@@ -155,6 +155,7 @@
                     <div>
                         <button id="frame-save">Save frame</button>
                         <button id="frame-update">Update frame</button>
+                        <button id="add-marker">Add marker</button>
                         <button id="frame-delete" class="light-destructive">Delete frame</button>
                     </div>
                     <div>
@@ -387,6 +388,22 @@
             <div class="modal-actions">
                 <button onclick="closeModal()">Cancel</button>
                 <button id="exportCompBtn" class="primary">Export</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="marker-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add marker</h2>
+            <input type="text" id="markerName" placeholder="e.g., 'Chorus'">
+            <span class="error-text" id="addMarkerError">Please enter some text!</span>
+            <div class="modal-actions">
+                <button id="deleteMarkerBtn" class="light-destructive" onclick="editMarker('delete')">Delete marker</button>
+                <div>
+                    <button id="cancelMarkerBtn" onclick="closeModal()">Cancel</button>
+                    <button id="addMarkerBtn" class="primary" onclick="editMarker()">Add marker</button>
+                </div>
             </div>
         </div>
     </div>

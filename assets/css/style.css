@@ -732,6 +732,7 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 
 .composer-frame button:hover {
    outline: 3px solid #8400FF;
+   outline-offset: -3px;
 }
 
 .marker {
@@ -739,15 +740,17 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
   position: absolute;
   top: -1.5rem;
   left: 0;
-  outline: 2px solid white;
-  background-color: blue;
-  color: #fff;
-  padding: 0 .5rem;
+  border: 1px solid #8400FF;
+  background-color: #f5eaff;
+  color: #5800aa;
+  padding: 2px .5rem 0 .5rem;
   border-radius: 3px;
 }
 
 .composer-frame.selected .marker {
    background-color: #8400FF;
+   color: #fff;
+   z-index: 10;
 }
 
 
@@ -1060,6 +1063,10 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    justify-content: right;
    gap: 0.5rem;
    padding-top: .5rem;
+}
+
+.modal-actions:has(div) {
+   justify-content: space-between;
 }
 
 .modal-actions .destructive {

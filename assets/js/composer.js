@@ -5,6 +5,7 @@ const comp_createBtn = document.getElementById("createCompBtn"); // inside the c
 const comp_delete = document.getElementById("comp-delete");
 const frame_save = document.getElementById("frame-save");
 const frame_update = document.getElementById("frame-update");
+const add_marker = document.getElementById("add-marker");
 const frame_delete = document.getElementById("frame-delete");
 const frame_next = document.getElementById("frame-next");
 const frame_prev = document.getElementById("frame-prev");
@@ -36,6 +37,47 @@ function writeCompositions() {
 
 function promptForTitle() {
     document.getElementById("new-composition-modal").style.display = "block";
+}
+
+function showMarkerModal() {
+    let markerName = document.getElementById("markerName");
+    document.getElementById("marker-modal").style.display = "block";
+    if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
+        markerName.value = compositions[comp_dropdown.value].frames[currentFrame].marker;
+        document.getElementById("addMarkerBtn").innerText = "Update marker";
+        document.querySelector("#marker-modal h2").innerText = "Edit marker";
+        document.getElementById("deleteMarkerBtn").style.visibility = "visible";
+    } else {
+        markerName.value = "";
+        document.getElementById("addMarkerBtn").innerText = "Add marker";
+        document.querySelector("#marker-modal h2").innerText = "Add marker";
+        document.getElementById("deleteMarkerBtn").style.visibility = "hidden";
+    }
+    markerName.focus();
+    markerName.select();
+}
+
+function updateMarkerBtn() {
+    if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
+        add_marker.innerText = "Edit marker";
+    } else {
+        add_marker.innerText = "Add marker";
+    }
+}
+
+function editMarker(action) {
+    let markerText = document.getElementById("markerName").value;
+    if (action == "delete") {
+        delete compositions[comp_dropdown.value].frames[currentFrame].marker;
+    } else if (!markerText) {
+        document.getElementById("addMarkerError").style.visibility = "visible";
+    } else {
+        compositions[comp_dropdown.value].frames[currentFrame].marker = markerText;
+    }
+    closeModal();
+    writeCompositions();
+    populateTimeline();
+    selectFrames();
 }
 
 function createComposition() {
@@ -138,6 +180,7 @@ function loadFrame (index) {
     selectConcertinaButtons();
     selectPianoKey();
     selectFrames();
+    updateMarkerBtn();
     playSelection();
 }
 
@@ -270,6 +313,7 @@ comp_new.addEventListener("click", () => promptForTitle());
 comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
 frame_update.addEventListener("click", () => updateFrame());
+add_marker.addEventListener("click", () => showMarkerModal());
 frame_delete.addEventListener("click", () => deleteFrame());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
