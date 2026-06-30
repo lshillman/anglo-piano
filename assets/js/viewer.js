@@ -1055,42 +1055,43 @@ opt_highlights.addEventListener("change", () => {
 });
 
 document.addEventListener('keydown', function (e) {
-    // console.log(e.code);
+    // console.log(e);
+    let notInput = e.target.nodeName != "INPUT";
     if (e.code.indexOf('Shift') != -1) {
         multiselect.checked = true;
-    } else if (e.code == "ArrowRight") {
+    } else if (e.code == "ArrowRight" && notInput) {
         deselectChordButtons();
         moveRight();
-    } else if (e.code == "ArrowLeft") {
+    } else if (e.code == "ArrowLeft" && notInput) {
         deselectChordButtons();
         moveLeft();
     } else if (e.code == "Escape") {
         closeModal();
-    } else if (e.code == "Digit1" && currentMode == "view") {
+    } else if (e.code == "Digit1" && notInput && currentMode == "view") {
         chordBar.children[0] && chordBar.children[0].click();
-    } else if (e.code == "Digit2" && currentMode == "view") {
+    } else if (e.code == "Digit2" && notInput && currentMode == "view") {
         chordBar.children[1] && chordBar.children[1].click();
-    } else if (e.code == "Digit3" && currentMode == "view") {
+    } else if (e.code == "Digit3" && notInput && currentMode == "view") {
         chordBar.children[2] && chordBar.children[2].click();
-    } else if (e.code == "Digit4" && currentMode == "view") {
+    } else if (e.code == "Digit4" && notInput && currentMode == "view") {
         chordBar.children[3] && chordBar.children[3].click();
-    } else if (e.code == "Digit5" && currentMode == "view") {
+    } else if (e.code == "Digit5" && notInput && currentMode == "view") {
         chordBar.children[4] && chordBar.children[4].click();
-    } else if (e.code == "Digit6" && currentMode == "view") {
+    } else if (e.code == "Digit6" && notInput && currentMode == "view") {
         chordBar.children[5] && chordBar.children[5].click();
-    } else if (e.code == "Digit7" && currentMode == "view") {
+    } else if (e.code == "Digit7" && notInput && currentMode == "view") {
         chordBar.children[6] && chordBar.children[6].click();
-    } else if (e.code == "Digit8" && currentMode == "view") {
+    } else if (e.code == "Digit8" && notInput && currentMode == "view") {
         chordBar.children[7] && chordBar.children[7].click();
-    } else if (e.code == "Digit9" && currentMode == "view") {
+    } else if (e.code == "Digit9" && notInput && currentMode == "view") {
         chordBar.children[8] && chordBar.children[8].click();
-    } else if (e.code == "Digit0" && currentMode == "view") {
+    } else if (e.code == "Digit0" && notInput && currentMode == "view") {
         chordBar.children[9] && chordBar.children[9].click();
-    } else if (e.code == "KeyJ" && currentMode == "view") {
+    } else if (e.code == "KeyJ" && notInput && currentMode == "view") {
         loadPrevFrame();
-    } else if (e.code == "KeyK" && currentMode == "view") {
+    } else if (e.code == "KeyK" && notInput && currentMode == "view") {
         loadNextFrame();
-    } else if (e.code == "KeyS" && e.shiftKey && currentMode == "view") {
+    } else if (e.code == "KeyS" && e.shiftKey && notInput && currentMode == "view") {
         saveFrame();
     }
 });
