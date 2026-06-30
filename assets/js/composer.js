@@ -162,16 +162,6 @@ function deleteFrame() {
 
 function loadFrame (index) {
     let frames = compositions[comp_dropdown.value].frames;
-    // if (frames[index].bellows == "pushpull") {
-    //     opt_pushpull.checked = true;
-    //     togglePushPullView();
-    // } else if (frames[index].bellows == "push-only") {
-    //     opt_push.checked = true;
-    //     togglePushView();
-    // } else if (frames[index].bellows == "pull-only") {
-    //     opt_pull.checked = true;
-    //     togglePullView();
-    // }
     selection.length = 0;
     if (opt_layout.value == compositions[comp_dropdown.value].layout) {
         selectionMode = frames[index].mode;
@@ -319,7 +309,6 @@ frame_delete.addEventListener("click", () => deleteFrame());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
-    console.log(e.target.nodeName);
     if(e.target && (e.target.nodeName == "BUTTON" || e.target.nodeName == "SPAN")) {
         if (!e.shiftKey) {
             currentFrame = parseInt(e.target.parentNode.dataset.position);
@@ -327,7 +316,7 @@ timeline.addEventListener("click", (e) => {
             // console.log(currentFrame);
             selectFrames();
         } else {
-            
+            selectFrameRange(currentFrame, parseInt(e.target.parentNode.dataset.position));
         }
     }
 });
@@ -338,6 +327,25 @@ function selectFrames() {
             frame.classList.add("selected");
         } else {
             frame.classList.remove("selected");
+        }
+    });
+}
+
+function selectFrameRange(start, end) {
+    console.log("start: " + start + ", end: " + end);
+    [...timeline.children].forEach((frame) => {
+        if (start < end) {
+            if (frame.dataset.position >= start && frame.dataset.position <= end) {
+                frame.classList.add("selected");
+            } else {
+                frame.classList.remove("selected");
+            }
+        } else {
+                if (frame.dataset.position <= start && frame.dataset.position >= end) {
+                    frame.classList.add("selected");
+                } else {
+                    frame.classList.remove("selected");
+                }
         }
     });
 }
