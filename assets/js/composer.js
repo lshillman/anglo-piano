@@ -5,6 +5,7 @@ const comp_createBtn = document.getElementById("createCompBtn"); // inside the c
 const comp_delete = document.getElementById("comp-delete");
 const frame_save = document.getElementById("frame-save");
 const frame_update = document.getElementById("frame-update");
+const add_marker = document.getElementById("add-marker");
 const frame_delete = document.getElementById("frame-delete");
 const frame_next = document.getElementById("frame-next");
 const frame_prev = document.getElementById("frame-prev");
@@ -38,6 +39,48 @@ function promptForTitle() {
     document.getElementById("new-composition-modal").style.display = "block";
 }
 
+function showMarkerModal() {
+    let markerName = document.getElementById("markerName");
+    document.getElementById("marker-modal").style.display = "block";
+    if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
+        markerName.value = compositions[comp_dropdown.value].frames[currentFrame].marker;
+        document.getElementById("addMarkerBtn").innerText = "Update marker";
+        document.querySelector("#marker-modal h2").innerText = "Edit marker";
+        document.getElementById("deleteMarkerBtn").style.visibility = "visible";
+    } else {
+        markerName.value = "";
+        document.getElementById("addMarkerBtn").innerText = "Add marker";
+        document.querySelector("#marker-modal h2").innerText = "Add marker";
+        document.getElementById("deleteMarkerBtn").style.visibility = "hidden";
+    }
+    markerName.focus();
+    markerName.select();
+}
+
+function updateMarkerBtn() {
+    if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
+        add_marker.innerText = "Edit marker";
+    } else {
+        add_marker.innerText = "Add marker";
+    }
+}
+
+function editMarker(action) {
+    let markerText = document.getElementById("markerName").value;
+    if (action == "delete") {
+        delete compositions[comp_dropdown.value].frames[currentFrame].marker;
+    } else if (!markerText) {
+        document.getElementById("addMarkerError").style.visibility = "visible";
+    } else {
+        compositions[comp_dropdown.value].frames[currentFrame].marker = markerText;
+    }
+    closeModal();
+    writeCompositions();
+    populateTimeline(); // TODO find a lighter-weight way of doing this. populateTimeline() also selects a layout -_-
+    selectFrames();
+    updateMarkerBtn();
+}
+
 function createComposition() {
     let title = document.getElementById("newCompTitle").value;
     if (!compositions[title] && title != "") {
@@ -64,11 +107,12 @@ let currentFrame = -1;
 function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
     // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
-    frames.splice(currentFrame + 1, 0, {bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
     writeCompositions();
-    timeline.innerHTML += `<button class="composer-frame" data-position="${frames.length - 1}">${frames.length}</button>`
+    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}"><button>${frames.length}</button>`;
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
     selectFrames();
+    scrollToCurrentFrame();
 }
 
 function updateFrame() {
@@ -119,16 +163,6 @@ function deleteFrame() {
 
 function loadFrame (index) {
     let frames = compositions[comp_dropdown.value].frames;
-    if (frames[index].bellows == "pushpull") {
-        opt_pushpull.checked = true;
-        togglePushPullView();
-    } else if (frames[index].bellows == "push-only") {
-        opt_push.checked = true;
-        togglePushView();
-    } else if (frames[index].bellows == "pull-only") {
-        opt_pull.checked = true;
-        togglePullView();
-    }
     selection.length = 0;
     if (opt_layout.value == compositions[comp_dropdown.value].layout) {
         selectionMode = frames[index].mode;
@@ -138,10 +172,20 @@ function loadFrame (index) {
     selectConcertinaButtons();
     selectPianoKey();
     selectFrames();
+    updateMarkerBtn();
     playSelection();
 }
 
-function loadNextFrame() {
+function loadNextFrame(select) {
+    let selectionStart = currentFrame;
+    if (select) {
+        let selectedFrames = timeline.querySelectorAll(".composer-frame.selected");
+        if (currentFrame < parseInt(selectedFrames[selectedFrames.length - 1].dataset.position)) {
+            selectionStart = parseInt(selectedFrames[selectedFrames.length - 1].dataset.position);
+        } else {
+            selectionStart = parseInt(selectedFrames[0].dataset.position);
+        }
+    }
     let frames = compositions[comp_dropdown.value].frames;
     if (frames[currentFrame + 1]) {
         currentFrame++;
@@ -150,9 +194,21 @@ function loadNextFrame() {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
+    if (select && frames[currentFrame + 1]) {
+        selectFrameRange(selectionStart, currentFrame);
+    }
 }
 
-function loadPrevFrame() {
+function loadPrevFrame(select) {
+    let selectionStart = currentFrame;
+    if (select) {
+        let selectedFrames = timeline.querySelectorAll(".composer-frame.selected");
+        if (currentFrame > parseInt(selectedFrames[0].dataset.position)) {
+            selectionStart = parseInt(selectedFrames[0].dataset.position);
+        } else {
+            selectionStart = parseInt(selectedFrames[selectedFrames.length - 1].dataset.position);
+        }
+    }
     let frames = compositions[comp_dropdown.value].frames;
     if (frames[currentFrame - 1]) {
         currentFrame--;
@@ -161,6 +217,9 @@ function loadPrevFrame() {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
+    if (select && frames[currentFrame - 1]) {
+        selectFrameRange(selectionStart, currentFrame);
+    }
 }
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
@@ -170,7 +229,12 @@ function populateTimeline() {
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
             for (let i = 0; i < frames.length; i++) {
-                timeline.innerHTML += `<button class="composer-frame" data-position="${i}">${i + 1}</button>`
+                let newFrame = `<div class="composer-frame" data-position="${i}"><button>${i + 1}</button>`;
+                if (frames[i].marker) {
+                    newFrame += `<span class="marker">${frames[i].marker}</span>`;
+                }
+                newFrame += `</div>`;
+                timeline.innerHTML += newFrame;
             }
         }
         opt_layout.value = compositions[comp_dropdown.value].layout;
@@ -265,18 +329,19 @@ comp_new.addEventListener("click", () => promptForTitle());
 comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
 frame_update.addEventListener("click", () => updateFrame());
+add_marker.addEventListener("click", () => showMarkerModal());
 frame_delete.addEventListener("click", () => deleteFrame());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
-    if(e.target && e.target.className.includes("composer-frame")) {
+    if(e.target && (e.target.nodeName == "BUTTON" || e.target.nodeName == "SPAN")) {
         if (!e.shiftKey) {
-            currentFrame = parseInt(e.target.dataset.position);
+            currentFrame = parseInt(e.target.parentNode.dataset.position);
             loadFrame(currentFrame);
             // console.log(currentFrame);
             selectFrames();
         } else {
-            
+            selectFrameRange(currentFrame, parseInt(e.target.parentNode.dataset.position));
         }
     }
 });
@@ -287,6 +352,24 @@ function selectFrames() {
             frame.classList.add("selected");
         } else {
             frame.classList.remove("selected");
+        }
+    });
+}
+
+function selectFrameRange(start, end) {
+    [...timeline.children].forEach((frame) => {
+        if (start < end) {
+            if (parseInt(frame.dataset.position) >= start && parseInt(frame.dataset.position) <= end) {
+                frame.classList.add("selected");
+            } else {
+                frame.classList.remove("selected");
+            }
+        } else {
+                if (parseInt(frame.dataset.position) <= start && parseInt(frame.dataset.position) >= end) {
+                    frame.classList.add("selected");
+                } else {
+                    frame.classList.remove("selected");
+                }
         }
     });
 }
