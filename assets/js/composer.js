@@ -109,9 +109,10 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
     frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
     writeCompositions();
-    timeline.innerHTML += `<button class="composer-frame" data-position="${frames.length - 1}">${frames.length}</button>`
+    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}"><button>${frames.length}</button>`;
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
     selectFrames();
+    scrollToCurrentFrame();
 }
 
 function updateFrame() {
@@ -175,7 +176,16 @@ function loadFrame (index) {
     playSelection();
 }
 
-function loadNextFrame() {
+function loadNextFrame(select) {
+    let selectionStart = currentFrame;
+    if (select) {
+        let selectedFrames = timeline.querySelectorAll(".composer-frame.selected");
+        if (currentFrame < parseInt(selectedFrames[selectedFrames.length - 1].dataset.position)) {
+            selectionStart = parseInt(selectedFrames[selectedFrames.length - 1].dataset.position);
+        } else {
+            selectionStart = parseInt(selectedFrames[0].dataset.position);
+        }
+    }
     let frames = compositions[comp_dropdown.value].frames;
     if (frames[currentFrame + 1]) {
         currentFrame++;
@@ -184,9 +194,21 @@ function loadNextFrame() {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
+    if (select && frames[currentFrame + 1]) {
+        selectFrameRange(selectionStart, currentFrame);
+    }
 }
 
-function loadPrevFrame() {
+function loadPrevFrame(select) {
+    let selectionStart = currentFrame;
+    if (select) {
+        let selectedFrames = timeline.querySelectorAll(".composer-frame.selected");
+        if (currentFrame > parseInt(selectedFrames[0].dataset.position)) {
+            selectionStart = parseInt(selectedFrames[0].dataset.position);
+        } else {
+            selectionStart = parseInt(selectedFrames[selectedFrames.length - 1].dataset.position);
+        }
+    }
     let frames = compositions[comp_dropdown.value].frames;
     if (frames[currentFrame - 1]) {
         currentFrame--;
@@ -195,6 +217,9 @@ function loadPrevFrame() {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
+    if (select && frames[currentFrame - 1]) {
+        selectFrameRange(selectionStart, currentFrame);
+    }
 }
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
@@ -332,16 +357,15 @@ function selectFrames() {
 }
 
 function selectFrameRange(start, end) {
-    console.log("start: " + start + ", end: " + end);
     [...timeline.children].forEach((frame) => {
         if (start < end) {
-            if (frame.dataset.position >= start && frame.dataset.position <= end) {
+            if (parseInt(frame.dataset.position) >= start && parseInt(frame.dataset.position) <= end) {
                 frame.classList.add("selected");
             } else {
                 frame.classList.remove("selected");
             }
         } else {
-                if (frame.dataset.position <= start && frame.dataset.position >= end) {
+                if (parseInt(frame.dataset.position) <= start && parseInt(frame.dataset.position) >= end) {
                     frame.classList.add("selected");
                 } else {
                     frame.classList.remove("selected");

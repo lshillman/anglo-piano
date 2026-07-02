@@ -1088,9 +1088,17 @@ document.addEventListener('keydown', function (e) {
     } else if (e.code == "Digit0" && notInput && currentMode == "view") {
         chordBar.children[9] && chordBar.children[9].click();
     } else if (e.code == "KeyJ" && notInput && currentMode == "view") {
-        loadPrevFrame();
+        if (e.shiftKey) {
+            loadPrevFrame("select")
+        } else {
+            loadPrevFrame();
+        }
     } else if (e.code == "KeyK" && notInput && currentMode == "view") {
-        loadNextFrame();
+        if (e.shiftKey) {
+            loadNextFrame("select");
+        } else {
+            loadNextFrame();
+        }
     } else if (e.code == "KeyS" && e.shiftKey && notInput && currentMode == "view") {
         saveFrame();
     }
