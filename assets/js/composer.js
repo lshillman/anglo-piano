@@ -10,6 +10,8 @@ const frame_delete = document.getElementById("frame-delete");
 const frame_next = document.getElementById("frame-next");
 const frame_prev = document.getElementById("frame-prev");
 const timeline = document.getElementById("timeline");
+const pasteFramesBtn = document.getElementById("paste-frames");
+const copyFramesBtn = document.getElementById("copy-frames");
 let clipboard = [];
 
 
@@ -128,6 +130,8 @@ function copyFrames() {
     let end = parseInt(timeline.querySelector(":nth-last-child(1 of .selected)").dataset.position) + 1;
     clipboard = frames.slice(start, end);
     console.log(clipboard);
+    pasteFramesBtn.innerText = `Paste frames (${clipboard.length})`
+    pasteFramesBtn.style.display = "inline-block";
 }
 
 function pasteFrames() {
@@ -197,7 +201,13 @@ function loadFrame (index) {
     selectPianoKey();
     selectFrames();
     updateMarkerBtn();
+    updateCopyFramesBtn();
     playSelection();
+}
+
+function updateCopyFramesBtn() {
+    let selectedFrames = timeline.querySelectorAll(".selected");
+    copyFramesBtn.innerText = `Copy frames (${selectedFrames.length})`;
 }
 
 function loadNextFrame(select) {
@@ -218,9 +228,10 @@ function loadNextFrame(select) {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
-    if (select && frames[currentFrame + 1]) {
+    if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
+    updateCopyFramesBtn();
 }
 
 function loadPrevFrame(select) {
@@ -241,9 +252,10 @@ function loadPrevFrame(select) {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
-    if (select && frames[currentFrame - 1]) {
+    if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
+    updateCopyFramesBtn();
 }
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
@@ -354,6 +366,8 @@ comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
 frame_update.addEventListener("click", () => updateFrame());
 add_marker.addEventListener("click", () => showMarkerModal());
+copyFramesBtn.addEventListener("click", () => copyFrames());
+pasteFramesBtn.addEventListener("click", () => pasteFrames());
 frame_delete.addEventListener("click", () => deleteFrame());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
@@ -396,6 +410,7 @@ function selectFrameRange(start, end) {
                 }
         }
     });
+    updateCopyFramesBtn();
 }
 
 function scrollToCurrentFrame () {
