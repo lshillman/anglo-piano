@@ -117,8 +117,25 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
-    frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, selection: [...selection]};
+    frames[currentFrame] = {mode: selectionMode, selection: [...selection]};
     writeCompositions();
+}
+
+let clipboard = [];
+function copyFrames() {
+    let frames = compositions[comp_dropdown.value].frames;
+    let start = parseInt(timeline.querySelector(".selected").dataset.position);
+    let end = parseInt(timeline.querySelector(":nth-last-child(1 of .selected)").dataset.position) + 1;
+    clipboard = frames.slice(start, end);
+    console.log(clipboard);
+}
+
+function pasteFrames() {
+    let position = parseInt(timeline.querySelector(":nth-last-child(1 of .selected)").dataset.position) + 1;
+    let frames = compositions[comp_dropdown.value].frames;
+    frames.splice(position, 0, ...clipboard);
+    writeCompositions();
+    populateTimeline();
 }
 
 function deleteFrame() {
