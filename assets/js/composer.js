@@ -10,6 +10,7 @@ const frame_delete = document.getElementById("frame-delete");
 const frame_next = document.getElementById("frame-next");
 const frame_prev = document.getElementById("frame-prev");
 const timeline = document.getElementById("timeline");
+let clipboard = [];
 
 
 let compositions = {};
@@ -121,7 +122,6 @@ function updateFrame() {
     writeCompositions();
 }
 
-let clipboard = [];
 function copyFrames() {
     let frames = compositions[comp_dropdown.value].frames;
     let start = parseInt(timeline.querySelector(".selected").dataset.position);
@@ -131,9 +131,14 @@ function copyFrames() {
 }
 
 function pasteFrames() {
-    let position = parseInt(timeline.querySelector(":nth-last-child(1 of .selected)").dataset.position) + 1;
+    let position = parseInt(timeline.querySelector(".selected").dataset.position);
+    let number = timeline.querySelectorAll(".selected").length > 1 ? timeline.querySelectorAll(".selected").length : 0;
+    if (!number) {
+        position++;
+    }
     let frames = compositions[comp_dropdown.value].frames;
-    frames.splice(position, 0, ...clipboard);
+    console.log("splicing at position " + position + ", deleting " + number);
+    frames.splice(position, number, ...clipboard);
     writeCompositions();
     populateTimeline();
 }
