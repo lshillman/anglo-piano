@@ -141,6 +141,8 @@ function pasteFrames() {
     frames.splice(position, number, ...clipboard);
     writeCompositions();
     populateTimeline();
+    currentFrame = position + clipboard.length - 1;
+    selectFrames();
 }
 
 function deleteFrame() {
