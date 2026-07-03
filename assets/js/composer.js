@@ -201,14 +201,26 @@ function loadFrame (index) {
     selectPianoKey();
     selectFrames();
     updateMarkerBtn();
-    updateCopyFramesBtn();
+    updateBulkActionsUI();
     playSelection();
 }
 
-function updateCopyFramesBtn() {
+function updateBulkActionsUI() {
     let selectedFrames = timeline.querySelectorAll(".selected");
-    copyFramesBtn.innerText = `Copy frames (${selectedFrames.length})`;
+    console.log("Selected frames: " + selectedFrames.length);
+    if (selectedFrames.length == 1) {
+        copyFramesBtn.innerText = `Copy frame`;
+        frame_save.style.display = "inline-block";
+        frame_update.style.display = "inline-block";
+        add_marker.style.display = "inline-block";
+    } else {
+        copyFramesBtn.innerText = `Copy frames (${selectedFrames.length})`;
+        frame_save.style.display = "none";
+        frame_update.style.display = "none";
+        add_marker.style.display = "none";
+    }
 }
+    
 
 function loadNextFrame(select) {
     let selectionStart = currentFrame;
@@ -231,7 +243,7 @@ function loadNextFrame(select) {
     if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
-    updateCopyFramesBtn();
+    updateBulkActionsUI();
 }
 
 function loadPrevFrame(select) {
@@ -255,7 +267,7 @@ function loadPrevFrame(select) {
     if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
-    updateCopyFramesBtn();
+    updateBulkActionsUI();
 }
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
@@ -410,7 +422,7 @@ function selectFrameRange(start, end) {
                 }
         }
     });
-    updateCopyFramesBtn();
+    updateBulkActionsUI();
 }
 
 function scrollToCurrentFrame () {
