@@ -149,40 +149,60 @@ function pasteFrames() {
     selectFrames();
 }
 
-function deleteFrame() {
+function deleteFrames(confirmation) {
+    console.log("In deleteFrames() ...");
+    let selectedFrames = timeline.querySelectorAll(".selected");
     let frames = compositions[comp_dropdown.value].frames;
-    let frame = document.querySelector(".composer-frame.selected");
-    frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
-    frame.classList.remove("selected");
+    if (selectedFrames.length > 4 && !confirmation) {
+        console.log("asking for confirmation...")
+        document.getElementById("delete-frames-modal").style.display = "block";
+        document.querySelector("#delete-frames-modal h2").innerText = `Delete ${selectedFrames.length} frames?`;
+        return;
+    } else if ((selectedFrames.length > 1 && selectedFrames.length <=4) || confirmation) {
+        console.log("deleting a range of frames...");
+        document.getElementById("delete-frames-modal").style.display = "none";
+        let position = parseInt(selectedFrames[0].dataset.position);
+        console.log(`Deleting ${selectedFrames.length} frames starting at position ${position}`);
+        frames.splice(position, selectedFrames.length);
+        if (!frames[position + 1]) {
+            currentFrame--;
+        }
+        populateTimeline();
+        selectFrames();
+    } else if (selectedFrames.length == 1) { // Handle single-frame deletes with nice animation
+        let frame = selectedFrames[0];
+        frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
+        frame.classList.remove("selected");
 
-    frame.style.padding = 0;
-    frame.style.width = 0;
-    frame.style.opacity = 0;
+        frame.style.padding = 0;
+        frame.style.width = 0;
+        frame.style.opacity = 0;
 
-    if (frame.nextSibling) {
-        frame.nextSibling.classList.add("selected");
-        setTimeout(() => {
-            frame.remove();
-            frames.splice(currentFrame, 1);
-            populateTimeline();
-            selectFrames();
-          }, "300");
-    } else if (frame.previousSibling) {
-        frame.previousSibling.classList.add("selected");
-        currentFrame--;
-        setTimeout(() => {
-            frame.remove();
-            frames.splice(currentFrame+1, 1);
-            populateTimeline();
-            selectFrames();
-          }, "300");
-    } else {
-        setTimeout(() => {
-            frame.remove();
-            frames.length = 0;
-            populateTimeline();
-            selectFrames();
-          }, "300");
+        if (frame.nextSibling) {
+            frame.nextSibling.classList.add("selected");
+            setTimeout(() => {
+                frame.remove();
+                frames.splice(currentFrame, 1);
+                populateTimeline();
+                selectFrames();
+            }, "300");
+        } else if (frame.previousSibling) {
+            frame.previousSibling.classList.add("selected");
+            currentFrame--;
+            setTimeout(() => {
+                frame.remove();
+                frames.splice(currentFrame+1, 1);
+                populateTimeline();
+                selectFrames();
+            }, "300");
+        } else {
+            setTimeout(() => {
+                frame.remove();
+                frames.length = 0;
+                populateTimeline();
+                selectFrames();
+            }, "300");
+        }
     }
     // frame.nextSibling && frame.nextSibling.classList.add("selected");
 
@@ -210,11 +230,13 @@ function updateBulkActionsUI() {
     console.log("Selected frames: " + selectedFrames.length);
     if (selectedFrames.length == 1) {
         copyFramesBtn.innerText = `Copy frame`;
+        frame_delete.innerText = `Delete frame`;
         frame_save.style.display = "inline-block";
         frame_update.style.display = "inline-block";
         add_marker.style.display = "inline-block";
     } else {
         copyFramesBtn.innerText = `Copy frames (${selectedFrames.length})`;
+        frame_delete.innerText = `Delete frames (${selectedFrames.length})`;
         frame_save.style.display = "none";
         frame_update.style.display = "none";
         add_marker.style.display = "none";
@@ -380,7 +402,7 @@ frame_update.addEventListener("click", () => updateFrame());
 add_marker.addEventListener("click", () => showMarkerModal());
 copyFramesBtn.addEventListener("click", () => copyFrames());
 pasteFramesBtn.addEventListener("click", () => pasteFrames());
-frame_delete.addEventListener("click", () => deleteFrame());
+frame_delete.addEventListener("click", () => deleteFrames());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {

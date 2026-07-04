@@ -359,6 +359,18 @@
         </div>
     </div>
 
+    <div id="delete-frames-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Delete frames?</h2>
+            <p>This can't be undone!</p>
+            <div class="modal-actions">
+                <button id="cancelDeleteBtn" onclick="closeModal()">Cancel</button>
+                <button id="finalDeleteFramesBtn" class="destructive" onclick="deleteFrames(1)">Delete frames</button>
+            </div>
+        </div>
+    </div>
+
     <div id="import-compositions-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
