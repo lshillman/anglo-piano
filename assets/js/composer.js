@@ -128,7 +128,7 @@ function copyFrames() {
     let frames = compositions[comp_dropdown.value].frames;
     let start = parseInt(timeline.querySelector(".selected").dataset.position);
     let end = parseInt(timeline.querySelector(":nth-last-child(1 of .selected)").dataset.position) + 1;
-    clipboard = frames.slice(start, end);
+    clipboard = JSON.parse(JSON.stringify(frames.slice(start, end))); // create a deep copy of an array with objects. Avoids pasted frames getting erroneously edited
     console.log(clipboard);
     pasteFramesBtn.innerText = `Paste frames (${clipboard.length})`
     pasteFramesBtn.style.display = "inline-block";
