@@ -372,34 +372,34 @@ function colorOctaves() {
 function togglePushView() {
     opt_bellows = "push-only";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("pull-only", "pushpull", "pullpush");
-        button.classList.add("push-only");
-    }
 }
 
 function togglePullView() {
     opt_bellows = "pull-only";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("push-only", "pushpull", "pullpush");
-        button.classList.add("pull-only");
-    }
 }
 
 function togglePushPullView() {
+    let oldView = opt_bellows;
     opt_bellows = "pushpull";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("push-only", "pull-only", "pullpush");
-    }
 }
 
 function togglePullPushView() {
+    let oldView = opt_bellows;
     opt_bellows = "pullpush";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("push-only", "pull-only", "pushpull");
+    if (selectionMode == "buttons" && selection.length > 0) {
+        let selectedButtons = angloKeyboard.querySelectorAll(".button:has(button.selected)");
+        selectedButtons.forEach((button, i) => {
+            if (button.querySelectorAll("button")[0].classList.contains("selected") && !button.querySelectorAll("button")[1].classList.contains("selected")) {
+                button.querySelectorAll("button")[0].classList.remove("selected");
+                button.querySelectorAll("button")[1].classList.add("selected");
+            } else if (button.querySelectorAll("button")[1].classList.contains("selected") && !button.querySelectorAll("button")[0].classList.contains("selected")) {
+                button.querySelectorAll("button")[1].classList.remove("selected");
+                button.querySelectorAll("button")[0].classList.add("selected");
+            }
+        });
     }
 }
 
