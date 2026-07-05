@@ -103,6 +103,15 @@ let currentFrame = -1;
 function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
     // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    if (opt_bellows == "pullpush") { // make sure the correct notes are saved, using push/pull as the default source of truth
+        selection.forEach(note => {
+            if (note.button % 2 == 0) {
+                note.button++;
+            } else {
+                note.button--;
+            }
+        });
+    }
     frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
     writeCompositions();
     timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}"><button>${frames.length}</button>`;
@@ -207,7 +216,19 @@ function loadFrame (index) {
     if (opt_layout.value == compositions[comp_dropdown.value].layout) {
         selectionMode = frames[index].mode;
     }
-    selection.push(...frames[index].selection)
+    if (opt_bellows == "pullpush") {
+        let pullpushSelection = [];
+        frames[index].selection.forEach(noteobj => {
+            if (noteobj.button % 2 == 0) {
+                pullpushSelection.push({"note": noteobj.note, "button": noteobj.button + 1});
+            } else {
+                pullpushSelection.push({"note": noteobj.note, "button": noteobj.button - 1});
+            }
+        });
+        selection.push(...pullpushSelection);
+    } else {
+        selection.push(...frames[index].selection);
+    }
     deselectChordButtons();
     selectConcertinaButtons();
     selectPianoKey();
@@ -218,7 +239,6 @@ function loadFrame (index) {
 
 function updateBulkActionsUI() {
     let selectedFrames = timeline.querySelectorAll(".selected");
-    console.log("Selected frames: " + selectedFrames.length);
     if (compositions[comp_dropdown.value].frames.length == 0) {
         frame_save.innerText = "Create new frame";
         timeline.innerHTML = `<div id="new-composition-message"><p>Select some concertina buttons and click "Create new frame" to get started!</p></div>`;
