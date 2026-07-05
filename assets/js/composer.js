@@ -10,6 +10,10 @@ const frame_delete = document.getElementById("frame-delete");
 const frame_next = document.getElementById("frame-next");
 const frame_prev = document.getElementById("frame-prev");
 const timeline = document.getElementById("timeline");
+const pasteFramesBtn = document.getElementById("paste-frames");
+const copyFramesBtn = document.getElementById("copy-frames");
+const playbackControls = document.getElementById("playback-controls");
+let clipboard = [];
 
 
 let compositions = {};
@@ -57,14 +61,6 @@ function showMarkerModal() {
     markerName.select();
 }
 
-function updateMarkerBtn() {
-    if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
-        add_marker.innerText = "Edit marker";
-    } else {
-        add_marker.innerText = "Add marker";
-    }
-}
-
 function editMarker(action) {
     let markerText = document.getElementById("markerName").value;
     if (action == "delete") {
@@ -78,7 +74,7 @@ function editMarker(action) {
     writeCompositions();
     populateTimeline(); // TODO find a lighter-weight way of doing this. populateTimeline() also selects a layout -_-
     selectFrames();
-    updateMarkerBtn();
+    updateBulkActionsUI();
 }
 
 function createComposition() {
@@ -117,47 +113,91 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
-    frames[currentFrame] = {bellows: opt_bellows, mode: selectionMode, selection: [...selection]};
+    frames[currentFrame] = {mode: selectionMode, selection: [...selection]};
     writeCompositions();
 }
 
-function deleteFrame() {
+// TODO store the selected layout with the copied frames to help avoid pasting to a different layout
+function copyFrames() {
     let frames = compositions[comp_dropdown.value].frames;
-    let frame = document.querySelector(".composer-frame.selected");
-    frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
-    frame.classList.remove("selected");
+    let start = parseInt(timeline.querySelector(".selected").dataset.position);
+    let end = parseInt(timeline.querySelector(":nth-last-child(1 of .selected)").dataset.position) + 1;
+    clipboard = JSON.parse(JSON.stringify(frames.slice(start, end))); // create a deep copy of an array with objects. Avoids pasted frames getting erroneously edited
+    console.log(clipboard);
+    pasteFramesBtn.innerText = `Paste frames (${clipboard.length})`
+    pasteFramesBtn.style.display = "inline-block";
+}
 
-    frame.style.padding = 0;
-    frame.style.width = 0;
-    frame.style.opacity = 0;
-
-    if (frame.nextSibling) {
-        frame.nextSibling.classList.add("selected");
-        setTimeout(() => {
-            frame.remove();
-            frames.splice(currentFrame, 1);
-            populateTimeline();
-            selectFrames();
-          }, "300");
-    } else if (frame.previousSibling) {
-        frame.previousSibling.classList.add("selected");
-        currentFrame--;
-        setTimeout(() => {
-            frame.remove();
-            frames.splice(currentFrame+1, 1);
-            populateTimeline();
-            selectFrames();
-          }, "300");
-    } else {
-        setTimeout(() => {
-            frame.remove();
-            frames.length = 0;
-            populateTimeline();
-            selectFrames();
-          }, "300");
+function pasteFrames() {
+    let position = parseInt(timeline.querySelector(".selected").dataset.position);
+    let number = timeline.querySelectorAll(".selected").length > 1 ? timeline.querySelectorAll(".selected").length : 0;
+    if (!number) {
+        position++;
     }
-    // frame.nextSibling && frame.nextSibling.classList.add("selected");
+    let frames = compositions[comp_dropdown.value].frames;
+    console.log("splicing at position " + position + ", deleting " + number);
+    let cleanFrames = JSON.parse(JSON.stringify(clipboard)); // gotta do this again in case the same frames get pasted multiple times
+    frames.splice(position, number, ...cleanFrames);
+    writeCompositions();
+    populateTimeline();
+    currentFrame = position + clipboard.length - 1;
+    selectFrames();
+}
 
+function deleteFrames(confirmation) {
+    console.log("In deleteFrames() ...");
+    let selectedFrames = timeline.querySelectorAll(".selected");
+    let frames = compositions[comp_dropdown.value].frames;
+    if (selectedFrames.length > 4 && !confirmation) {
+        console.log("asking for confirmation...")
+        document.getElementById("delete-frames-modal").style.display = "block";
+        document.querySelector("#delete-frames-modal h2").innerText = `Delete ${selectedFrames.length} frames?`;
+        return;
+    } else if ((selectedFrames.length > 1 && selectedFrames.length <=4) || confirmation) {
+        console.log("deleting a range of frames...");
+        document.getElementById("delete-frames-modal").style.display = "none";
+        let position = parseInt(selectedFrames[0].dataset.position);
+        console.log(`Deleting ${selectedFrames.length} frames starting at position ${position}`);
+        frames.splice(position, selectedFrames.length);
+        if (!frames[position + 1]) {
+            currentFrame--;
+        }
+        populateTimeline();
+        selectFrames();
+    } else if (selectedFrames.length == 1) { // Handle single-frame deletes with nice animation
+        let frame = selectedFrames[0];
+        frame.style.cssText += "transition:width 0.2s ease 0.2s, margin-right 0.2s ease 0.2s, opacity 0.2s;";
+        frame.classList.remove("selected");
+
+        frame.style.padding = 0;
+        frame.style.width = 0;
+        frame.style.opacity = 0;
+
+        if (frame.nextSibling) {
+            frame.nextSibling.classList.add("selected");
+            setTimeout(() => {
+                frame.remove();
+                frames.splice(currentFrame, 1);
+                populateTimeline();
+                selectFrames();
+            }, "300");
+        } else if (frame.previousSibling) {
+            frame.previousSibling.classList.add("selected");
+            currentFrame--;
+            setTimeout(() => {
+                frame.remove();
+                frames.splice(currentFrame+1, 1);
+                populateTimeline();
+                selectFrames();
+            }, "300");
+        } else {
+            setTimeout(() => {
+                frame.remove();
+                frames.length = 0;
+                populateTimeline();
+            }, "300");
+        }
+    }
     writeCompositions();
 }
 
@@ -172,9 +212,56 @@ function loadFrame (index) {
     selectConcertinaButtons();
     selectPianoKey();
     selectFrames();
-    updateMarkerBtn();
+    updateBulkActionsUI();
     playSelection();
 }
+
+function updateBulkActionsUI() {
+    let selectedFrames = timeline.querySelectorAll(".selected");
+    console.log("Selected frames: " + selectedFrames.length);
+    if (compositions[comp_dropdown.value].frames.length == 0) {
+        frame_save.innerText = "Create new frame";
+        timeline.innerHTML = `<div id="new-composition-message"><p>Select some concertina buttons and click "Create new frame" to get started!</p></div>`;
+        playbackControls.style.display = "none";
+    } else {
+        playbackControls.style.display = "block";
+        if (document.getElementById("new-composition-message")) {
+            document.getElementById("new-composition-message").remove();
+        }
+    }
+    if (selectedFrames.length == 0) {
+        frame_update.style.display = "none";
+        add_marker.style.display = "none";
+        copyFramesBtn.style.display = "none";
+        frame_delete.style.display = "none";
+    } else if (selectedFrames.length == 1) {
+        copyFramesBtn.innerText = `Copy frame`;
+        frame_delete.innerText = `Delete frame`;
+        frame_save.style.display = "inline-block";
+        frame_update.style.display = "inline-block";
+        add_marker.style.display = "inline-block";
+        copyFramesBtn.style.display = "inline-block";
+        frame_delete.style.display = "inline-block";
+        if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
+            add_marker.innerText = "Edit marker";
+        } else {
+            add_marker.innerText = "Add marker";
+        }
+        if (compositions[comp_dropdown.value].frames.length == currentFrame + 1) {
+            frame_save.innerText = "Create new frame";
+        } else {
+            frame_save.innerText = "Insert new frame";
+        }
+    } else {
+        copyFramesBtn.innerText = `Copy frames (${selectedFrames.length})`;
+        frame_delete.innerText = `Delete frames (${selectedFrames.length})`;
+        frame_delete.style.display = "inline-block";
+        frame_save.style.display = "none";
+        frame_update.style.display = "none";
+        add_marker.style.display = "none";
+    }
+}
+    
 
 function loadNextFrame(select) {
     let selectionStart = currentFrame;
@@ -194,9 +281,10 @@ function loadNextFrame(select) {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
-    if (select && frames[currentFrame + 1]) {
+    if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
+    updateBulkActionsUI();
 }
 
 function loadPrevFrame(select) {
@@ -217,9 +305,10 @@ function loadPrevFrame(select) {
     }
     loadFrame(currentFrame);
     scrollToCurrentFrame();
-    if (select && frames[currentFrame - 1]) {
+    if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
+    updateBulkActionsUI();
 }
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
@@ -237,6 +326,10 @@ function populateTimeline() {
                 timeline.innerHTML += newFrame;
             }
         }
+        // else if (frames && frames.length == 0) {
+            
+        // }
+        updateBulkActionsUI();
         opt_layout.value = compositions[comp_dropdown.value].layout;
         selectLayout();
     } else {
@@ -330,7 +423,9 @@ comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
 frame_update.addEventListener("click", () => updateFrame());
 add_marker.addEventListener("click", () => showMarkerModal());
-frame_delete.addEventListener("click", () => deleteFrame());
+copyFramesBtn.addEventListener("click", () => copyFrames());
+pasteFramesBtn.addEventListener("click", () => pasteFrames());
+frame_delete.addEventListener("click", () => deleteFrames());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
 timeline.addEventListener("click", (e) => {
@@ -354,6 +449,7 @@ function selectFrames() {
             frame.classList.remove("selected");
         }
     });
+    updateBulkActionsUI();
 }
 
 function selectFrameRange(start, end) {
@@ -372,19 +468,20 @@ function selectFrameRange(start, end) {
                 }
         }
     });
+    updateBulkActionsUI();
 }
 
 function scrollToCurrentFrame () {
-    if (currentFrame != -1) {
-        let el = timeline.children[currentFrame];
-        const elLeft = el.offsetLeft + el.offsetWidth;
-        const elParentLeft = el.parentNode.offsetLeft + el.parentNode.offsetWidth;
+    if (currentFrame > 1) {
+        let frame = timeline.children[currentFrame];
+        const frameLeft = frame.offsetLeft + frame.offsetWidth;
+        const frameParentLeft = frame.parentNode.offsetLeft + frame.parentNode.offsetWidth;
     
         // check if element not in view
-        if (elLeft >= elParentLeft + el.parentNode.scrollLeft) {
-        el.parentNode.scrollLeft = elLeft - elParentLeft;
-        } else if (elLeft <= el.parentNode.offsetLeft + el.parentNode.scrollLeft) {
-        el.parentNode.scrollLeft = el.offsetLeft - el.parentNode.offsetLeft;
+        if (frameLeft >= frameParentLeft + frame.parentNode.scrollLeft) {
+        frame.parentNode.scrollLeft = frameLeft - frameParentLeft;
+        } else if (frameLeft <= frame.parentNode.offsetLeft + frame.parentNode.scrollLeft) {
+        frame.parentNode.scrollLeft = frame.offsetLeft - frame.parentNode.offsetLeft;
         }
     } else {
         timeline.scrollLeft = 0;

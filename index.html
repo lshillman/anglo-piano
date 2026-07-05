@@ -153,9 +153,11 @@
                         <button id="comp-export">Export...</button>
                     </div>
                     <div>
-                        <button id="frame-save">Save frame</button>
+                        <button id="frame-save">Create new frame</button>
                         <button id="frame-update">Update frame</button>
                         <button id="add-marker">Add marker</button>
+                        <button id="copy-frames">Copy frame(s)</button>
+                        <button id="paste-frames" style="display:none;">Paste frame(s)</button>
                         <button id="frame-delete" class="light-destructive">Delete frame</button>
                     </div>
                     <div>
@@ -353,6 +355,18 @@
             <div class="modal-actions">
                 <button id="cancelDeleteBtn" onclick="closeModal()">Cancel</button>
                 <button id="finalDeleteBtn" class="destructive" onclick="deleteComposition()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-frames-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Delete frames?</h2>
+            <p>This can't be undone!</p>
+            <div class="modal-actions">
+                <button id="cancelDeleteBtn" onclick="closeModal()">Cancel</button>
+                <button id="finalDeleteFramesBtn" class="destructive" onclick="deleteFrames(1)">Delete frames</button>
             </div>
         </div>
     </div>

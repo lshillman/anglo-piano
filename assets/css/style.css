@@ -699,6 +699,15 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 	padding-top: 2rem;
 }
 
+#new-composition-message {
+   display: flex;
+   align-items: center;
+   line-height: 1.25;
+   text-wrap: balance;
+   text-align: center;
+   color: #767676;
+}
+
 #playback-controls {
    /* flex-basis: 30%; */
    white-space: nowrap;
