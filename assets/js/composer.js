@@ -12,6 +12,7 @@ const frame_prev = document.getElementById("frame-prev");
 const timeline = document.getElementById("timeline");
 const pasteFramesBtn = document.getElementById("paste-frames");
 const copyFramesBtn = document.getElementById("copy-frames");
+const playbackControls = document.getElementById("playback-controls");
 let clipboard = [];
 
 
@@ -104,7 +105,6 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
     frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
     writeCompositions();
-    document.getElementById("new-composition-message").remove();
     timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}"><button>${frames.length}</button>`;
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
     selectFrames();
@@ -195,12 +195,9 @@ function deleteFrames(confirmation) {
                 frame.remove();
                 frames.length = 0;
                 populateTimeline();
-                selectFrames();
             }, "300");
         }
     }
-    // frame.nextSibling && frame.nextSibling.classList.add("selected");
-
     writeCompositions();
 }
 
@@ -224,7 +221,13 @@ function updateBulkActionsUI() {
     console.log("Selected frames: " + selectedFrames.length);
     if (compositions[comp_dropdown.value].frames.length == 0) {
         frame_save.innerText = "Create new frame";
-        timeline.innerHTML += `<div id="new-composition-message">Select some concertina buttons and click "Create new frame" to get started!</div>`;
+        timeline.innerHTML = `<div id="new-composition-message"><p>Select some concertina buttons and click "Create new frame" to get started!</p></div>`;
+        playbackControls.style.display = "none";
+    } else {
+        playbackControls.style.display = "block";
+        if (document.getElementById("new-composition-message")) {
+            document.getElementById("new-composition-message").remove();
+        }
     }
     if (selectedFrames.length == 0) {
         frame_update.style.display = "none";
@@ -322,9 +325,11 @@ function populateTimeline() {
                 newFrame += `</div>`;
                 timeline.innerHTML += newFrame;
             }
-        } else if (frames && frames.length == 0) {
-            updateBulkActionsUI();
         }
+        // else if (frames && frames.length == 0) {
+            
+        // }
+        updateBulkActionsUI();
         opt_layout.value = compositions[comp_dropdown.value].layout;
         selectLayout();
     } else {
@@ -467,16 +472,16 @@ function selectFrameRange(start, end) {
 }
 
 function scrollToCurrentFrame () {
-    if (currentFrame != -1) {
-        let el = timeline.children[currentFrame];
-        const elLeft = el.offsetLeft + el.offsetWidth;
-        const elParentLeft = el.parentNode.offsetLeft + el.parentNode.offsetWidth;
+    if (currentFrame > 1) {
+        let frame = timeline.children[currentFrame];
+        const frameLeft = frame.offsetLeft + frame.offsetWidth;
+        const frameParentLeft = frame.parentNode.offsetLeft + frame.parentNode.offsetWidth;
     
         // check if element not in view
-        if (elLeft >= elParentLeft + el.parentNode.scrollLeft) {
-        el.parentNode.scrollLeft = elLeft - elParentLeft;
-        } else if (elLeft <= el.parentNode.offsetLeft + el.parentNode.scrollLeft) {
-        el.parentNode.scrollLeft = el.offsetLeft - el.parentNode.offsetLeft;
+        if (frameLeft >= frameParentLeft + frame.parentNode.scrollLeft) {
+        frame.parentNode.scrollLeft = frameLeft - frameParentLeft;
+        } else if (frameLeft <= frame.parentNode.offsetLeft + frame.parentNode.scrollLeft) {
+        frame.parentNode.scrollLeft = frame.offsetLeft - frame.parentNode.offsetLeft;
         }
     } else {
         timeline.scrollLeft = 0;
