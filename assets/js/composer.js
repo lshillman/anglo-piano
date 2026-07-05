@@ -60,14 +60,6 @@ function showMarkerModal() {
     markerName.select();
 }
 
-function updateMarkerBtn() {
-    if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
-        add_marker.innerText = "Edit marker";
-    } else {
-        add_marker.innerText = "Add marker";
-    }
-}
-
 function editMarker(action) {
     let markerText = document.getElementById("markerName").value;
     if (action == "delete") {
@@ -81,7 +73,7 @@ function editMarker(action) {
     writeCompositions();
     populateTimeline(); // TODO find a lighter-weight way of doing this. populateTimeline() also selects a layout -_-
     selectFrames();
-    updateMarkerBtn();
+    updateBulkActionsUI();
 }
 
 function createComposition() {
@@ -112,6 +104,7 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
     frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
     writeCompositions();
+    document.getElementById("new-composition-message").remove();
     timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}"><button>${frames.length}</button>`;
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
     selectFrames();
@@ -124,6 +117,7 @@ function updateFrame() {
     writeCompositions();
 }
 
+// TODO store the selected layout with the copied frames to help avoid pasting to a different layout
 function copyFrames() {
     let frames = compositions[comp_dropdown.value].frames;
     let start = parseInt(timeline.querySelector(".selected").dataset.position);
@@ -142,7 +136,8 @@ function pasteFrames() {
     }
     let frames = compositions[comp_dropdown.value].frames;
     console.log("splicing at position " + position + ", deleting " + number);
-    frames.splice(position, number, ...clipboard);
+    let cleanFrames = JSON.parse(JSON.stringify(clipboard)); // gotta do this again in case the same frames get pasted multiple times
+    frames.splice(position, number, ...cleanFrames);
     writeCompositions();
     populateTimeline();
     currentFrame = position + clipboard.length - 1;
@@ -220,7 +215,6 @@ function loadFrame (index) {
     selectConcertinaButtons();
     selectPianoKey();
     selectFrames();
-    updateMarkerBtn();
     updateBulkActionsUI();
     playSelection();
 }
@@ -228,15 +222,37 @@ function loadFrame (index) {
 function updateBulkActionsUI() {
     let selectedFrames = timeline.querySelectorAll(".selected");
     console.log("Selected frames: " + selectedFrames.length);
-    if (selectedFrames.length == 1) {
+    if (compositions[comp_dropdown.value].frames.length == 0) {
+        frame_save.innerText = "Create new frame";
+        timeline.innerHTML += `<div id="new-composition-message">Select some concertina buttons and click "Create new frame" to get started!</div>`;
+    }
+    if (selectedFrames.length == 0) {
+        frame_update.style.display = "none";
+        add_marker.style.display = "none";
+        copyFramesBtn.style.display = "none";
+        frame_delete.style.display = "none";
+    } else if (selectedFrames.length == 1) {
         copyFramesBtn.innerText = `Copy frame`;
         frame_delete.innerText = `Delete frame`;
         frame_save.style.display = "inline-block";
         frame_update.style.display = "inline-block";
         add_marker.style.display = "inline-block";
+        copyFramesBtn.style.display = "inline-block";
+        frame_delete.style.display = "inline-block";
+        if (compositions[comp_dropdown.value].frames[currentFrame].marker) {
+            add_marker.innerText = "Edit marker";
+        } else {
+            add_marker.innerText = "Add marker";
+        }
+        if (compositions[comp_dropdown.value].frames.length == currentFrame + 1) {
+            frame_save.innerText = "Create new frame";
+        } else {
+            frame_save.innerText = "Insert new frame";
+        }
     } else {
         copyFramesBtn.innerText = `Copy frames (${selectedFrames.length})`;
         frame_delete.innerText = `Delete frames (${selectedFrames.length})`;
+        frame_delete.style.display = "inline-block";
         frame_save.style.display = "none";
         frame_update.style.display = "none";
         add_marker.style.display = "none";
@@ -306,6 +322,8 @@ function populateTimeline() {
                 newFrame += `</div>`;
                 timeline.innerHTML += newFrame;
             }
+        } else if (frames && frames.length == 0) {
+            updateBulkActionsUI();
         }
         opt_layout.value = compositions[comp_dropdown.value].layout;
         selectLayout();
@@ -426,6 +444,7 @@ function selectFrames() {
             frame.classList.remove("selected");
         }
     });
+    updateBulkActionsUI();
 }
 
 function selectFrameRange(start, end) {
