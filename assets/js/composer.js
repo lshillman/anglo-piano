@@ -13,6 +13,7 @@ const timeline = document.getElementById("timeline");
 const pasteFramesBtn = document.getElementById("paste-frames");
 const copyFramesBtn = document.getElementById("copy-frames");
 const playbackControls = document.getElementById("playback-controls");
+let timelineTouch = false;
 let clipboard = [];
 
 
@@ -448,15 +449,31 @@ pasteFramesBtn.addEventListener("click", () => pasteFrames());
 frame_delete.addEventListener("click", () => deleteFrames());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
-timeline.addEventListener("click", (e) => {
+
+timeline.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
+    timelineTouch = true;
     if(e.target && (e.target.nodeName == "BUTTON" || e.target.nodeName == "SPAN")) {
-        if (!e.shiftKey) {
-            currentFrame = parseInt(e.target.parentNode.dataset.position);
-            loadFrame(currentFrame);
-            // console.log(currentFrame);
-            selectFrames();
-        } else {
-            selectFrameRange(currentFrame, parseInt(e.target.parentNode.dataset.position));
+        setTimeout(() => {
+            if (timelineTouch) {
+                selectFrameRange(currentFrame, parseInt(e.target.parentNode.dataset.position));
+                timelineTouch = false;
+            }
+        }, "400");
+    }
+});
+
+timeline.addEventListener((mobileDevice ? 'touchend' : 'mouseup'), (e) => {
+    if (timelineTouch) {
+        timelineTouch = false;
+        if(e.target && (e.target.nodeName == "BUTTON" || e.target.nodeName == "SPAN")) {
+            if (!e.shiftKey) {
+                currentFrame = parseInt(e.target.parentNode.dataset.position);
+                loadFrame(currentFrame);
+                // console.log(currentFrame);
+                selectFrames();
+            } else {
+                selectFrameRange(currentFrame, parseInt(e.target.parentNode.dataset.position));
+            }
         }
     }
 });
