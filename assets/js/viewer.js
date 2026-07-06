@@ -380,7 +380,6 @@ function togglePullView() {
 }
 
 function togglePushPullView() {
-    let oldView = opt_bellows;
     opt_bellows = "pushpull";
     renderAngloKeyboard();
 }
@@ -441,9 +440,16 @@ function updateSelection(note, button = "any") {
                 // console.log("   adding buttons to selection");
                 let addCount = 0;
                 allbuttons.forEach((button, i) => {
-                    if (note == button.dataset.note) {
-                        selection.push({ note, "button": i });
-                        addCount++
+                    if (opt_matchoctave.checked) {
+                        if (note == button.dataset.note) {
+                            selection.push({ note, "button": i });
+                            addCount++
+                        }
+                    } else {
+                        if (note.slice(0, -1) == button.dataset.note.slice(0, -1)) {
+                            selection.push({ "note":button.dataset.note, "button": i });
+                            addCount++
+                        }
                     }
                 });
                 if (!addCount) { // we still want to select the note even if there are no matching buttons
@@ -454,9 +460,16 @@ function updateSelection(note, button = "any") {
                 selection.length = 0;
                 let addCount = 0;
                 allbuttons.forEach((button, i) => {
-                    if (note == button.dataset.note) {
-                        selection.push({ note, "button": i });
-                        addCount++;
+                    if (opt_matchoctave.checked) {
+                        if (note == button.dataset.note) {
+                            selection.push({ note, "button": i });
+                            addCount++
+                        }
+                    } else {
+                        if (note.slice(0, -1) == button.dataset.note.slice(0, -1)) {
+                            selection.push({ "note":button.dataset.note, "button": i });
+                            addCount++
+                        }
                     }
                 });
                 if (!addCount) { // we still want to select the note even if there are no matching buttons
@@ -472,9 +485,16 @@ function updateSelection(note, button = "any") {
             let allbuttons = document.querySelectorAll("#anglo-keyboard button");
             let addCount = 0;
             allbuttons.forEach((button, i) => {
-                if (note == button.dataset.note) {
-                    selection.push({ note, "button": i });
-                    addCount++;
+                if (opt_matchoctave.checked) {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                        addCount++
+                    }
+                } else {
+                    if (note.slice(0, -1) == button.dataset.note.slice(0, -1)) {
+                        selection.push({ "note":button.dataset.note, "button": i });
+                        addCount++
+                    }
                 }
             });
             if (!addCount) { // we still want to select the note even if there are no matching buttons
