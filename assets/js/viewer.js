@@ -370,36 +370,55 @@ function colorOctaves() {
 }
 
 function togglePushView() {
+    let oldView = opt_bellows;
     opt_bellows = "push-only";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("pull-only", "pushpull", "pullpush");
-        button.classList.add("push-only");
-    }
+    adjustSelectionPerBellows(oldView);
 }
 
 function togglePullView() {
+    let oldView = opt_bellows;
     opt_bellows = "pull-only";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("push-only", "pushpull", "pullpush");
-        button.classList.add("pull-only");
-    }
+    adjustSelectionPerBellows(oldView);
 }
 
 function togglePushPullView() {
+    let oldView = opt_bellows;
     opt_bellows = "pushpull";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("push-only", "pull-only", "pullpush");
-    }
+    adjustSelectionPerBellows(oldView);
 }
 
 function togglePullPushView() {
+    let oldView = opt_bellows;
     opt_bellows = "pullpush";
     renderAngloKeyboard();
-    for (button of angloKeyboard.children) {
-        button.classList.remove("push-only", "pull-only", "pushpull");
+    adjustSelectionPerBellows(oldView);
+}
+
+function adjustSelectionPerBellows(oldView) {
+    // updateSelection() handles the following in all cases EXCEPT immediately after toggling the view >_<
+    if (!(["pushpull", "push-only", "pull-only"].includes(oldView) && ["pushpull", "push-only", "pull-only"].includes(opt_bellows))) {
+        if (selectionMode == "buttons" && selection.length > 0) {
+            let selectedButtons = angloKeyboard.querySelectorAll(".button:has(button.selected)");
+            selectedButtons.forEach((button, i) => {
+                if (button.querySelectorAll("button")[0].classList.contains("selected") && !button.querySelectorAll("button")[1].classList.contains("selected")) {
+                    button.querySelectorAll("button")[0].classList.remove("selected");
+                    button.querySelectorAll("button")[1].classList.add("selected");
+                } else if (button.querySelectorAll("button")[1].classList.contains("selected") && !button.querySelectorAll("button")[0].classList.contains("selected")) {
+                    button.querySelectorAll("button")[1].classList.remove("selected");
+                    button.querySelectorAll("button")[0].classList.add("selected");
+                }
+            });
+            selection.forEach(noteobj => {
+                if (noteobj.button % 2 == 0) {
+                    noteobj.button = noteobj.button + 1;
+                } else {
+                    noteobj.button = noteobj.button - 1;
+                }
+            });
+        }
     }
 }
 
@@ -441,9 +460,16 @@ function updateSelection(note, button = "any") {
                 // console.log("   adding buttons to selection");
                 let addCount = 0;
                 allbuttons.forEach((button, i) => {
-                    if (note == button.dataset.note) {
-                        selection.push({ note, "button": i });
-                        addCount++
+                    if (opt_matchoctave.checked) {
+                        if (note == button.dataset.note) {
+                            selection.push({ note, "button": i });
+                            addCount++
+                        }
+                    } else {
+                        if (note.slice(0, -1) == button.dataset.note.slice(0, -1)) {
+                            selection.push({ "note":button.dataset.note, "button": i });
+                            addCount++
+                        }
                     }
                 });
                 if (!addCount) { // we still want to select the note even if there are no matching buttons
@@ -454,9 +480,16 @@ function updateSelection(note, button = "any") {
                 selection.length = 0;
                 let addCount = 0;
                 allbuttons.forEach((button, i) => {
-                    if (note == button.dataset.note) {
-                        selection.push({ note, "button": i });
-                        addCount++;
+                    if (opt_matchoctave.checked) {
+                        if (note == button.dataset.note) {
+                            selection.push({ note, "button": i });
+                            addCount++
+                        }
+                    } else {
+                        if (note.slice(0, -1) == button.dataset.note.slice(0, -1)) {
+                            selection.push({ "note":button.dataset.note, "button": i });
+                            addCount++
+                        }
                     }
                 });
                 if (!addCount) { // we still want to select the note even if there are no matching buttons
@@ -472,9 +505,16 @@ function updateSelection(note, button = "any") {
             let allbuttons = document.querySelectorAll("#anglo-keyboard button");
             let addCount = 0;
             allbuttons.forEach((button, i) => {
-                if (note == button.dataset.note) {
-                    selection.push({ note, "button": i });
-                    addCount++;
+                if (opt_matchoctave.checked) {
+                    if (note == button.dataset.note) {
+                        selection.push({ note, "button": i });
+                        addCount++
+                    }
+                } else {
+                    if (note.slice(0, -1) == button.dataset.note.slice(0, -1)) {
+                        selection.push({ "note":button.dataset.note, "button": i });
+                        addCount++
+                    }
                 }
             });
             if (!addCount) { // we still want to select the note even if there are no matching buttons
