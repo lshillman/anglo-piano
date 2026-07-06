@@ -370,35 +370,55 @@ function colorOctaves() {
 }
 
 function togglePushView() {
+    let oldView = opt_bellows;
     opt_bellows = "push-only";
     renderAngloKeyboard();
+    adjustSelectionPerBellows(oldView);
 }
 
 function togglePullView() {
+    let oldView = opt_bellows;
     opt_bellows = "pull-only";
     renderAngloKeyboard();
+    adjustSelectionPerBellows(oldView);
 }
 
 function togglePushPullView() {
+    let oldView = opt_bellows;
     opt_bellows = "pushpull";
     renderAngloKeyboard();
+    adjustSelectionPerBellows(oldView);
 }
 
 function togglePullPushView() {
     let oldView = opt_bellows;
     opt_bellows = "pullpush";
     renderAngloKeyboard();
-    if (selectionMode == "buttons" && selection.length > 0) {
-        let selectedButtons = angloKeyboard.querySelectorAll(".button:has(button.selected)");
-        selectedButtons.forEach((button, i) => {
-            if (button.querySelectorAll("button")[0].classList.contains("selected") && !button.querySelectorAll("button")[1].classList.contains("selected")) {
-                button.querySelectorAll("button")[0].classList.remove("selected");
-                button.querySelectorAll("button")[1].classList.add("selected");
-            } else if (button.querySelectorAll("button")[1].classList.contains("selected") && !button.querySelectorAll("button")[0].classList.contains("selected")) {
-                button.querySelectorAll("button")[1].classList.remove("selected");
-                button.querySelectorAll("button")[0].classList.add("selected");
-            }
-        });
+    adjustSelectionPerBellows(oldView);
+}
+
+function adjustSelectionPerBellows(oldView) {
+    // updateSelection() handles the following in all cases EXCEPT immediately after toggling the view >_<
+    if (!(["pushpull", "push-only", "pull-only"].includes(oldView) && ["pushpull", "push-only", "pull-only"].includes(opt_bellows))) {
+        if (selectionMode == "buttons" && selection.length > 0) {
+            let selectedButtons = angloKeyboard.querySelectorAll(".button:has(button.selected)");
+            selectedButtons.forEach((button, i) => {
+                if (button.querySelectorAll("button")[0].classList.contains("selected") && !button.querySelectorAll("button")[1].classList.contains("selected")) {
+                    button.querySelectorAll("button")[0].classList.remove("selected");
+                    button.querySelectorAll("button")[1].classList.add("selected");
+                } else if (button.querySelectorAll("button")[1].classList.contains("selected") && !button.querySelectorAll("button")[0].classList.contains("selected")) {
+                    button.querySelectorAll("button")[1].classList.remove("selected");
+                    button.querySelectorAll("button")[0].classList.add("selected");
+                }
+            });
+            selection.forEach(noteobj => {
+                if (noteobj.button % 2 == 0) {
+                    noteobj.button = noteobj.button + 1;
+                } else {
+                    noteobj.button = noteobj.button - 1;
+                }
+            });
+        }
     }
 }
 
