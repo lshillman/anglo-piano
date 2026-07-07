@@ -127,6 +127,25 @@ function updateFrame() {
     writeCompositions();
 }
 
+function getSelectionBellowsInfo() {
+    let push = 0;
+    let pull = 0;
+    if (opt_bellows == "pullpush") {
+        push += angloKeyboard.querySelectorAll(".bottom .selected").length;
+        pull += angloKeyboard.querySelectorAll(".top .selected").length;
+    } else {
+        push += angloKeyboard.querySelectorAll(".top .selected").length;
+        pull += angloKeyboard.querySelectorAll(".bottom .selected").length;
+    }
+    if (push && pull) {
+        return "pushpull";
+    } else if (push) {
+        return "push-only";
+    } else {
+        return "pull-only";
+    }
+}
+
 // TODO store the selected layout with the copied frames to help avoid pasting to a different layout
 function copyFrames() {
     let frames = compositions[comp_dropdown.value].frames;
