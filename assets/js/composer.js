@@ -113,9 +113,9 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
             }
         });
     }
-    frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
+    frames.splice(currentFrame + 1, 0, {mode: selectionMode, bellows: getSelectionBellowsInfo(), selection: [...selection]});
     writeCompositions();
-    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}"><button>${frames.length}</button>`;
+    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}" data-bellows="${getSelectionBellowsInfo()}"><button>${frames.length}</button>`;
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
     selectFrames();
     scrollToCurrentFrame();
@@ -123,7 +123,8 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
-    frames[currentFrame] = {mode: selectionMode, selection: [...selection]};
+    frames[currentFrame] = {mode: selectionMode, bellows: getSelectionBellowsInfo(), selection: [...selection]};
+    document.querySelector(".composer-frame.selected").dataset.bellows = getSelectionBellowsInfo();
     writeCompositions();
 }
 
@@ -358,7 +359,7 @@ function populateTimeline() {
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
             for (let i = 0; i < frames.length; i++) {
-                let newFrame = `<div class="composer-frame" data-position="${i}"><button>${i + 1}</button>`;
+                let newFrame = `<div class="composer-frame" data-position="${i}" data-bellows="${frames[i].bellows}"><button>${i + 1}</button>`;
                 if (frames[i].marker) {
                     newFrame += `<span class="marker">${frames[i].marker}</span>`;
                 }
