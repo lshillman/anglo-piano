@@ -692,7 +692,8 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    overflow-y: hidden;
    white-space: nowrap;
    text-align: left;
-   /* flex-basis: 70%; */
+   display: flex;
+   gap: 1rem;
 }
 
 #timeline:has(.composer-frame):has(.marker) {
@@ -709,7 +710,6 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 }
 
 #playback-controls {
-   /* flex-basis: 30%; */
    white-space: nowrap;
 }
 
@@ -725,14 +725,14 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 
 .composer-frame button{
    display: inline-block;
+   box-sizing: border-box;
    width: 3rem;
-   height: 100%;
+   height: 4rem;
    text-align: center;
    background: #ddd;
    background: linear-gradient(135deg,rgba(221, 221, 255, 1) 48%, rgba(255, 255, 255, 1) 48%, rgba(255, 255, 255, 1) 52%, rgba(255, 221, 221, 1) 52%);
    border: none;
    line-height: 4;
-   margin-right: 1rem;
 }
 
 .composer-frame[data-bellows="push-only"] button {
@@ -749,8 +749,10 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 }
 
 .composer-frame button:hover {
-   outline: 3px solid #8400FF;
-   outline-offset: -3px;
+	border-top: 3px solid #0000ff;
+	border-bottom: 3px solid #a30014;
+	border-right: 3px solid #a30014;
+	border-left: 3px solid #0000ff;
 }
 
 .composer-frame.selected[data-bellows="push-only"] button, .composer-frame.selected[data-bellows="push-only"] button:hover {
@@ -759,8 +761,7 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 }
 
 .composer-frame[data-bellows="push-only"] button:hover {
-   outline: 3px solid #0000FF;
-   outline-offset: -3px;
+   border: 3px solid #0000FF;
 }
 
 .composer-frame.selected[data-bellows="pull-only"] button, .composer-frame.selected[data-bellows="pull-only"] button:hover {
@@ -769,14 +770,13 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 }
 
 .composer-frame[data-bellows="pull-only"] button:hover {
-   outline: 3px solid #A30014;
-   outline-offset: -3px;
+   border: 3px solid #A30014;
 }
 
 .marker {
   display: inline-block;
   position: absolute;
-  top: -1.5rem;
+  top: -1.6rem;
   left: 0;
   border: 1px solid #8400FF;
   background-color: #f5eaff;
