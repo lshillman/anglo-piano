@@ -727,12 +727,11 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    display: inline-block;
    box-sizing: border-box;
    width: 3rem;
-   height: 4rem;
+   height: 3.5rem;
    text-align: center;
    background: #ddd;
    background: linear-gradient(135deg,rgba(221, 221, 255, 1) 48%, rgba(255, 255, 255, 1) 48%, rgba(255, 255, 255, 1) 52%, rgba(255, 221, 221, 1) 52%);
    border: none;
-   line-height: 4;
 }
 
 .composer-frame[data-bellows="push-only"] button {
