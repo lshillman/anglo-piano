@@ -123,7 +123,9 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
-    frames[currentFrame] = {mode: selectionMode, bellows: getSelectionBellowsInfo(), selection: [...selection]};
+    frames[currentFrame].mode = selectionMode;
+    frames[currentFrame].bellows = getSelectionBellowsInfo();
+    frames[currentFrame].selection = [...selection];
     document.querySelector(".composer-frame.selected").dataset.bellows = getSelectionBellowsInfo();
     writeCompositions();
 }
