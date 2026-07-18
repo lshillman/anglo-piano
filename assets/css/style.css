@@ -671,8 +671,12 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    justify-content: space-between;
    gap: 2rem;
    overflow-x: auto;
-   padding: 0.5rem 0.5rem 0.1rem 0.5rem;
+   padding: 0.5rem;
    background-color: #efefef;
+}
+
+#composer-controls select {
+   margin-bottom: 0;
 }
 
 #composer-controls div {

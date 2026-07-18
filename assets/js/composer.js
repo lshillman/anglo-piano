@@ -27,9 +27,20 @@ function loadCompositions() {
             // console.log(Object.keys(compositions)[i]);
             comp_dropdown.innerHTML += `<option value="${Object.keys(compositions)[i]}">${Object.keys(compositions)[i]}</option>`;
         }
+        comp_dropdown.style.display = "inline-block";
+        comp_delete.style.display = "block";
+        document.getElementById("comp-export").style.display = "inline-block";
+        document.getElementById("frame-actions").style.display = "block";
+        playbackControls.style.display = "block";
         populateTimeline(compositions[comp_dropdown.value].frames);
     } else {
         console.log("no compositions in localStorage")
+        comp_dropdown.style.display = "none";
+        comp_delete.style.display = "none";
+        document.getElementById("comp-export").style.display = "none";
+        document.getElementById("frame-actions").style.display = "none";
+        playbackControls.style.display = "none";
+        timeline.innerHTML = `<div id="new-composition-message"><p>Create a new composition, or <a href=#>see an example composition</a> to get a sense of how the composer works.</p></div>`
         // prompt user to enter a name for the new composition
     }
 }
