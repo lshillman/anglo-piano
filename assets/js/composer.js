@@ -401,7 +401,7 @@ function deleteComposition() {
     comp_dropdown.remove(comp_dropdown.selectedIndex);
     writeCompositions();
     closeModal();
-    populateTimeline();
+    loadCompositions();
 }
 
 function exportComposition() {
