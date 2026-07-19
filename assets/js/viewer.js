@@ -18,6 +18,9 @@ const keyboard = document.getElementById("keyboard");
 const angloContainer = document.getElementById("anglo-container");
 const angloKeyboard = document.getElementById("anglo-keyboard");
 
+// composer container - needs to be declared here
+const composer_container = document.getElementById("composer-container");
+
 // chord bar
 const chordBar = document.getElementById("chords");
 const maj = document.getElementById("major");

@@ -1,5 +1,4 @@
 // composer elements
-const composer_container = document.getElementById("composer-container");
 const comp_dropdown = document.getElementById("composition");
 const comp_new = document.getElementById("comp-new"); // shows the create modal
 const comp_createBtn = document.getElementById("createCompBtn"); // inside the create modal
