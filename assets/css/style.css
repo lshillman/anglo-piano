@@ -679,6 +679,11 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    margin-bottom: 0;
 }
 
+#layout-mismatch {
+   display: none;
+   line-height: 1.9;
+}
+
 #composer-controls div {
    white-space: nowrap;
 }

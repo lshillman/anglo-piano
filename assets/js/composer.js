@@ -1,4 +1,5 @@
 // composer elements
+const composer_container = document.getElementById("composer-container");
 const comp_dropdown = document.getElementById("composition");
 const comp_new = document.getElementById("comp-new"); // shows the create modal
 const comp_createBtn = document.getElementById("createCompBtn"); // inside the create modal
@@ -13,6 +14,7 @@ const timeline = document.getElementById("timeline");
 const pasteFramesBtn = document.getElementById("paste-frames");
 const copyFramesBtn = document.getElementById("copy-frames");
 const playbackControls = document.getElementById("playback-controls");
+let currentFrame = -1;
 let timelineTouch = false;
 let clipboard = [];
 
@@ -86,7 +88,7 @@ function editMarker(action) {
     writeCompositions();
     populateTimeline(); // TODO find a lighter-weight way of doing this. populateTimeline() also selects a layout -_-
     selectFrames();
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function createComposition() {
@@ -96,11 +98,11 @@ function createComposition() {
         closeModal();
         console.log("Creating new composition...");
         compositions[title] = {
-            layout: opt_layout.value,
             frames: []
         };
         writeCompositions();
         loadCompositions();
+        currentFrame = -1;
     } else if (compositions[title]) {
         document.getElementById("newCompError").innerHTML = "You already have a composition with this name.<br />Please choose another.";
         document.getElementById("newCompError").style.visibility = "visible";
@@ -110,11 +112,12 @@ function createComposition() {
     }
 }
 
-let currentFrame = -1;
-
 function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
-    // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    if (frames.length == 0) {
+        compositions[comp_dropdown.value].layout = encodeLayout();
+        compositions[comp_dropdown.value].layoutTitle = opt_layout.value;
+    }
     if (opt_bellows == "pullpush") { // make sure the correct notes are saved, using push/pull as the default source of truth
         selection.forEach(note => {
             if (note.button % 2 == 0) {
@@ -247,9 +250,10 @@ function deleteFrames(confirmation) {
 function loadFrame (index) {
     let frames = compositions[comp_dropdown.value].frames;
     selection.length = 0;
-    if (opt_layout.value == compositions[comp_dropdown.value].layout) {
-        selectionMode = frames[index].mode;
-    }
+    // if (opt_layout.value == compositions[comp_dropdown.value].layout) {
+    //     selectionMode = frames[index].mode;
+    // }
+    // setSelectionMode(); // do this instead of above 3 lines?
     if (opt_bellows == "pullpush") {
         let pullpushSelection = [];
         frames[index].selection.forEach(noteobj => {
@@ -267,11 +271,11 @@ function loadFrame (index) {
     selectConcertinaButtons();
     selectPianoKey();
     selectFrames();
-    updateBulkActionsUI();
+    updateFrameActionsUI();
     playSelection();
 }
 
-function updateBulkActionsUI() {
+function updateFrameActionsUI() {
     let selectedFrames = timeline.querySelectorAll(".selected");
     if (compositions[comp_dropdown.value].frames.length == 0) {
         frame_save.innerText = "Create new frame";
@@ -282,6 +286,9 @@ function updateBulkActionsUI() {
         if (document.getElementById("new-composition-message")) {
             document.getElementById("new-composition-message").remove();
         }
+    }
+    if (selectedFrames.length == 0 && compositions[comp_dropdown.value].frames.length > 0) {
+        frame_save.style.display = "none";
     }
     if (selectedFrames.length == 0) {
         frame_update.style.display = "none";
@@ -338,7 +345,7 @@ function loadNextFrame(select) {
     if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function loadPrevFrame(select) {
@@ -362,7 +369,7 @@ function loadPrevFrame(select) {
     if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
@@ -380,14 +387,54 @@ function populateTimeline() {
                 timeline.innerHTML += newFrame;
             }
         }
-        // else if (frames && frames.length == 0) {
-            
-        // }
-        updateBulkActionsUI();
-        opt_layout.value = compositions[comp_dropdown.value].layout;
-        selectLayout();
+        updateFrameActionsUI();
+        // opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+        // selectLayout();
     } else {
         timeline.innerHTML = "";
+    }
+    // setSelectionMode();
+}
+
+function setSelectionMode() {
+    if (composer_container.style.display == "none") {
+        selectionMode = "notes";
+        document.getElementById("frame-actions").style.display = "block";
+        document.getElementById("layout-mismatch").style.display = "none";
+    } else if (compositions[comp_dropdown.value].frames.length == 0) {
+        selectionMode = "buttons";
+        document.getElementById("frame-actions").style.display = "block";
+        document.getElementById("layout-mismatch").style.display = "none";
+    } else if (compareLayouts()) {
+        selectionMode = "buttons";
+        document.getElementById("frame-actions").style.display = "block";
+        document.getElementById("layout-mismatch").style.display = "none";
+    } else if (!compareLayouts()) {
+        selectionMode = "notes";
+        document.getElementById("frame-actions").style.display = "none";
+        document.getElementById("layout-mismatch").style.display = "block";
+    }
+}
+
+function compareLayouts() {
+    // checks to see if a composition's layout matches the currently selected layout, disregarding margins
+    console.log("comparing layouts...");
+    if (!compositions[comp_dropdown.value].layoutTitle.includes("USER_LAYOUT_")) {
+        if (compositions[comp_dropdown.value].layoutTitle == opt_layout.value) {
+            console.log("Matches built-in layout");
+            return true;
+        } else {
+            console.log("does not match built-in layout");
+            return false;
+        }
+    } else {
+        if (encodeLayout().replaceAll(/_[0-9]*_/g, "") == compositions[comp_dropdown.value].layout.replaceAll(/_[0-9]*_/g, "")) {
+            console.log("matches user layout");
+            return true;
+        } else {
+            console.log("does not match user layout");
+            return false;
+        }
     }
 }
 
@@ -402,6 +449,13 @@ function deleteComposition() {
     writeCompositions();
     closeModal();
     loadCompositions();
+    if (compositions[comp_dropdown.value].layoutTitle) {
+        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+        selectLayout();
+    }
+    setSelectionMode();
+    currentFrame = -1;
+    timeline.scrollLeft = 0;
 }
 
 function exportComposition() {
@@ -460,6 +514,11 @@ function importCompositionFromFile(e) {
 
 comp_dropdown.addEventListener("change", () => {
     populateTimeline(compositions[comp_dropdown.value].frames);
+    if (compositions[comp_dropdown.value].layoutTitle) {
+        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+        selectLayout();
+    }
+    setSelectionMode();
     currentFrame = -1;
     timeline.scrollLeft = 0;
 });
@@ -519,7 +578,7 @@ function selectFrames() {
             frame.classList.remove("selected");
         }
     });
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function selectFrameRange(start, end) {
@@ -538,7 +597,7 @@ function selectFrameRange(start, end) {
                 }
         }
     });
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function scrollToCurrentFrame () {
