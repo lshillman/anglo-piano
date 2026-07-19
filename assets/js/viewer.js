@@ -777,6 +777,12 @@ function selectLayout() {
     }
     renderAngloKeyboard();
     opt_layout.blur();
+    if (composer_container.style.display == "block" && timeline.querySelector(".selected")) {
+        setSelectionMode();
+        selection.length = 0;
+        updateSelection();
+        loadFrame(currentFrame);
+    }
 }
 
 
