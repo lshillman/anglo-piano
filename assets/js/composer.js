@@ -522,6 +522,7 @@ comp_dropdown.addEventListener("change", () => {
     currentFrame = -1;
     timeline.scrollLeft = 0;
 });
+document.getElementById("comp-layout-button").addEventListener("click", (e) => switchToCompLayout());
 comp_createBtn.addEventListener("click", () => createComposition());
 document.getElementById("comp-import").addEventListener("click", () => document.getElementById("import-compositions-modal").style.display = "block");
 document.getElementById("comp-export").addEventListener("click", () => {
@@ -617,11 +618,25 @@ function scrollToCurrentFrame () {
     }
 }
 
+function switchToCompLayout() {
+    console.log("switching layout");
+    opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+    selectLayout();
+    setSelectionMode();
+    if (timeline.querySelector(".selected")) {
+        loadFrame(currentFrame);
+    } else {
+        selection.length = 0;
+        updateSelection();
+    }
+}
+
 // hastily-improvised feature flag.
 function showComposer() {
     document.getElementById("composer-container").style.display = "block";
     document.getElementById("default-view-container").style.paddingBottom = "8rem";
     console.warn("The composer is actively being developed. Use at your own risk!")
+    setSelectionMode();
 }
 
 if (urlParams.composer) {

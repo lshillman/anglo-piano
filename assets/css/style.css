@@ -684,6 +684,15 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    line-height: 1.9;
 }
 
+#comp-layout-button {
+	background: none;
+	border: none;
+	font-size: inherit;
+	padding: 0px;
+	color: inherit;
+	text-decoration: underline;
+}
+
 #composer-controls div {
    white-space: nowrap;
 }
