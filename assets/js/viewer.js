@@ -47,6 +47,8 @@ const opt_accidentals = document.getElementById("accidentals");
 const opt_absentNotes = document.getElementById("absent-notes");
 const opt_highlights = document.getElementById("highlights");
 const editHighlightsBtn = document.getElementById("editHighlightsBtn");
+const moreDisplayOptionsBtn = document.getElementById("moreDisplayOptionsBtn");
+const openComposerBtn = document.getElementById("openComposerBtn");
 let highlightColor = "red";
 
 
@@ -771,7 +773,7 @@ function selectLayout() {
         buttons = USER_LAYOUTS[opt_layout.value.slice(12)].layout;
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "block";
-        editHighlightsBtn.style.display = "block";
+        editHighlightsBtn.style.display = "inherit";
     } else if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
         addToLayoutsBtn.style.display = "none";
@@ -844,6 +846,22 @@ document.getElementById("highlight-colors").addEventListener("change", (e) => {
 
 document.getElementById("stop-highlighting").addEventListener("click", () => stopHighlighting());
 document.getElementById("editHighlightsBtn").addEventListener("click", () => startHighlighting());
+moreDisplayOptionsBtn.addEventListener("click", () => {
+    if (document.getElementById("more-display-options").style.display == "none") {
+        moreDisplayOptionsBtn.innerText = "Fewer options";
+        document.getElementById("more-display-options").style.display = "flex";
+    } else {
+        moreDisplayOptionsBtn.innerText = "More options..."
+        document.getElementById("more-display-options").style.display = "none";
+    }
+});
+openComposerBtn.addEventListener("click", () => {
+    if (composer_container.style.display == "none") {
+        showComposer();
+    } else {
+        closeComposer();
+    }
+});
 
 function toggleButtonHighlight(e) {
     if (e.target.classList.contains("highlighted")) {
@@ -1307,7 +1325,7 @@ function addUserLayout() {
 function init() {
     if (!mobileDevice) {
         keyboardShortcutsBtn.style.display = "block"
-        document.querySelector('[for="multiselect"]').innerText = "Select multiple notes [shift]";
+        document.querySelector('[for="multiselect"] span').innerText = "Select multiple notes [shift]";
     }
     let port = "";
     if (window.location.port){

@@ -29,7 +29,7 @@ function loadCompositions() {
             comp_dropdown.innerHTML += `<option value="${Object.keys(compositions)[i]}">${Object.keys(compositions)[i]}</option>`;
         }
         comp_dropdown.style.display = "inline-block";
-        comp_delete.style.display = "block";
+        comp_delete.style.display = "inline-block";
         document.getElementById("comp-export").style.display = "inline-block";
         document.getElementById("frame-actions").style.display = "block";
         playbackControls.style.display = "block";
@@ -46,7 +46,7 @@ function loadCompositions() {
     }
 }
 
-loadCompositions();
+
 
 function writeCompositions() {
     localStorage.setItem("COMPOSITIONS", JSON.stringify(compositions));
@@ -373,7 +373,7 @@ function loadPrevFrame(select) {
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
 function populateTimeline() {
-    if (urlParams.composer && comp_dropdown.value) {
+    if (comp_dropdown.value) {
         let frames = compositions[comp_dropdown.value].frames;
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
@@ -531,6 +531,7 @@ document.getElementById("comp-export").addEventListener("click", () => {
 document.getElementById("importCompFileBtn").addEventListener("click", (e) => importCompositionFromFile(e));
 document.getElementById("cancelImportCompBtn").addEventListener("click", (e) => closeModal(e));
 document.getElementById("exportCompBtn").addEventListener("click", () => exportComposition());
+document.getElementById("close-composer").addEventListener("click", () => closeComposer());
 comp_new.addEventListener("click", () => promptForTitle());
 comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
@@ -626,16 +627,25 @@ function switchToCompLayout() {
         loadFrame(currentFrame);
     } else {
         selection.length = 0;
-        updateSelection();
     }
 }
 
-// hastily-improvised feature flag.
 function showComposer() {
-    document.getElementById("composer-container").style.display = "block";
+    composer_container.style.display = "block";
     document.getElementById("default-view-container").style.paddingBottom = "8rem";
     console.warn("The composer is actively being developed. Use at your own risk!")
+    loadCompositions();
     setSelectionMode();
+    openComposerBtn.innerText = "Close composer"
+}
+
+function closeComposer() {
+    composer_container.style.display = "none";
+    document.getElementById("default-view-container").style.paddingBottom = "0";
+    comp_dropdown.innerHTML = "";
+    timeline.innerHTML = "";
+    setSelectionMode();
+    openComposerBtn.innerText = "Open composer"
 }
 
 if (urlParams.composer) {

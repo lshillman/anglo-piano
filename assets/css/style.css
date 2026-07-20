@@ -273,12 +273,12 @@ button {
    flex-wrap: wrap;
 }
 
-#viewer-options div {
-   padding: 0;
-   white-space: nowrap;
+#view-preferences, #bellows-preferences {
+   display: flex;
+   flex-direction: column;
 }
 
-#viewer-options div div {
+#layout-preferences div {
    display: flex;
    align-items: baseline;
    gap: 0.3rem;
@@ -471,19 +471,24 @@ button#addToLayoutsBtn:active {
 
 /*========== HIGHLIGHT CONTROLS ============*/
 
-button#editHighlightsBtn {
+#editHighlightsBtn, #moreDisplayOptionsBtn {
+   display: inherit;
+   line-height: 1.5;
    font-size: 1rem;
    padding: 0;
-   margin-left: 1.5rem;
-   color: #222;
+   margin-left: 1.3rem;
+   color: inherit;
    border-color: transparent;
    background-color: transparent;
    cursor: pointer;
 }
 
-button#editHighlightsBtn:hover, button#edit-highlights:active {
+#moreDisplayOptionsBtn {
+   margin-left: 0;
+}
+
+#editHighlightsBtn:hover, #editHighlightsBtn:active, #moreDisplayOptionsBtn:hover, #moreDisplayOptionsBtn:active {
    text-decoration: underline;
-   color: #333;
 }
 
 #highlight-controls {
@@ -646,6 +651,17 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
    box-shadow: 0 16px 0 0 #8080FF inset;
 }
 
+#more-display-options {
+   flex-direction: column;
+   padding-left: 1rem;
+   border-left: 2px solid #ccc;
+   margin-bottom: 1rem;
+}
+
+#openComposerBtn {
+   width: fit-content;
+}
+
 
 /* ===== COMPOSER ===== */
 
@@ -682,6 +698,7 @@ button#editHighlightsBtn:hover, button#edit-highlights:active {
 #layout-mismatch {
    display: none;
    line-height: 1.9;
+   white-space: nowrap;
 }
 
 #comp-layout-button {
