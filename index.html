@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div id="chords">
-                <button id="major" class="selected" onclick="findChord('maj')">Maj</button><button id="minor"
+                <button id="major" onclick="findChord('maj')">Maj</button><button id="minor"
                     onclick="findChord('min')">min</button><button id="diminished"
                     onclick="findChord('dim')">dim</button><button id="seventh"
                     onclick="findChord('7')">7</button><button id="major7"
@@ -46,7 +46,7 @@
             </div>
 
             <div id="viewer-options">
-                <div>
+                <div id="layout-preferences">
                     <select id="layout">
                         <!-- layouts -->
                     </select>
@@ -59,64 +59,32 @@
                         <button id="removeFromLayoutsBtn">Remove from your layouts</button>
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <input type="radio" id="pushpull" name="bellows" value="pushpull" checked>
-                        <label for="pushpull">push / pull</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="pullpush" name="bellows" value="pullpush">
-                        <label for="pullpush">pull / push</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="push" name="bellows" value="push">
-                        <label for="push">push only</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="pull" name="bellows" value="pull">
-                        <label for="pull">pull only</label>
-                    </div>
+                <div id="bellows-preferences">
+                    <label for="pushpull"><input type="radio" id="pushpull" name="bellows" value="pushpull" checked>push / pull</label>
+                    <label for="pullpush"><input type="radio" id="pullpush" name="bellows" value="pullpush">pull / push</label>
+                    <label for="push"><input type="radio" id="push" name="bellows" value="push">push only</label>
+                    <label for="pull"><input type="radio" id="pull" name="bellows" value="pull">pull only</label>
                     <div id="sound-option">
-                        <input type="checkbox" id="sound" name="sound" checked="checked">
-                        <label for="sound"> Sound</label>
+                        <label for="sound"><input type="checkbox" id="sound" name="sound" checked="checked">Sound</label>
                     </div>
                 </div>
 
-                <div>
-                    <div>
-                        <input type="checkbox" id="matchoctave" name="matchoctave" checked="checked">
-                        <label for="matchoctave"> Match octave</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="multiselect" name="multiselect" value="false">
-                        <label for="multiselect">Select multiple notes [long-press]</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="coloroctave" name="coloroctave" value="false">
-                        <label for="coloroctave">Color octaves</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="absent-notes" name="absent-notes" value="true" checked="checked">
-                        <label for="absent-notes">Gray out absent notes</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="concertina-labels" name="concertina-labels" value="true"
-                            checked="checked">
-                        <label for="concertina-labels">Concertina labels</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">
-                        <label for="piano-labels">Piano labels</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="accidentals" name="accidentals" value="true">
-                        <label for="accidentals">Alternate accidental spellings</label>
-                    </div>
+                <div id="view-preferences">
+                    <label for="matchoctave"><input type="checkbox" id="matchoctave" name="matchoctave" checked="checked">Match octave</label>
+                    <label for="multiselect"><input type="checkbox" id="multiselect" name="multiselect" value="false"><span>Select multiple notes [long-press]</span></label>
                     <div id="highlight-option">
-                        <input type="checkbox" id="highlights" name="highlights" value="true" checked="checked">
-                        <label for="highlights">User highlights</label>
+                        <label for="highlights"><input type="checkbox" id="highlights" name="highlights" value="true" checked="checked">User highlights</label>
                     </div>
-                    <button id="editHighlightsBtn" style="display: block;">Edit highlights...</button>
+                    <button id="editHighlightsBtn">Edit highlights...</button>
+                    <button id="moreDisplayOptionsBtn">More options...</button>
+                    <div id="more-display-options" style="display:none;">
+                        <label for="coloroctave"><input type="checkbox" id="coloroctave" name="coloroctave" value="false">Color octaves</label>
+                        <label for="absent-notes"><input type="checkbox" id="absent-notes" name="absent-notes" value="true" checked="checked">Gray out absent notes</label>
+                        <label for="concertina-labels"><input type="checkbox" id="concertina-labels" name="concertina-labels" value="true" checked="checked">Concertina labels</label>
+                        <label for="piano-labels"><input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">Piano labels</label>
+                        <label for="accidentals"><input type="checkbox" id="accidentals" name="accidentals" value="true">Alternate accidental spellings</label>
+                    </div>
+                    <button id="openComposerBtn">Open composer</button>
                 </div>
             </div>
             <div id="highlight-controls">
@@ -143,7 +111,7 @@
             </div>
         </div>
 
-        <div id="composer-container">
+        <div id="composer-container" style="display:none;">
             <div id="composer">
                 <div id="composer-controls">
                     <div>
@@ -151,8 +119,9 @@
                         <button id="comp-new">New composition</button>
                         <button id="comp-import">Import...</button>
                         <button id="comp-export">Export...</button>
+                        <button id="comp-delete" class="light-destructive">Delete composition</button>
                     </div>
-                    <div>
+                    <div id="frame-actions">
                         <button id="frame-save">Create new frame</button>
                         <button id="frame-update">Update frame</button>
                         <button id="add-marker">Add marker</button>
@@ -160,8 +129,9 @@
                         <button id="paste-frames" style="display:none;">Paste frame(s)</button>
                         <button id="frame-delete" class="light-destructive">Delete frame</button>
                     </div>
+                    <span id="layout-mismatch">Switch to <button id="comp-layout-button">this composition's layout</button> to enable editing.</span>
                     <div>
-                        <button id="comp-delete" class="light-destructive">Delete composition</button>
+                        <button id="close-composer" title="Close composer">&times;</button>
                     </div>
                 </div>
                 <div id="timeline-container">

@@ -13,6 +13,7 @@ const timeline = document.getElementById("timeline");
 const pasteFramesBtn = document.getElementById("paste-frames");
 const copyFramesBtn = document.getElementById("copy-frames");
 const playbackControls = document.getElementById("playback-controls");
+let currentFrame = -1;
 let timelineTouch = false;
 let clipboard = [];
 
@@ -27,14 +28,25 @@ function loadCompositions() {
             // console.log(Object.keys(compositions)[i]);
             comp_dropdown.innerHTML += `<option value="${Object.keys(compositions)[i]}">${Object.keys(compositions)[i]}</option>`;
         }
+        comp_dropdown.style.display = "inline-block";
+        comp_delete.style.display = "inline-block";
+        document.getElementById("comp-export").style.display = "inline-block";
+        document.getElementById("frame-actions").style.display = "block";
+        playbackControls.style.display = "block";
         populateTimeline(compositions[comp_dropdown.value].frames);
     } else {
         console.log("no compositions in localStorage")
+        comp_dropdown.style.display = "none";
+        comp_delete.style.display = "none";
+        document.getElementById("comp-export").style.display = "none";
+        document.getElementById("frame-actions").style.display = "none";
+        playbackControls.style.display = "none";
+        timeline.innerHTML = `<div id="new-composition-message"><p>Create a new composition, or <a href=#>see an example composition</a> to get a sense of how the composer works.</p></div>`
         // prompt user to enter a name for the new composition
     }
 }
 
-loadCompositions();
+
 
 function writeCompositions() {
     localStorage.setItem("COMPOSITIONS", JSON.stringify(compositions));
@@ -75,7 +87,7 @@ function editMarker(action) {
     writeCompositions();
     populateTimeline(); // TODO find a lighter-weight way of doing this. populateTimeline() also selects a layout -_-
     selectFrames();
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function createComposition() {
@@ -85,11 +97,11 @@ function createComposition() {
         closeModal();
         console.log("Creating new composition...");
         compositions[title] = {
-            layout: opt_layout.value,
             frames: []
         };
         writeCompositions();
         loadCompositions();
+        currentFrame = -1;
     } else if (compositions[title]) {
         document.getElementById("newCompError").innerHTML = "You already have a composition with this name.<br />Please choose another.";
         document.getElementById("newCompError").style.visibility = "visible";
@@ -99,11 +111,12 @@ function createComposition() {
     }
 }
 
-let currentFrame = -1;
-
 function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
     let frames = compositions[comp_dropdown.value].frames;
-    // frames.push({bellows: opt_bellows, mode: selectionMode, selection: [...selection]});
+    if (frames.length == 0) {
+        compositions[comp_dropdown.value].layout = encodeLayout();
+        compositions[comp_dropdown.value].layoutTitle = opt_layout.value;
+    }
     if (opt_bellows == "pullpush") { // make sure the correct notes are saved, using push/pull as the default source of truth
         selection.forEach(note => {
             if (note.button % 2 == 0) {
@@ -113,9 +126,9 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
             }
         });
     }
-    frames.splice(currentFrame + 1, 0, {mode: selectionMode, selection: [...selection]});
+    frames.splice(currentFrame + 1, 0, {mode: selectionMode, bellows: getSelectionBellowsInfo(), selection: [...selection]});
     writeCompositions();
-    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}"><button>${frames.length}</button>`;
+    timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}" data-bellows="${getSelectionBellowsInfo()}"><button>${frames.length}</button>`;
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
     selectFrames();
     scrollToCurrentFrame();
@@ -123,8 +136,30 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
-    frames[currentFrame] = {mode: selectionMode, selection: [...selection]};
+    frames[currentFrame].mode = selectionMode;
+    frames[currentFrame].bellows = getSelectionBellowsInfo();
+    frames[currentFrame].selection = [...selection];
+    document.querySelector(".composer-frame.selected").dataset.bellows = getSelectionBellowsInfo();
     writeCompositions();
+}
+
+function getSelectionBellowsInfo() {
+    let push = 0;
+    let pull = 0;
+    if (opt_bellows == "pullpush") {
+        push += angloKeyboard.querySelectorAll(".bottom .selected").length;
+        pull += angloKeyboard.querySelectorAll(".top .selected").length;
+    } else {
+        push += angloKeyboard.querySelectorAll(".top .selected").length;
+        pull += angloKeyboard.querySelectorAll(".bottom .selected").length;
+    }
+    if (push && pull) {
+        return "pushpull";
+    } else if (push) {
+        return "push-only";
+    } else {
+        return "pull-only";
+    }
 }
 
 // TODO store the selected layout with the copied frames to help avoid pasting to a different layout
@@ -214,9 +249,10 @@ function deleteFrames(confirmation) {
 function loadFrame (index) {
     let frames = compositions[comp_dropdown.value].frames;
     selection.length = 0;
-    if (opt_layout.value == compositions[comp_dropdown.value].layout) {
-        selectionMode = frames[index].mode;
-    }
+    // if (opt_layout.value == compositions[comp_dropdown.value].layout) {
+    //     selectionMode = frames[index].mode;
+    // }
+    // setSelectionMode(); // do this instead of above 3 lines?
     if (opt_bellows == "pullpush") {
         let pullpushSelection = [];
         frames[index].selection.forEach(noteobj => {
@@ -234,11 +270,11 @@ function loadFrame (index) {
     selectConcertinaButtons();
     selectPianoKey();
     selectFrames();
-    updateBulkActionsUI();
+    updateFrameActionsUI();
     playSelection();
 }
 
-function updateBulkActionsUI() {
+function updateFrameActionsUI() {
     let selectedFrames = timeline.querySelectorAll(".selected");
     if (compositions[comp_dropdown.value].frames.length == 0) {
         frame_save.innerText = "Create new frame";
@@ -249,6 +285,9 @@ function updateBulkActionsUI() {
         if (document.getElementById("new-composition-message")) {
             document.getElementById("new-composition-message").remove();
         }
+    }
+    if (selectedFrames.length == 0 && compositions[comp_dropdown.value].frames.length > 0) {
+        frame_save.style.display = "none";
     }
     if (selectedFrames.length == 0) {
         frame_update.style.display = "none";
@@ -305,7 +344,7 @@ function loadNextFrame(select) {
     if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function loadPrevFrame(select) {
@@ -329,17 +368,17 @@ function loadPrevFrame(select) {
     if (select && frames[currentFrame]) {
         selectFrameRange(selectionStart, currentFrame);
     }
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 //TODO invoke this only when composer is shown. For now, requiring feature flag
 function populateTimeline() {
-    if (urlParams.composer && comp_dropdown.value) {
+    if (comp_dropdown.value) {
         let frames = compositions[comp_dropdown.value].frames;
         timeline.innerHTML = "";
         if (frames && frames.length != 0) {
             for (let i = 0; i < frames.length; i++) {
-                let newFrame = `<div class="composer-frame" data-position="${i}"><button>${i + 1}</button>`;
+                let newFrame = `<div class="composer-frame" data-position="${i}" data-bellows="${frames[i].bellows}"><button>${i + 1}</button>`;
                 if (frames[i].marker) {
                     newFrame += `<span class="marker">${frames[i].marker}</span>`;
                 }
@@ -347,14 +386,54 @@ function populateTimeline() {
                 timeline.innerHTML += newFrame;
             }
         }
-        // else if (frames && frames.length == 0) {
-            
-        // }
-        updateBulkActionsUI();
-        opt_layout.value = compositions[comp_dropdown.value].layout;
-        selectLayout();
+        updateFrameActionsUI();
+        // opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+        // selectLayout();
     } else {
         timeline.innerHTML = "";
+    }
+    // setSelectionMode();
+}
+
+function setSelectionMode() {
+    if (composer_container.style.display == "none") {
+        selectionMode = "notes";
+        document.getElementById("frame-actions").style.display = "block";
+        document.getElementById("layout-mismatch").style.display = "none";
+    } else if (compositions[comp_dropdown.value].frames.length == 0) {
+        selectionMode = "buttons";
+        document.getElementById("frame-actions").style.display = "block";
+        document.getElementById("layout-mismatch").style.display = "none";
+    } else if (compareLayouts()) {
+        selectionMode = "buttons";
+        document.getElementById("frame-actions").style.display = "block";
+        document.getElementById("layout-mismatch").style.display = "none";
+    } else if (!compareLayouts()) {
+        selectionMode = "notes";
+        document.getElementById("frame-actions").style.display = "none";
+        document.getElementById("layout-mismatch").style.display = "block";
+    }
+}
+
+function compareLayouts() {
+    // checks to see if a composition's layout matches the currently selected layout, disregarding margins
+    console.log("comparing layouts...");
+    if (!compositions[comp_dropdown.value].layoutTitle.includes("USER_LAYOUT_")) {
+        if (compositions[comp_dropdown.value].layoutTitle == opt_layout.value) {
+            console.log("Matches built-in layout");
+            return true;
+        } else {
+            console.log("does not match built-in layout");
+            return false;
+        }
+    } else {
+        if (encodeLayout().replaceAll(/_[0-9]*_/g, "") == compositions[comp_dropdown.value].layout.replaceAll(/_[0-9]*_/g, "")) {
+            console.log("matches user layout");
+            return true;
+        } else {
+            console.log("does not match user layout");
+            return false;
+        }
     }
 }
 
@@ -368,7 +447,14 @@ function deleteComposition() {
     comp_dropdown.remove(comp_dropdown.selectedIndex);
     writeCompositions();
     closeModal();
-    populateTimeline();
+    loadCompositions();
+    if (compositions[comp_dropdown.value].layoutTitle) {
+        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+        selectLayout();
+    }
+    setSelectionMode();
+    currentFrame = -1;
+    timeline.scrollLeft = 0;
 }
 
 function exportComposition() {
@@ -427,9 +513,15 @@ function importCompositionFromFile(e) {
 
 comp_dropdown.addEventListener("change", () => {
     populateTimeline(compositions[comp_dropdown.value].frames);
+    if (compositions[comp_dropdown.value].layoutTitle) {
+        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+        selectLayout();
+    }
+    setSelectionMode();
     currentFrame = -1;
     timeline.scrollLeft = 0;
 });
+document.getElementById("comp-layout-button").addEventListener("click", (e) => switchToCompLayout());
 comp_createBtn.addEventListener("click", () => createComposition());
 document.getElementById("comp-import").addEventListener("click", () => document.getElementById("import-compositions-modal").style.display = "block");
 document.getElementById("comp-export").addEventListener("click", () => {
@@ -439,6 +531,7 @@ document.getElementById("comp-export").addEventListener("click", () => {
 document.getElementById("importCompFileBtn").addEventListener("click", (e) => importCompositionFromFile(e));
 document.getElementById("cancelImportCompBtn").addEventListener("click", (e) => closeModal(e));
 document.getElementById("exportCompBtn").addEventListener("click", () => exportComposition());
+document.getElementById("close-composer").addEventListener("click", () => closeComposer());
 comp_new.addEventListener("click", () => promptForTitle());
 comp_delete.addEventListener("click", () => confirmDelete());
 frame_save.addEventListener("click", () => saveFrame());
@@ -486,7 +579,7 @@ function selectFrames() {
             frame.classList.remove("selected");
         }
     });
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function selectFrameRange(start, end) {
@@ -505,7 +598,7 @@ function selectFrameRange(start, end) {
                 }
         }
     });
-    updateBulkActionsUI();
+    updateFrameActionsUI();
 }
 
 function scrollToCurrentFrame () {
@@ -525,11 +618,34 @@ function scrollToCurrentFrame () {
     }
 }
 
-// hastily-improvised feature flag.
+function switchToCompLayout() {
+    console.log("switching layout");
+    opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+    selectLayout();
+    setSelectionMode();
+    if (timeline.querySelector(".selected")) {
+        loadFrame(currentFrame);
+    } else {
+        selection.length = 0;
+    }
+}
+
 function showComposer() {
-    document.getElementById("composer-container").style.display = "block";
+    composer_container.style.display = "block";
     document.getElementById("default-view-container").style.paddingBottom = "8rem";
     console.warn("The composer is actively being developed. Use at your own risk!")
+    loadCompositions();
+    setSelectionMode();
+    openComposerBtn.innerText = "Close composer"
+}
+
+function closeComposer() {
+    composer_container.style.display = "none";
+    document.getElementById("default-view-container").style.paddingBottom = "0";
+    comp_dropdown.innerHTML = "";
+    timeline.innerHTML = "";
+    setSelectionMode();
+    openComposerBtn.innerText = "Open composer"
 }
 
 if (urlParams.composer) {
