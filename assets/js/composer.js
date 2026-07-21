@@ -41,7 +41,7 @@ function loadCompositions() {
         document.getElementById("comp-export").style.display = "none";
         document.getElementById("frame-actions").style.display = "none";
         playbackControls.style.display = "none";
-        timeline.innerHTML = `<div id="new-composition-message"><p>Create a new composition, or <a href=#>see an example composition</a> to get a sense of how the composer works.</p></div>`
+        timeline.innerHTML = `<div id="new-composition-message"><p>Create a new composition, or <button onclick="addExampleComposition()">see an example composition</button> to get a sense of how the composer works.</p></div>`
         // prompt user to enter a name for the new composition
     }
 }
@@ -101,6 +101,7 @@ function createComposition() {
         };
         writeCompositions();
         loadCompositions();
+        setSelectionMode();
         currentFrame = -1;
     } else if (compositions[title]) {
         document.getElementById("newCompError").innerHTML = "You already have a composition with this name.<br />Please choose another.";
@@ -126,7 +127,7 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
             }
         });
     }
-    frames.splice(currentFrame + 1, 0, {mode: selectionMode, bellows: getSelectionBellowsInfo(), selection: [...selection]});
+    frames.splice(currentFrame + 1, 0, {bellows: getSelectionBellowsInfo(), selection: [...selection]});
     writeCompositions();
     timeline.innerHTML += `<div class="composer-frame" data-position="${frames.length - 1}" data-bellows="${getSelectionBellowsInfo()}"><button>${frames.length}</button>`;
     currentFrame++; // TODO: figure out when to set currentFrame to currentFrame++ or to position arg
@@ -136,7 +137,6 @@ function saveFrame(position = compositions[comp_dropdown.value].frames.length) {
 
 function updateFrame() {
     let frames = compositions[comp_dropdown.value].frames;
-    frames[currentFrame].mode = selectionMode;
     frames[currentFrame].bellows = getSelectionBellowsInfo();
     frames[currentFrame].selection = [...selection];
     document.querySelector(".composer-frame.selected").dataset.bellows = getSelectionBellowsInfo();
@@ -510,7 +510,6 @@ function importCompositionFromFile(e) {
     fileReader.onerror = () => console.error(fileReader.error);
 }
 
-
 comp_dropdown.addEventListener("change", () => {
     populateTimeline(compositions[comp_dropdown.value].frames);
     if (compositions[comp_dropdown.value].layoutTitle) {
@@ -650,4 +649,12 @@ function closeComposer() {
 
 if (urlParams.composer) {
     showComposer();
+}
+
+
+function addExampleComposition() {
+    compositions["Hot Cross Buns"] = { "frames": [{ "bellows": "push-only", "selection": [{ "note": "E5", "button": 32 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "pull-only", "selection": [{ "note": "D5", "button": 33 }, { "note": "G3", "button": 21 }, { "note": "B3", "button": 23 }, { "note": "D4", "button": 25 }] }, { "bellows": "push-only", "selection": [{ "note": "C5", "button": 30 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "push-only", "selection": [{ "note": "E5", "button": 32 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "pull-only", "selection": [{ "note": "D5", "button": 33 }, { "note": "G3", "button": 21 }, { "note": "B3", "button": 23 }, { "note": "D4", "button": 25 }] }, { "bellows": "push-only", "selection": [{ "note": "C5", "button": 30 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "push-only", "selection": [{ "note": "C5", "button": 30 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "push-only", "selection": [{ "note": "C5", "button": 30 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "push-only", "selection": [{ "note": "C5", "button": 30 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "push-only", "selection": [{ "note": "C5", "button": 30 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "pull-only", "selection": [{ "note": "D5", "button": 33 }, { "note": "G3", "button": 21 }, { "note": "B3", "button": 23 }, { "note": "D4", "button": 25 }] }, { "bellows": "pull-only", "selection": [{ "note": "D5", "button": 33 }, { "note": "G3", "button": 21 }, { "note": "B3", "button": 23 }, { "note": "D4", "button": 25 }] }, { "bellows": "pull-only", "selection": [{ "note": "D5", "button": 33 }, { "note": "G3", "button": 21 }, { "note": "B3", "button": 23 }, { "note": "D4", "button": 25 }] }, { "bellows": "pull-only", "selection": [{ "note": "D5", "button": 33 }, { "note": "G3", "button": 21 }, { "note": "B3", "button": 23 }, { "note": "D4", "button": 25 }] }, { "bellows": "push-only", "selection": [{ "note": "E5", "button": 32 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }, { "bellows": "pull-only", "selection": [{ "note": "D5", "button": 33 }, { "note": "G3", "button": 21 }, { "note": "B3", "button": 23 }, { "note": "D4", "button": 25 }] }, { "bellows": "push-only", "selection": [{ "note": "C5", "button": 30 }, { "note": "C3", "button": 20 }, { "note": "G3", "button": 22 }, { "note": "C4", "button": 24 }] }], "layout": "_30_eFHhJKNMmn_50_PQTSstVWZX._15_cGGIijkLMN_80_oOqpSRuTwU.IHjlMNOopq_110_SrUTvuYw1x", "layoutTitle": "cg-wheatstone-30" };
+    writeCompositions();
+    loadCompositions();
+    switchToCompLayout();
 }
