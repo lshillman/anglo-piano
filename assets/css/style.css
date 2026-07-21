@@ -744,6 +744,19 @@ button#addToLayoutsBtn:active {
    color: #767676;
 }
 
+#new-composition-message button {
+	padding: 0;
+	border: none;
+	font-size: inherit;
+	color: #0000FF;
+	border-radius: 0;
+}
+
+#new-composition-message button:hover {
+	background-color: transparent;
+   text-decoration: underline;
+}
+
 #playback-controls {
    white-space: nowrap;
 }
