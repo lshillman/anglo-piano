@@ -748,13 +748,13 @@ button#addToLayoutsBtn:active {
 	padding: 0;
 	border: none;
 	font-size: inherit;
-	color: inherit;
-	text-decoration: underline;
+	color: #0000FF;
 	border-radius: 0;
 }
 
 #new-composition-message button:hover {
 	background-color: transparent;
+   text-decoration: underline;
 }
 
 #playback-controls {
