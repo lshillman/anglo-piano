@@ -4,6 +4,7 @@ let baseURL = "";
 // store a custom layout, title, highlights, etc passed in via the URL
 let urlParams = {};
 let parsedLayoutFromURL = [];
+let parsedLayoutFromComposition = [];
 let parsedWithErrors = false;
 
 // are we on a mobile device?
@@ -190,6 +191,9 @@ function parseLayout(origin) {
     } else if (origin == "editor") {
         layout = customLayoutFromEditor;
         title = customTitleFromEditor;
+    } else if (origin == "composition") {
+        layout = compositions[comp_dropdown.value].layout;
+        title = compositions[comp_dropdown.value].layoutTitle.slice(12);
     }
     let newLayout = [];
     while (layout.length > 0) {
@@ -222,11 +226,16 @@ function parseLayout(origin) {
         opt_layout.value = "customFromEditor";
         parsedLayoutFromEditor = newLayout;
         buttons = parsedLayoutFromEditor;
-    } else {
+    } else if (origin == "url") {
         if (newLayout.length > 0) {
             parsedLayoutFromURL = newLayout;
             buttons = parsedLayoutFromURL;
         }
+    } else if (origin == "composition") {
+        addToDropdown("compositionLayout", title, "composition");
+        opt_layout.value = "compositionLayout";
+        parsedLayoutFromComposition = newLayout;
+        buttons = parsedLayoutFromComposition;
     }
     return newLayout;
 }
@@ -774,6 +783,11 @@ function selectLayout() {
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "block";
         editHighlightsBtn.style.display = "inherit";
+    } else if (opt_layout.value == "compositionLayout") { 
+        buttons = parsedLayoutFromComposition;
+        addToLayoutsBtn.style.display = "block";
+        removeFromLayoutsBtn.style.display = "none";
+        editHighlightsBtn.style.display = "none";
     } else if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
         addToLayoutsBtn.style.display = "none";
@@ -1032,6 +1046,15 @@ function addToDropdown(value, title, origin) {
         opt_layout.appendChild(newOption);
     } else if (origin == "url" || origin == "editor") {
         opt_layout.insertBefore(newOption, opt_layout.firstChild);
+    } else if (origin == "composition") {
+        // TODO avoid creating duplicates every time a composition is deselected and selected again
+        let compGroup = document.createElement("optgroup");
+        compGroup.label = "From composition";
+        opt_layout.insertBefore(compGroup, opt_layout.firstChild);
+        let compOption = document.createElement("option");
+        compOption.value = "compositionLayout";
+        compOption.text = title;
+        compGroup.appendChild(compOption);
     }
 }
 

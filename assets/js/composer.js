@@ -396,6 +396,7 @@ function populateTimeline() {
 }
 
 function setSelectionMode() {
+    console.log("in setSelectionMode()");
     if (composer_container.style.display == "none") {
         selectionMode = "notes";
         document.getElementById("frame-actions").style.display = "block";
@@ -503,6 +504,7 @@ function importCompositionFromFile(e) {
         if (importCount) {
             writeCompositions();
             loadCompositions();
+            selectComposition();
         }
         document.getElementById("file").value = "";
         closeModal();
@@ -510,16 +512,30 @@ function importCompositionFromFile(e) {
     fileReader.onerror = () => console.error(fileReader.error);
 }
 
-comp_dropdown.addEventListener("change", () => {
+function selectComposition() {
     populateTimeline(compositions[comp_dropdown.value].frames);
     if (compositions[comp_dropdown.value].layoutTitle) {
-        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
-        selectLayout();
+        let options = [];
+        opt_layout.querySelectorAll("option").forEach(option => {
+            options.push(option.value);
+        });
+        if (options.includes(compositions[comp_dropdown.value].layoutTitle)) {
+            opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+            selectLayout();
+        } else {
+        console.log("adding layout from link to dropdown...");
+            parseLayout("composition");
+            opt_layout.value = "compositionLayout";
+            selectLayout();
+        }
     }
     setSelectionMode();
     currentFrame = -1;
     timeline.scrollLeft = 0;
-});
+}
+
+comp_dropdown.addEventListener("change", () => selectComposition());
+
 document.getElementById("comp-layout-button").addEventListener("click", (e) => switchToCompLayout());
 comp_createBtn.addEventListener("click", () => createComposition());
 document.getElementById("comp-import").addEventListener("click", () => document.getElementById("import-compositions-modal").style.display = "block");
