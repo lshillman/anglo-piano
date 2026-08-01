@@ -1047,7 +1047,9 @@ function addToDropdown(value, title, origin) {
     } else if (origin == "url" || origin == "editor") {
         opt_layout.insertBefore(newOption, opt_layout.firstChild);
     } else if (origin == "composition") {
-        // TODO avoid creating duplicates every time a composition is deselected and selected again
+        if (opt_layout.querySelector("optgroup[label='From composition']")) {
+            opt_layout.querySelector("optgroup[label='From composition']").remove();
+        }
         let compGroup = document.createElement("optgroup");
         compGroup.label = "From composition";
         opt_layout.insertBefore(compGroup, opt_layout.firstChild);
@@ -1202,7 +1204,11 @@ document.addEventListener('keyup', function (e) {
 
 addToLayoutsBtn.onclick = function () {
     let newLayoutName = document.getElementById("newLayoutName");
-    newLayoutName.value = urlParams.title || "";
+    if (opt_layout.value == "compositionLayout") {
+        newLayoutName.value = opt_layout.options[opt_layout.selectedIndex].text;
+    } else {
+        newLayoutName.value = urlParams.title || "";
+    }
     document.getElementById("add-modal").style.display = "block";
     newLayoutName.focus();
     newLayoutName.select();

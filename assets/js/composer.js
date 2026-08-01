@@ -101,6 +101,7 @@ function createComposition() {
         };
         writeCompositions();
         loadCompositions();
+        selectComposition()
         setSelectionMode();
         currentFrame = -1;
     } else if (compositions[title]) {
@@ -280,6 +281,7 @@ function updateFrameActionsUI() {
         frame_save.innerText = "Create new frame";
         timeline.innerHTML = `<div id="new-composition-message"><p>Select some concertina buttons and click "Create new frame" to get started!</p></div>`;
         playbackControls.style.display = "none";
+        frame_save.style.display = "inline-block";
     } else {
         playbackControls.style.display = "block";
         if (document.getElementById("new-composition-message")) {
@@ -449,10 +451,7 @@ function deleteComposition() {
     writeCompositions();
     closeModal();
     loadCompositions();
-    if (compositions[comp_dropdown.value].layoutTitle) {
-        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
-        selectLayout();
-    }
+    selectComposition();
     setSelectionMode();
     currentFrame = -1;
     timeline.scrollLeft = 0;
@@ -513,6 +512,9 @@ function importCompositionFromFile(e) {
 }
 
 function selectComposition() {
+    if (opt_layout.querySelector("optgroup[label='From composition']")) {
+        opt_layout.querySelector("optgroup[label='From composition']").remove();
+    }
     populateTimeline(compositions[comp_dropdown.value].frames);
     if (compositions[comp_dropdown.value].layoutTitle) {
         let options = [];
@@ -523,11 +525,13 @@ function selectComposition() {
             opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
             selectLayout();
         } else {
-        console.log("adding layout from link to dropdown...");
+        console.log("adding layout from composition to dropdown...");
             parseLayout("composition");
             opt_layout.value = "compositionLayout";
             selectLayout();
         }
+    } else {
+        selectLayout();
     }
     setSelectionMode();
     currentFrame = -1;
