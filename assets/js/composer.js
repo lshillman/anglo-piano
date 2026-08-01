@@ -101,6 +101,7 @@ function createComposition() {
         };
         writeCompositions();
         loadCompositions();
+        selectComposition()
         setSelectionMode();
         currentFrame = -1;
     } else if (compositions[title]) {
@@ -280,6 +281,7 @@ function updateFrameActionsUI() {
         frame_save.innerText = "Create new frame";
         timeline.innerHTML = `<div id="new-composition-message"><p>Select some concertina buttons and click "Create new frame" to get started!</p></div>`;
         playbackControls.style.display = "none";
+        frame_save.style.display = "inline-block";
     } else {
         playbackControls.style.display = "block";
         if (document.getElementById("new-composition-message")) {
@@ -396,6 +398,7 @@ function populateTimeline() {
 }
 
 function setSelectionMode() {
+    console.log("in setSelectionMode()");
     if (composer_container.style.display == "none") {
         selectionMode = "notes";
         document.getElementById("frame-actions").style.display = "block";
@@ -448,10 +451,7 @@ function deleteComposition() {
     writeCompositions();
     closeModal();
     loadCompositions();
-    if (compositions[comp_dropdown.value].layoutTitle) {
-        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
-        selectLayout();
-    }
+    selectComposition();
     setSelectionMode();
     currentFrame = -1;
     timeline.scrollLeft = 0;
@@ -503,6 +503,7 @@ function importCompositionFromFile(e) {
         if (importCount) {
             writeCompositions();
             loadCompositions();
+            selectComposition();
         }
         document.getElementById("file").value = "";
         closeModal();
@@ -510,16 +511,35 @@ function importCompositionFromFile(e) {
     fileReader.onerror = () => console.error(fileReader.error);
 }
 
-comp_dropdown.addEventListener("change", () => {
+function selectComposition() {
+    if (opt_layout.querySelector("optgroup[label='From composition']")) {
+        opt_layout.querySelector("optgroup[label='From composition']").remove();
+    }
     populateTimeline(compositions[comp_dropdown.value].frames);
     if (compositions[comp_dropdown.value].layoutTitle) {
-        opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+        let options = [];
+        opt_layout.querySelectorAll("option").forEach(option => {
+            options.push(option.value);
+        });
+        if (options.includes(compositions[comp_dropdown.value].layoutTitle)) {
+            opt_layout.value = compositions[comp_dropdown.value].layoutTitle;
+            selectLayout();
+        } else {
+        console.log("adding layout from composition to dropdown...");
+            parseLayout("composition");
+            opt_layout.value = "compositionLayout";
+            selectLayout();
+        }
+    } else {
         selectLayout();
     }
     setSelectionMode();
     currentFrame = -1;
     timeline.scrollLeft = 0;
-});
+}
+
+comp_dropdown.addEventListener("change", () => selectComposition());
+
 document.getElementById("comp-layout-button").addEventListener("click", (e) => switchToCompLayout());
 comp_createBtn.addEventListener("click", () => createComposition());
 document.getElementById("comp-import").addEventListener("click", () => document.getElementById("import-compositions-modal").style.display = "block");
