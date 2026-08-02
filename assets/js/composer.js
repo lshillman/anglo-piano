@@ -459,10 +459,10 @@ function deleteComposition() {
 
 function exportComposition() {
     let data = {};
-    let fileName = "compositions.txt";
+    let fileName = "compositions.apc";
     if (document.getElementById("currentComp").checked) {
         data[comp_dropdown.value] = compositions[comp_dropdown.value];
-        fileName = `${comp_dropdown.value}.txt`;
+        fileName = `${comp_dropdown.value}.apc`;
     } else {
         data = compositions;
     }
