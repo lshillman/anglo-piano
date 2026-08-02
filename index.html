@@ -122,12 +122,12 @@
                         <button id="comp-delete" class="light-destructive">Delete composition</button>
                     </div>
                     <div id="frame-actions">
-                        <button id="frame-save">Create new frame</button>
-                        <button id="frame-update">Update frame</button>
-                        <button id="add-marker">Add marker</button>
-                        <button id="copy-frames">Copy frame(s)</button>
-                        <button id="paste-frames" style="display:none;">Paste frame(s)</button>
-                        <button id="frame-delete" class="light-destructive">Delete frame</button>
+                        <button id="frame-save" title="Create new frame [Shift + S]">Create new frame</button>
+                        <button id="frame-update" title="Update frame">Update frame</button>
+                        <button id="add-marker" title="Add marker">Add marker</button>
+                        <button id="copy-frames" title="Copy frame(s)">Copy frame(s)</button>
+                        <button id="paste-frames"  title="Paste frame(s)" style="display:none;">Paste frame(s)</button>
+                        <button id="frame-delete"  title="Delete frame(s)" class="light-destructive">Delete frame</button>
                     </div>
                     <span id="layout-mismatch">Switch to <button id="comp-layout-button">this composition's layout</button> to enable editing.</span>
                     <div>
@@ -139,8 +139,8 @@
                         <!-- frames -->
                     </div>
                     <div id="playback-controls">
-                        <button id="frame-prev">Prev</button>
-                        <button id="frame-next">Next</button>
+                        <button id="frame-prev">Prev<br>[J]</button>
+                        <button id="frame-next">Next<br>[K]</button>
                     </div>
                 </div>
             </div>
@@ -348,7 +348,7 @@
             <form id="upload-form">
                 <div>
                     <label for="file">Choose a file to import</label>
-                    <input type="file" id="file" name="file" accept=".txt,.json" />
+                    <input type="file" id="file" name="file" accept=".apc,.txt,.json" />
                 </div>
                 <div class="modal-actions">
                     <button id="cancelImportCompBtn">Cancel</button>
