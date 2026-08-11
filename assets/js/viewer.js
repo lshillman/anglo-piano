@@ -568,7 +568,7 @@ function playNote(note) {
         let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let oscillator;
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
-        let freq = notes[note];
+        let freq = notes[noteNames[note]];
         let fullVolume = 0;
         if (selection.length) {
             let selectedNotes = new Set();
