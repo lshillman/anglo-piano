@@ -50,39 +50,49 @@
                     <select id="layout">
                         <!-- layouts -->
                     </select>
-                    <div>
+                    <div id="layout-actions">
                         <button id="editLayoutBtn">Edit layout</button>
                         <button id="getLinkBtn">Get link</button>
+                        <button id="layoutActionsBtn">...</button>
+                        <div id="more-layout-actions" popover="auto">
+                            <button id="editHighlightsBtn">Highlight buttons...</button>
+                            <button id="addToLayoutsBtn">Add to your layouts</button>
+                            <button id="removeFromLayoutsBtn">Remove from your layouts</button>
+                        </div>
                     </div>
-                    <div>
-                        <button id="addToLayoutsBtn">Add to your layouts</button>
-                        <button id="removeFromLayoutsBtn">Remove from your layouts</button>
+                    <div id="display-options">
+                        <label for="matchoctave"><input type="checkbox" id="matchoctave" name="matchoctave" checked="checked">Match octave</label>
+                        <div id="highlight-option">
+                            <label for="highlights"><input type="checkbox" id="highlights" name="highlights" value="true" checked="checked">User highlights</label>
+                        </div>
+                        <label for="coloroctave"><input type="checkbox" id="coloroctave" name="coloroctave" value="false">Color octaves</label>
+                        <span>Accidental spellings</span>
+                        <div id="accidentals">
+                            <label for="sharp"><input type="radio" id="sharp" name="accidentals" value="sharp" checked><strong>♯</strong> Sharp</label>
+                            <label for="flat"><input type="radio" id="flat" name="accidentals" value="flat"><strong>♭</strong> Flat</label>
+                        </div>
                     </div>
                 </div>
-                <div id="bellows-preferences">
-                    <label for="pushpull"><input type="radio" id="pushpull" name="bellows" value="pushpull" checked>push / pull</label>
-                    <label for="pullpush"><input type="radio" id="pullpush" name="bellows" value="pullpush">pull / push</label>
-                    <label for="push"><input type="radio" id="push" name="bellows" value="push">push only</label>
-                    <label for="pull"><input type="radio" id="pull" name="bellows" value="pull">pull only</label>
-                    <div id="sound-option">
-                        <label for="sound"><input type="checkbox" id="sound" name="sound" checked="checked">Sound</label>
+                <div>
+                    <div id="bellows-preferences">
+                        <label for="pushpull"><input type="radio" id="pushpull" name="bellows" value="pushpull" checked><span>Push</span><span>Pull</span></label>
+                        <label for="pullpush"><input type="radio" id="pullpush" name="bellows" value="pullpush"><span>Pull</span><span>Push</span></label>
+                        <label for="push"><input type="radio" id="push" name="bellows" value="push">Push</label>
+                        <label for="pull"><input type="radio" id="pull" name="bellows" value="pull">Pull</label>
                     </div>
                 </div>
 
-                <div id="view-preferences">
-                    <label for="matchoctave"><input type="checkbox" id="matchoctave" name="matchoctave" checked="checked">Match octave</label>
-                    <label for="multiselect"><input type="checkbox" id="multiselect" name="multiselect" value="false"><span>Select multiple notes [long-press]</span></label>
-                    <div id="highlight-option">
-                        <label for="highlights"><input type="checkbox" id="highlights" name="highlights" value="true" checked="checked">User highlights</label>
+                <div id="view-preferences" style="display:none;">
+                    <div id="sound-option">
+                        <label for="sound"><input type="checkbox" id="sound" name="sound" checked="checked">Sound</label>
                     </div>
-                    <button id="editHighlightsBtn">Edit highlights...</button>
+                    <label for="multiselect"><input type="checkbox" id="multiselect" name="multiselect" value="false"><span>Select multiple notes [long-press]</span></label>
+
                     <button id="moreDisplayOptionsBtn">More options...</button>
                     <div id="more-display-options" style="display:none;">
-                        <label for="coloroctave"><input type="checkbox" id="coloroctave" name="coloroctave" value="false">Color octaves</label>
                         <label for="absent-notes"><input type="checkbox" id="absent-notes" name="absent-notes" value="true" checked="checked">Gray out absent notes</label>
                         <label for="concertina-labels"><input type="checkbox" id="concertina-labels" name="concertina-labels" value="true" checked="checked">Concertina labels</label>
                         <label for="piano-labels"><input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">Piano labels</label>
-                        <label for="accidentals"><input type="checkbox" id="accidentals" name="accidentals" value="true">Alternate accidental spellings</label>
                     </div>
                     <button id="openComposerBtn">Open composer</button>
                 </div>

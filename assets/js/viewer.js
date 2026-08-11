@@ -44,7 +44,8 @@ const multiselect = document.getElementById("multiselect");
 const opt_coloroctave = document.getElementById("coloroctave");
 const opt_concertinaLabels = document.getElementById("concertina-labels");
 const opt_pianoLabels = document.getElementById("piano-labels");
-const opt_accidentals = document.getElementById("accidentals");
+const opt_flat = document.getElementById("flat");
+const opt_sharp = document.getElementById("sharp");
 const opt_absentNotes = document.getElementById("absent-notes");
 const opt_highlights = document.getElementById("highlights");
 const editHighlightsBtn = document.getElementById("editHighlightsBtn");
@@ -88,9 +89,9 @@ function renderPianoKeyboard(min, max, layoutnotes, pushnotes, pullnotes) {
     activeNotes.length = 0;
     let allnotes = Object.keys(notes); // get an array of notes from the note object, and also add the novelty symbol
     for (let i = min; i < max; i++) {
-        let note = allnotes[i];
+        let note = noteNames[allnotes[i]];
         let label = note;
-        if (opt_accidentals.checked) {
+        if (opt_flat.checked) {
             label = altNoteNames[note];
         }
         if (!opt_pianoLabels.checked) {
@@ -129,6 +130,9 @@ function renderAngloKeyboard() {
     // droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
+        // older versions of Anglo Piano spelled accidentals as "mostly sharp, except for Bb". The following two lines are to make sure layouts in localStorage render appropriately using the new ui preference (sharps or flats, vs. the older default or alt).
+        button.push = button.push.replace("Bb", "A#");
+        button.pull = button.pull.replace("Bb", "A#");
         if (button.push != "~") {
             layoutnotes.push(button.push);
             pushnotes.push(button.push);
@@ -139,7 +143,7 @@ function renderAngloKeyboard() {
         }
         let pushLabel = button.push;
         let pullLabel = button.pull;
-        if (opt_accidentals.checked) {
+        if (opt_flat.checked) {
             pushLabel = altNoteNames[button.push];
             pullLabel = altNoteNames[button.pull];
         }
@@ -165,8 +169,8 @@ function renderAngloKeyboard() {
     bindAngloButtons();
 
     // find the lowest and highest notes for the piano keyboard
-    let min = allnotes.indexOf(layoutnotes[0]);
-    let max = allnotes.indexOf(layoutnotes[0]);
+    let min = allnotes.indexOf(noteNames[layoutnotes[0]]);
+    let max = allnotes.indexOf(noteNames[layoutnotes[0]]);
     for (let i = 1; i < layoutnotes.length; i++) {
         if (layoutnotes[i] != "~") {
             if (allnotes.indexOf(noteNames[layoutnotes[i]]) < min) {
@@ -1133,7 +1137,11 @@ opt_pianoLabels.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 
-opt_accidentals.addEventListener("change", () => {
+opt_flat.addEventListener("change", () => {
+    renderAngloKeyboard();
+});
+
+opt_sharp.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 

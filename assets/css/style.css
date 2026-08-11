@@ -278,11 +278,21 @@ button {
    flex-direction: column;
 }
 
-#layout-preferences div {
+#layout-actions {
+	display: flex;
+	gap: 4px;
+	position: relative;
+}
+
+#editLayoutBtn, #getLinkBtn {
+	flex-grow: 1;
+}
+
+/* #layout-preferences div {
    display: flex;
    align-items: baseline;
    gap: 0.3rem;
-}
+} */
 
 #viewer-options #sound-option {
    margin-top: 1rem;
@@ -323,7 +333,88 @@ select:hover {
    width: 100%;
 }
 
-#editLayoutBtn {
+#display-options {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	margin-top: 1rem;
+}
+
+#bellows-preferences {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  border: 1px solid black;
+  padding: .5rem;
+  width: fit-content;
+  font-size: .8rem;
+}
+
+#bellows-preferences input, #accidentals input {
+  display: none;
+}
+
+#bellows-preferences label {
+  display:block;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px solid black;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  text-align: center;
+  padding: 0;
+}
+
+#bellows-preferences label:has(input:checked) {
+  background-color: #3279ec;
+  color: white;
+  border: none;
+}
+
+#bellows-preferences label span {
+  display: block;
+  height: 25px;
+  line-height: 25px;
+}
+
+#bellows-preferences label span+span {
+  border-top: 1px solid black;
+}
+
+#bellows-preferences label:has(input:checked) span+span {
+  border-color: white;
+}
+
+#bellows-preferences label:not(:has(span)) {
+  line-height: 50px;
+}
+
+#accidentals {
+   display: flex;
+   flex-direction: row;
+   gap: 4px;
+}
+
+#accidentals label {
+  display:block;
+  flex-basis: 50%;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px solid black;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  padding: 0;
+}
+
+#accidentals label:has(input:checked) {
+  background-color: #3279ec;
+  color: white;
+  border: none;
+}
+
+/* #editLayoutBtn {
    flex-basis: 60%;
 }
 
@@ -357,7 +448,7 @@ button#addToLayoutsBtn:active {
    background-color: transparent;
    text-decoration: underline;
    color: #000;
-}
+} */
 
 #anglo-keyboard,
 #editor-anglo-keyboard {
@@ -471,7 +562,7 @@ button#addToLayoutsBtn:active {
 
 /*========== HIGHLIGHT CONTROLS ============*/
 
-#editHighlightsBtn, #moreDisplayOptionsBtn {
+/* #editHighlightsBtn, #moreDisplayOptionsBtn {
    display: inherit;
    line-height: 1.5;
    font-size: 1rem;
@@ -481,15 +572,15 @@ button#addToLayoutsBtn:active {
    border-color: transparent;
    background-color: transparent;
    cursor: pointer;
-}
+} */
 
-#moreDisplayOptionsBtn {
+/* #moreDisplayOptionsBtn {
    margin-left: 0;
-}
+} */
 
-#editHighlightsBtn:hover, #editHighlightsBtn:active, #moreDisplayOptionsBtn:hover, #moreDisplayOptionsBtn:active {
+/* #editHighlightsBtn:hover, #editHighlightsBtn:active, #moreDisplayOptionsBtn:hover, #moreDisplayOptionsBtn:active {
    text-decoration: underline;
-}
+} */
 
 #highlight-controls {
    display: none;
