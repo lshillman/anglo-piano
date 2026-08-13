@@ -273,19 +273,21 @@ button {
    flex-wrap: wrap;
 }
 
-#view-preferences, #bellows-preferences {
+#view-preferences,
+#bellows-preferences {
    display: flex;
    flex-direction: column;
 }
 
 #layout-actions {
-	display: flex;
-	gap: 4px;
-	position: relative;
+   display: flex;
+   gap: 4px;
+   position: relative;
 }
 
-#editLayoutBtn, #getLinkBtn {
-	flex-grow: 1;
+#editLayoutBtn,
+#getLinkBtn {
+   flex-grow: 1;
 }
 
 /* #layout-preferences div {
@@ -334,60 +336,61 @@ select:hover {
 }
 
 #display-options {
-	display: flex;
-	flex-direction: column;
-	gap: 0.3rem;
-	margin-top: 1rem;
+   display: flex;
+   flex-direction: column;
+   gap: 0.3rem;
+   margin-top: 1rem;
 }
 
 #bellows-preferences {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  border: 1px solid black;
-  padding: .5rem;
-  width: fit-content;
-  font-size: .8rem;
+   display: flex;
+   flex-direction: row;
+   gap: 4px;
+   border: 1px solid black;
+   padding: .5rem;
+   width: fit-content;
+   font-size: .8rem;
 }
 
-#bellows-preferences input, #accidentals input {
-  display: none;
+#bellows-preferences input,
+#accidentals input {
+   display: none;
 }
 
 #bellows-preferences label {
-  display:block;
-  box-sizing: border-box;
-  cursor: pointer;
-  border: 1px solid black;
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  text-align: center;
-  padding: 0;
+   display: block;
+   box-sizing: border-box;
+   cursor: pointer;
+   border: 1px solid black;
+   width: 50px;
+   height: 50px;
+   border-radius: 100%;
+   text-align: center;
+   padding: 0;
 }
 
 #bellows-preferences label:has(input:checked) {
-  background-color: #3279ec;
-  color: white;
-  border: none;
+   background-color: #3279ec;
+   color: white;
+   border: none;
 }
 
 #bellows-preferences label span {
-  display: block;
-  height: 25px;
-  line-height: 25px;
+   display: block;
+   height: 25px;
+   line-height: 25px;
 }
 
 #bellows-preferences label span+span {
-  border-top: 1px solid black;
+   border-top: 1px solid black;
 }
 
 #bellows-preferences label:has(input:checked) span+span {
-  border-color: white;
+   border-color: white;
 }
 
 #bellows-preferences label:not(:has(span)) {
-  line-height: 50px;
+   line-height: 50px;
 }
 
 #accidentals {
@@ -397,21 +400,85 @@ select:hover {
 }
 
 #accidentals label {
-  display:block;
-  flex-basis: 50%;
-  box-sizing: border-box;
-  cursor: pointer;
-  border: 1px solid black;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  padding: 0;
+   display: block;
+   flex-basis: 50%;
+   box-sizing: border-box;
+   cursor: pointer;
+   border: 1px solid black;
+   height: 30px;
+   line-height: 30px;
+   text-align: center;
+   padding: 0;
 }
 
 #accidentals label:has(input:checked) {
-  background-color: #3279ec;
-  color: white;
-  border: none;
+   background-color: #3279ec;
+   color: white;
+   border: none;
+}
+
+label:has(input[type=checkbox]) {
+   cursor: pointer;
+}
+
+.toggle {
+   position: relative;
+   display: inline-block;
+   width: 40px;
+   height: 22px;
+}
+
+.toggle input {
+   position: absolute;
+   opacity: 0;
+   width: 100%;
+   height: 100%;
+}
+
+.slider {
+   position: absolute;
+   cursor: pointer;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background-color: #ccc;
+   border-radius: 11px;
+   -webkit-transition: .1s;
+   transition: .1s;
+}
+
+.slider:before {
+   position: absolute;
+   content: "";
+   height: 16px;
+   width: 16px;
+   left: 3px;
+   bottom: 3px;
+   background-color: white;
+   border-radius: 50%;
+   -webkit-transition: .1s;
+   transition: .1s;
+}
+
+input:checked+.slider {
+   background-color: #3279ec;
+}
+
+input:focus+.slider {
+   box-shadow: 0 0 1px #3279ec;
+}
+
+input:checked+.slider:before {
+   -webkit-transform: translateX(18px);
+   -ms-transform: translateX(18px);
+   transform: translateX(18px);
+}
+
+.toggle .label {
+   text-wrap: nowrap;
+   line-height: 22px;
+   margin-left: 48px;
 }
 
 /* #editLayoutBtn {
@@ -596,46 +663,48 @@ button#addToLayoutsBtn:active {
    margin: 1rem;
    display: flex;
    gap: 0.5rem
- }
- #highlight-colors input[type="radio"] {
+}
+
+#highlight-colors input[type="radio"] {
    appearance: none;
- }
- #highlight-colors label {
+}
+
+#highlight-colors label {
    height: 100%;
    height: 2rem;
    width: 2rem;
    border-radius: 1rem;
    cursor: pointer;
- }
+}
 
- #highlight-colors input[type="radio"]:checked + label {
+#highlight-colors input[type="radio"]:checked+label {
    outline: 2px solid black;
    outline-offset: 2px;
- }
- 
- #highlight-colors #red + label {
+}
+
+#highlight-colors #red+label {
    background-color: red;
- }
- 
- #highlight-colors #orange + label {
+}
+
+#highlight-colors #orange+label {
    background-color: orange;
- }
- 
- #highlight-colors #green + label {
+}
+
+#highlight-colors #green+label {
    background-color: green;
- }
- 
- #highlight-colors #blue + label {
+}
+
+#highlight-colors #blue+label {
    background-color: blue;
- }
- 
- #highlight-colors #pink + label {
+}
+
+#highlight-colors #pink+label {
    background-color: magenta;
- }
- 
- #highlight-colors #purple + label {
+}
+
+#highlight-colors #purple+label {
    background-color: purple;
- }
+}
 
 .highlightable:not(.highlighted):hover {
    outline: 2px solid var(--highlightColor);
@@ -768,7 +837,7 @@ button#addToLayoutsBtn:active {
 
 #composer {
    width: 100%;
-   display:flex;
+   display: flex;
    flex-direction: column;
 }
 
@@ -793,12 +862,12 @@ button#addToLayoutsBtn:active {
 }
 
 #comp-layout-button {
-	background: none;
-	border: none;
-	font-size: inherit;
-	padding: 0px;
-	color: inherit;
-	text-decoration: underline;
+   background: none;
+   border: none;
+   font-size: inherit;
+   padding: 0px;
+   color: inherit;
+   text-decoration: underline;
 }
 
 #composer-controls div {
@@ -811,7 +880,7 @@ button#addToLayoutsBtn:active {
 
 #timeline {
    width: 100%;
-   height:100%;
+   height: 100%;
    padding: 1rem;
    box-sizing: border-box;
    overflow-x: auto;
@@ -823,7 +892,7 @@ button#addToLayoutsBtn:active {
 }
 
 #timeline:has(.composer-frame):has(.marker) {
-	padding-top: 2rem;
+   padding-top: 2rem;
 }
 
 #new-composition-message {
@@ -836,15 +905,15 @@ button#addToLayoutsBtn:active {
 }
 
 #new-composition-message button {
-	padding: 0;
-	border: none;
-	font-size: inherit;
-	color: #0000FF;
-	border-radius: 0;
+   padding: 0;
+   border: none;
+   font-size: inherit;
+   color: #0000FF;
+   border-radius: 0;
 }
 
 #new-composition-message button:hover {
-	background-color: transparent;
+   background-color: transparent;
    text-decoration: underline;
 }
 
@@ -862,14 +931,14 @@ button#addToLayoutsBtn:active {
    position: relative;
 }
 
-.composer-frame button{
+.composer-frame button {
    display: inline-block;
    box-sizing: border-box;
    width: 3rem;
    height: 3.5rem;
    text-align: center;
    background: #ddd;
-   background: linear-gradient(135deg,rgba(221, 221, 255, 1) 48%, rgba(255, 255, 255, 1) 48%, rgba(255, 255, 255, 1) 52%, rgba(255, 221, 221, 1) 52%);
+   background: linear-gradient(135deg, rgba(221, 221, 255, 1) 48%, rgba(255, 255, 255, 1) 48%, rgba(255, 255, 255, 1) 52%, rgba(255, 221, 221, 1) 52%);
    border: none;
 }
 
@@ -881,19 +950,21 @@ button#addToLayoutsBtn:active {
    background: #fdd;
 }
 
-.composer-frame.selected button, .composer-frame.selected button:hover {
-   background: linear-gradient(135deg,rgba(0, 0, 255, 1) 50%, rgba(163, 0, 20, 1) 50%);
+.composer-frame.selected button,
+.composer-frame.selected button:hover {
+   background: linear-gradient(135deg, rgba(0, 0, 255, 1) 50%, rgba(163, 0, 20, 1) 50%);
    color: #fff;
 }
 
 .composer-frame button:hover {
-	border-top: 3px solid #0000ff;
-	border-bottom: 3px solid #a30014;
-	border-right: 3px solid #a30014;
-	border-left: 3px solid #0000ff;
+   border-top: 3px solid #0000ff;
+   border-bottom: 3px solid #a30014;
+   border-right: 3px solid #a30014;
+   border-left: 3px solid #0000ff;
 }
 
-.composer-frame.selected[data-bellows="push-only"] button, .composer-frame.selected[data-bellows="push-only"] button:hover {
+.composer-frame.selected[data-bellows="push-only"] button,
+.composer-frame.selected[data-bellows="push-only"] button:hover {
    background: #0000FF;
    color: #fff;
 }
@@ -902,7 +973,8 @@ button#addToLayoutsBtn:active {
    border: 3px solid #0000FF;
 }
 
-.composer-frame.selected[data-bellows="pull-only"] button, .composer-frame.selected[data-bellows="pull-only"] button:hover {
+.composer-frame.selected[data-bellows="pull-only"] button,
+.composer-frame.selected[data-bellows="pull-only"] button:hover {
    background: #A30014;
    color: #fff;
 }
@@ -912,15 +984,15 @@ button#addToLayoutsBtn:active {
 }
 
 .marker {
-  display: inline-block;
-  position: absolute;
-  top: -1.6rem;
-  left: 0;
-  border: 1px solid #8400FF;
-  background-color: #f5eaff;
-  color: #5800aa;
-  padding: 2px .5rem 0 .5rem;
-  border-radius: 3px;
+   display: inline-block;
+   position: absolute;
+   top: -1.6rem;
+   left: 0;
+   border: 1px solid #8400FF;
+   background-color: #f5eaff;
+   color: #5800aa;
+   padding: 2px .5rem 0 .5rem;
+   border-radius: 3px;
 }
 
 .composer-frame.selected .marker {
@@ -1029,7 +1101,8 @@ button#addToLayoutsBtn:active {
    text-align: center;
    border: 1px solid #767676;
    font-family: monospace;
-   font-size: 16px; /* has to be 16px instead of 1rem for iOS */
+   font-size: 16px;
+   /* has to be 16px instead of 1rem for iOS */
 }
 
 .editor-button input[type=text]:focus {
@@ -1139,8 +1212,8 @@ button#addToLayoutsBtn:active {
 }
 
 #mobile-note-picker div {
-   display:flex;
-   width:100%;
+   display: flex;
+   width: 100%;
    padding: 0.2rem 0.4rem;
 }
 
@@ -1210,7 +1283,7 @@ button#addToLayoutsBtn:active {
    text-align: left;
    border-radius: 8px;
    overflow-y: scroll;
-	box-sizing: border-box;
+   box-sizing: border-box;
 }
 
 .modal-content h2 {
@@ -1304,15 +1377,16 @@ button#addToLayoutsBtn:active {
 
 /* version info */
 #version {
-	background-color: #555;
-	color: #fff;
-	margin: 0 -1.5rem -1.5rem -1.5rem;
-	padding: 0.8rem;
-	border-radius: 0 0 7px 7px;
-	text-align: center;
+   background-color: #555;
+   color: #fff;
+   margin: 0 -1.5rem -1.5rem -1.5rem;
+   padding: 0.8rem;
+   border-radius: 0 0 7px 7px;
+   text-align: center;
 }
 
-#version a, #version a:visited {
+#version a,
+#version a:visited {
    color: #fff;
 }
 
@@ -1376,7 +1450,7 @@ button#addToLayoutsBtn:active {
 
    #playback-controls button {
       width: 50%;
-      height:40px;
+      height: 40px;
    }
 
    #editor-header {
@@ -1407,7 +1481,7 @@ button#addToLayoutsBtn:active {
       border-top: 1px solid #ccc;
       display: flex;
       flex-direction: column-reverse;
-      box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.10);
+      box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.10);
    }
 
    #editor-options {
