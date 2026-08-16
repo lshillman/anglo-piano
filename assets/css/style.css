@@ -342,22 +342,58 @@ select:hover {
    margin-top: 1rem;
 }
 
+#bellows-preferences-container {
+   position: relative;
+}
+
 #bellows-preferences {
-   display: flex;
+   display: none;
+   position: absolute;
+   right: -9px;
+   top: -70px;
    flex-direction: row;
    gap: 4px;
    border: 1px solid black;
    padding: .5rem;
    width: fit-content;
    font-size: .8rem;
+   background-color: #fff;
 }
 
-#bellows-preferences input,
 #accidentals input {
    display: none;
 }
 
+#bellowsPickerBtn {
+	height: 50px;
+	width: 50px;
+	border-radius: 25px;
+	padding: 0;
+	line-height: 50px;
+   border-color: #000;
+}
+
+#bellowsPickerBtn span {
+	display: block;
+	height: 25px;
+	line-height: 25px;
+}
+
+#bellowsPickerBtn span + span {
+	border-top: 1px solid #000;
+}
+
+#bellows-preferences input {
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	opacity: 0;
+}
+
 #bellows-preferences label {
+   position: relative;
    display: block;
    box-sizing: border-box;
    cursor: pointer;
@@ -1253,9 +1289,7 @@ button#addToLayoutsBtn:active {
 /* overlay */
 .modal {
    display: none;
-   /* Hidden by default */
    position: fixed;
-   /* Stay in place */
    z-index: 100;
    left: 0;
    top: 0;

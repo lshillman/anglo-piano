@@ -1108,6 +1108,17 @@ function showShareModal () {
     linkField.select();
 }
 
+document.getElementById("bellowsPickerBtn").addEventListener("click", (e) => {
+    document.getElementById("bellows-preferences").style.display = "flex";
+    e.stopPropagation();
+    window.addEventListener("click", function handlePopover(f) {
+        if (!document.getElementById("bellows-preferences").contains(f.target)) {
+            document.getElementById("bellows-preferences").style.display = "none";
+            window.removeEventListener("click", handlePopover);
+        }
+    })
+});
+
 opt_pushpull.addEventListener("change", () => {
     togglePushPullView();
 });
@@ -1258,7 +1269,7 @@ closeModalBtn.onclick = function () {
 }
 
 window.onclick = function (event) {
-    if (event.target.className == "modal") {
+    if (event.target.className == "modal" || event.target.className == "popover") {
         closeModal();
     }
 }
