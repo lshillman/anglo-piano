@@ -273,16 +273,28 @@ button {
    flex-wrap: wrap;
 }
 
-#view-preferences, #bellows-preferences {
+#view-preferences,
+#bellows-preferences {
    display: flex;
    flex-direction: column;
 }
 
-#layout-preferences div {
+#layout-actions {
+   display: flex;
+   gap: 4px;
+   position: relative;
+}
+
+#editLayoutBtn,
+#getLinkBtn {
+   flex-grow: 1;
+}
+
+/* #layout-preferences div {
    display: flex;
    align-items: baseline;
    gap: 0.3rem;
-}
+} */
 
 #viewer-options #sound-option {
    margin-top: 1rem;
@@ -323,7 +335,246 @@ select:hover {
    width: 100%;
 }
 
-#editLayoutBtn {
+#layout, #layout-actions button {
+   font-size: 1rem;
+}
+
+#display-options {
+   display: none;
+   flex-direction: column;
+   gap: 0.6rem;
+   margin-top: 1rem;
+}
+
+#layout-preferences #first-row {
+   display:flex;
+   gap: 1.5rem;
+}
+
+#layout-preferences select,
+#layout-preferences button {
+   height: 40px;
+}
+
+#layoutActionsBtn {
+   width: 40px;
+}
+
+#more-layout-actions {
+	display: none;
+	flex-direction: column;
+	border: 1px solid #777;
+	position: absolute;
+	bottom: 40px;
+	right: 0;
+}
+
+#more-layout-actions button {
+	border: none;
+	border-bottom: 1px solid #777;
+	border-radius: 0;
+	line-height: 40px;
+	height: 40px;
+}
+
+#bellows-preferences-container {
+   position: relative;
+}
+
+#bellows-preferences {
+   display: none;
+   position: absolute;
+   right: -9px;
+   top: -70px;
+   flex-direction: row;
+   gap: 6px;
+   border: 1px solid black;
+   padding: .5rem;
+   width: fit-content;
+   font-size: .8rem;
+   background-color: #fff;
+}
+
+#layout-preferences #bellowsPickerBtn {
+	height: 50px;
+	width: 50px;
+	border-radius: 25px;
+	padding: 0;
+	line-height: 50px;
+   border-color: #000;
+}
+
+#bellowsPickerBtn span {
+	display: block;
+	height: 25px;
+	line-height: 25px;
+}
+
+#bellowsPickerBtn span + span {
+	border-top: 1px solid #000;
+}
+
+#bellows-preferences input {
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	opacity: 0;
+}
+
+#bellows-preferences label {
+   position: relative;
+   display: block;
+   box-sizing: border-box;
+   cursor: pointer;
+   border: 1px solid black;
+   width: 50px;
+   height: 50px;
+   border-radius: 100%;
+   text-align: center;
+   padding: 0;
+}
+
+#bellows-preferences label:has(input:checked) {
+   background-color: #3279ec;
+   color: white;
+   border: none;
+}
+
+#bellows-preferences label:has(input:focus) {
+	outline: 2px solid #3279ec;
+	outline-offset: 1px;
+}
+
+#bellows-preferences label span {
+   display: block;
+   height: 25px;
+   line-height: 25px;
+}
+
+#bellows-preferences label span+span {
+   border-top: 1px solid black;
+}
+
+#bellows-preferences label:has(input:checked) span+span {
+   border-color: white;
+}
+
+#bellows-preferences label:not(:has(span)) {
+   line-height: 50px;
+}
+
+#accidentals-label {
+   margin-top: .6rem;
+}
+
+#accidentals {
+   display: flex;
+   flex-direction: row;
+   gap: 4px;
+}
+
+#accidentals input {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	display: block;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#accidentals label {
+   position: relative;
+   display: block;
+   flex-basis: 50%;
+   box-sizing: border-box;
+   cursor: pointer;
+   border: 1px solid black;
+   height: 40px;
+   line-height: 40px;
+   text-align: center;
+   padding: 0;
+}
+
+#accidentals label:has(input:checked) {
+   background-color: #3279ec;
+   color: white;
+   border: none;
+}
+
+#accidentals label:has(input:focus) {
+   outline: 2px solid #3279ec;
+	outline-offset: 1px;
+}
+
+label:has(input[type=checkbox]) {
+   cursor: pointer;
+}
+
+.toggle {
+   position: relative;
+   display: inline-block;
+   width: 40px;
+   height: 22px;
+}
+
+.toggle input {
+   position: absolute;
+   opacity: 0;
+   width: 100%;
+   height: 100%;
+}
+
+.slider {
+   position: absolute;
+   cursor: pointer;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background-color: #ccc;
+   border-radius: 11px;
+   -webkit-transition: .1s;
+   transition: .1s;
+}
+
+.slider:before {
+   position: absolute;
+   content: "";
+   height: 16px;
+   width: 16px;
+   left: 3px;
+   bottom: 3px;
+   background-color: white;
+   border-radius: 50%;
+   -webkit-transition: .1s;
+   transition: .1s;
+}
+
+input:checked+.slider {
+   background-color: #3279ec;
+}
+
+input:focus + .slider {
+	outline: 2px solid #3279ec;
+	outline-offset: 1px;
+}
+
+input:checked+.slider:before {
+   -webkit-transform: translateX(18px);
+   -ms-transform: translateX(18px);
+   transform: translateX(18px);
+}
+
+.toggle .label {
+   text-wrap: nowrap;
+   line-height: 22px;
+   margin-left: 48px;
+}
+
+/* #editLayoutBtn {
    flex-basis: 60%;
 }
 
@@ -357,7 +608,7 @@ button#addToLayoutsBtn:active {
    background-color: transparent;
    text-decoration: underline;
    color: #000;
-}
+} */
 
 #anglo-keyboard,
 #editor-anglo-keyboard {
@@ -471,7 +722,7 @@ button#addToLayoutsBtn:active {
 
 /*========== HIGHLIGHT CONTROLS ============*/
 
-#editHighlightsBtn, #moreDisplayOptionsBtn {
+/* #editHighlightsBtn, #moreDisplayOptionsBtn {
    display: inherit;
    line-height: 1.5;
    font-size: 1rem;
@@ -481,15 +732,15 @@ button#addToLayoutsBtn:active {
    border-color: transparent;
    background-color: transparent;
    cursor: pointer;
-}
+} */
 
-#moreDisplayOptionsBtn {
+/* #moreDisplayOptionsBtn {
    margin-left: 0;
-}
+} */
 
-#editHighlightsBtn:hover, #editHighlightsBtn:active, #moreDisplayOptionsBtn:hover, #moreDisplayOptionsBtn:active {
+/* #editHighlightsBtn:hover, #editHighlightsBtn:active, #moreDisplayOptionsBtn:hover, #moreDisplayOptionsBtn:active {
    text-decoration: underline;
-}
+} */
 
 #highlight-controls {
    display: none;
@@ -505,46 +756,48 @@ button#addToLayoutsBtn:active {
    margin: 1rem;
    display: flex;
    gap: 0.5rem
- }
- #highlight-colors input[type="radio"] {
+}
+
+#highlight-colors input[type="radio"] {
    appearance: none;
- }
- #highlight-colors label {
+}
+
+#highlight-colors label {
    height: 100%;
    height: 2rem;
    width: 2rem;
    border-radius: 1rem;
    cursor: pointer;
- }
+}
 
- #highlight-colors input[type="radio"]:checked + label {
+#highlight-colors input[type="radio"]:checked+label {
    outline: 2px solid black;
    outline-offset: 2px;
- }
- 
- #highlight-colors #red + label {
+}
+
+#highlight-colors #red+label {
    background-color: red;
- }
- 
- #highlight-colors #orange + label {
+}
+
+#highlight-colors #orange+label {
    background-color: orange;
- }
- 
- #highlight-colors #green + label {
+}
+
+#highlight-colors #green+label {
    background-color: green;
- }
- 
- #highlight-colors #blue + label {
+}
+
+#highlight-colors #blue+label {
    background-color: blue;
- }
- 
- #highlight-colors #pink + label {
+}
+
+#highlight-colors #pink+label {
    background-color: magenta;
- }
- 
- #highlight-colors #purple + label {
+}
+
+#highlight-colors #purple+label {
    background-color: purple;
- }
+}
 
 .highlightable:not(.highlighted):hover {
    outline: 2px solid var(--highlightColor);
@@ -677,7 +930,7 @@ button#addToLayoutsBtn:active {
 
 #composer {
    width: 100%;
-   display:flex;
+   display: flex;
    flex-direction: column;
 }
 
@@ -702,12 +955,12 @@ button#addToLayoutsBtn:active {
 }
 
 #comp-layout-button {
-	background: none;
-	border: none;
-	font-size: inherit;
-	padding: 0px;
-	color: inherit;
-	text-decoration: underline;
+   background: none;
+   border: none;
+   font-size: inherit;
+   padding: 0px;
+   color: inherit;
+   text-decoration: underline;
 }
 
 #composer-controls div {
@@ -720,7 +973,7 @@ button#addToLayoutsBtn:active {
 
 #timeline {
    width: 100%;
-   height:100%;
+   height: 100%;
    padding: 1rem;
    box-sizing: border-box;
    overflow-x: auto;
@@ -732,7 +985,7 @@ button#addToLayoutsBtn:active {
 }
 
 #timeline:has(.composer-frame):has(.marker) {
-	padding-top: 2rem;
+   padding-top: 2rem;
 }
 
 #new-composition-message {
@@ -745,15 +998,15 @@ button#addToLayoutsBtn:active {
 }
 
 #new-composition-message button {
-	padding: 0;
-	border: none;
-	font-size: inherit;
-	color: #0000FF;
-	border-radius: 0;
+   padding: 0;
+   border: none;
+   font-size: inherit;
+   color: #0000FF;
+   border-radius: 0;
 }
 
 #new-composition-message button:hover {
-	background-color: transparent;
+   background-color: transparent;
    text-decoration: underline;
 }
 
@@ -771,14 +1024,14 @@ button#addToLayoutsBtn:active {
    position: relative;
 }
 
-.composer-frame button{
+.composer-frame button {
    display: inline-block;
    box-sizing: border-box;
    width: 3rem;
    height: 3.5rem;
    text-align: center;
    background: #ddd;
-   background: linear-gradient(135deg,rgba(221, 221, 255, 1) 48%, rgba(255, 255, 255, 1) 48%, rgba(255, 255, 255, 1) 52%, rgba(255, 221, 221, 1) 52%);
+   background: linear-gradient(135deg, rgba(221, 221, 255, 1) 48%, rgba(255, 255, 255, 1) 48%, rgba(255, 255, 255, 1) 52%, rgba(255, 221, 221, 1) 52%);
    border: none;
 }
 
@@ -790,19 +1043,21 @@ button#addToLayoutsBtn:active {
    background: #fdd;
 }
 
-.composer-frame.selected button, .composer-frame.selected button:hover {
-   background: linear-gradient(135deg,rgba(0, 0, 255, 1) 50%, rgba(163, 0, 20, 1) 50%);
+.composer-frame.selected button,
+.composer-frame.selected button:hover {
+   background: linear-gradient(135deg, rgba(0, 0, 255, 1) 50%, rgba(163, 0, 20, 1) 50%);
    color: #fff;
 }
 
 .composer-frame button:hover {
-	border-top: 3px solid #0000ff;
-	border-bottom: 3px solid #a30014;
-	border-right: 3px solid #a30014;
-	border-left: 3px solid #0000ff;
+   border-top: 3px solid #0000ff;
+   border-bottom: 3px solid #a30014;
+   border-right: 3px solid #a30014;
+   border-left: 3px solid #0000ff;
 }
 
-.composer-frame.selected[data-bellows="push-only"] button, .composer-frame.selected[data-bellows="push-only"] button:hover {
+.composer-frame.selected[data-bellows="push-only"] button,
+.composer-frame.selected[data-bellows="push-only"] button:hover {
    background: #0000FF;
    color: #fff;
 }
@@ -811,7 +1066,8 @@ button#addToLayoutsBtn:active {
    border: 3px solid #0000FF;
 }
 
-.composer-frame.selected[data-bellows="pull-only"] button, .composer-frame.selected[data-bellows="pull-only"] button:hover {
+.composer-frame.selected[data-bellows="pull-only"] button,
+.composer-frame.selected[data-bellows="pull-only"] button:hover {
    background: #A30014;
    color: #fff;
 }
@@ -821,15 +1077,15 @@ button#addToLayoutsBtn:active {
 }
 
 .marker {
-  display: inline-block;
-  position: absolute;
-  top: -1.6rem;
-  left: 0;
-  border: 1px solid #8400FF;
-  background-color: #f5eaff;
-  color: #5800aa;
-  padding: 2px .5rem 0 .5rem;
-  border-radius: 3px;
+   display: inline-block;
+   position: absolute;
+   top: -1.6rem;
+   left: 0;
+   border: 1px solid #8400FF;
+   background-color: #f5eaff;
+   color: #5800aa;
+   padding: 2px .5rem 0 .5rem;
+   border-radius: 3px;
 }
 
 .composer-frame.selected .marker {
@@ -938,7 +1194,8 @@ button#addToLayoutsBtn:active {
    text-align: center;
    border: 1px solid #767676;
    font-family: monospace;
-   font-size: 16px; /* has to be 16px instead of 1rem for iOS */
+   font-size: 16px;
+   /* has to be 16px instead of 1rem for iOS */
 }
 
 .editor-button input[type=text]:focus {
@@ -1048,8 +1305,8 @@ button#addToLayoutsBtn:active {
 }
 
 #mobile-note-picker div {
-   display:flex;
-   width:100%;
+   display: flex;
+   width: 100%;
    padding: 0.2rem 0.4rem;
 }
 
@@ -1089,9 +1346,7 @@ button#addToLayoutsBtn:active {
 /* overlay */
 .modal {
    display: none;
-   /* Hidden by default */
    position: fixed;
-   /* Stay in place */
    z-index: 100;
    left: 0;
    top: 0;
@@ -1119,7 +1374,7 @@ button#addToLayoutsBtn:active {
    text-align: left;
    border-radius: 8px;
    overflow-y: scroll;
-	box-sizing: border-box;
+   box-sizing: border-box;
 }
 
 .modal-content h2 {
@@ -1213,20 +1468,21 @@ button#addToLayoutsBtn:active {
 
 /* version info */
 #version {
-	background-color: #555;
-	color: #fff;
-	margin: 0 -1.5rem -1.5rem -1.5rem;
-	padding: 0.8rem;
-	border-radius: 0 0 7px 7px;
-	text-align: center;
+   background-color: #555;
+   color: #fff;
+   margin: 0 -1.5rem -1.5rem -1.5rem;
+   padding: 0.8rem;
+   border-radius: 0 0 7px 7px;
+   text-align: center;
 }
 
-#version a, #version a:visited {
+#version a,
+#version a:visited {
    color: #fff;
 }
 
 
-/* ===== ARROWS ===== */
+/* ===== ARROWS, ICONS ===== */
 
 .arrow::before {
    border-top: 3px solid #555;
@@ -1261,6 +1517,50 @@ button#addToLayoutsBtn:active {
    transform: rotate(-135deg);
 }
 
+svg.icon-button {
+   height: 100%;
+   width: 100%;
+   fill: currentColor;
+}
+
+#layout-preferences .accordion-button {
+   display: flex;
+   align-items: center;
+   height: 20px;
+	border: none;
+	padding: 0;
+	margin: 1rem 0;
+	font-size: 1rem;
+   border-radius: 0;
+   background-color: transparent;
+}
+
+#layout-preferences .accordion-button:hover {
+   background-color: transparent;
+}
+
+.accordion-button svg {
+   height: 100%;
+   width: 20px;
+   fill: currentColor;
+}
+
+.accordion-button.closed .right {
+   display: block;
+}
+
+.accordion-button.closed .down {
+   display: none;
+}
+
+.accordion-button.open .right {
+   display: none;
+}
+
+.accordion-button.open .down {
+   display: block;
+}
+
 
 @media only screen and (max-width: 630px) {
 
@@ -1285,7 +1585,7 @@ button#addToLayoutsBtn:active {
 
    #playback-controls button {
       width: 50%;
-      height:40px;
+      height: 40px;
    }
 
    #editor-header {
@@ -1316,7 +1616,7 @@ button#addToLayoutsBtn:active {
       border-top: 1px solid #ccc;
       display: flex;
       flex-direction: column-reverse;
-      box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.10);
+      box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.10);
    }
 
    #editor-options {
@@ -1353,5 +1653,11 @@ button#addToLayoutsBtn:active {
 
    #mobile-note-picker #picker-nav {
       display: flex;
+   }
+}
+
+@media only screen and (max-width: 430px) {
+   #viewer-options {
+      max-width: 100%;
    }
 }

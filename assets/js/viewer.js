@@ -44,10 +44,12 @@ const multiselect = document.getElementById("multiselect");
 const opt_coloroctave = document.getElementById("coloroctave");
 const opt_concertinaLabels = document.getElementById("concertina-labels");
 const opt_pianoLabels = document.getElementById("piano-labels");
-const opt_accidentals = document.getElementById("accidentals");
+const opt_flat = document.getElementById("flat");
+const opt_sharp = document.getElementById("sharp");
 const opt_absentNotes = document.getElementById("absent-notes");
 const opt_highlights = document.getElementById("highlights");
 const editHighlightsBtn = document.getElementById("editHighlightsBtn");
+const layoutActionsBtn = document.getElementById("layoutActionsBtn");
 const moreDisplayOptionsBtn = document.getElementById("moreDisplayOptionsBtn");
 const openComposerBtn = document.getElementById("openComposerBtn");
 let highlightColor = "red";
@@ -88,9 +90,9 @@ function renderPianoKeyboard(min, max, layoutnotes, pushnotes, pullnotes) {
     activeNotes.length = 0;
     let allnotes = Object.keys(notes); // get an array of notes from the note object, and also add the novelty symbol
     for (let i = min; i < max; i++) {
-        let note = allnotes[i];
+        let note = noteNames[allnotes[i]];
         let label = note;
-        if (opt_accidentals.checked) {
+        if (opt_flat.checked) {
             label = altNoteNames[note];
         }
         if (!opt_pianoLabels.checked) {
@@ -129,6 +131,9 @@ function renderAngloKeyboard() {
     // droneDiv.style.display = 'none';
     angloKeyboard.innerHTML = "";
     for (button of buttons) {
+        // older versions of Anglo Piano spelled accidentals as "mostly sharp, except for Bb". The following two lines are to make sure layouts in localStorage render appropriately using the new ui preference (sharps or flats, vs. the older default or alt).
+        button.push = button.push.replace("Bb", "A#");
+        button.pull = button.pull.replace("Bb", "A#");
         if (button.push != "~") {
             layoutnotes.push(button.push);
             pushnotes.push(button.push);
@@ -139,7 +144,7 @@ function renderAngloKeyboard() {
         }
         let pushLabel = button.push;
         let pullLabel = button.pull;
-        if (opt_accidentals.checked) {
+        if (opt_flat.checked) {
             pushLabel = altNoteNames[button.push];
             pullLabel = altNoteNames[button.pull];
         }
@@ -165,8 +170,8 @@ function renderAngloKeyboard() {
     bindAngloButtons();
 
     // find the lowest and highest notes for the piano keyboard
-    let min = allnotes.indexOf(layoutnotes[0]);
-    let max = allnotes.indexOf(layoutnotes[0]);
+    let min = allnotes.indexOf(noteNames[layoutnotes[0]]);
+    let max = allnotes.indexOf(noteNames[layoutnotes[0]]);
     for (let i = 1; i < layoutnotes.length; i++) {
         if (layoutnotes[i] != "~") {
             if (allnotes.indexOf(noteNames[layoutnotes[i]]) < min) {
@@ -564,7 +569,7 @@ function playNote(note) {
         let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let oscillator;
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
-        let freq = notes[note];
+        let freq = notes[noteNames[note]];
         let fullVolume = 0;
         if (selection.length) {
             let selectedNotes = new Set();
@@ -776,6 +781,7 @@ function selectLayout() {
         addToLayoutsBtn.style.display = "block";
         removeFromLayoutsBtn.style.display = "none";
         editHighlightsBtn.style.display = "none";
+        layoutActionsBtn.style.display = "block";
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
     } else if (opt_layout.value.includes("USER_LAYOUT_")) {
@@ -783,16 +789,19 @@ function selectLayout() {
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "block";
         editHighlightsBtn.style.display = "inherit";
+        layoutActionsBtn.style.display = "block";
     } else if (opt_layout.value == "compositionLayout") { 
         buttons = parsedLayoutFromComposition;
         addToLayoutsBtn.style.display = "block";
         removeFromLayoutsBtn.style.display = "none";
         editHighlightsBtn.style.display = "none";
+        layoutActionsBtn.style.display = "block";
     } else if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "none";
         editHighlightsBtn.style.display = "none";
+        layoutActionsBtn.style.display = "none";
     }
     renderAngloKeyboard();
     opt_layout.blur();
@@ -861,12 +870,14 @@ document.getElementById("highlight-colors").addEventListener("change", (e) => {
 document.getElementById("stop-highlighting").addEventListener("click", () => stopHighlighting());
 document.getElementById("editHighlightsBtn").addEventListener("click", () => startHighlighting());
 moreDisplayOptionsBtn.addEventListener("click", () => {
-    if (document.getElementById("more-display-options").style.display == "none") {
-        moreDisplayOptionsBtn.innerText = "Fewer options";
-        document.getElementById("more-display-options").style.display = "flex";
+    if (document.getElementById("display-options").style.display == "none") {
+        moreDisplayOptionsBtn.classList.add("open");
+        moreDisplayOptionsBtn.classList.remove("closed");
+        document.getElementById("display-options").style.display = "flex";
     } else {
-        moreDisplayOptionsBtn.innerText = "More options..."
-        document.getElementById("more-display-options").style.display = "none";
+        moreDisplayOptionsBtn.classList.add("closed");
+        moreDisplayOptionsBtn.classList.remove("open");
+        document.getElementById("display-options").style.display = "none";
     }
 });
 openComposerBtn.addEventListener("click", () => {
@@ -1104,17 +1115,52 @@ function showShareModal () {
     linkField.select();
 }
 
+document.getElementById("bellowsPickerBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    closePopovers();
+    document.getElementById("bellows-preferences").style.display = "flex";
+    document.querySelectorAll("#bellows-preferences input").forEach((input) => {
+        if (input.checked) {
+            input.focus();
+        }
+    })
+    window.addEventListener("click", function handlePopover(f) {
+        if (!document.getElementById("bellows-preferences").contains(f.target)) {
+            document.getElementById("bellows-preferences").style.display = "none";
+            console.log("in bellows handler");
+            window.removeEventListener("click", handlePopover);
+        }
+    })
+});
+
+layoutActionsBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closePopovers();
+    document.getElementById("more-layout-actions").style.display = "flex";
+    window.addEventListener("click", function handlePopover(f) {
+        if (!document.getElementById("more-layout-actions").contains(f.target)) {
+            document.getElementById("more-layout-actions").style.display = "none";
+            console.log("in layout actions handler");
+            window.removeEventListener("click", handlePopover);
+        }
+    })
+});
+
 opt_pushpull.addEventListener("change", () => {
     togglePushPullView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `<span>Push</span><span>Pull</span>`;
 });
 opt_pullpush.addEventListener("change", () => {
     togglePullPushView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `<span>Pull</span><span>Push</span>`;
 });
 opt_push.addEventListener("change", () => {
     togglePushView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `Push`;
 });
 opt_pull.addEventListener("change", () => {
     togglePullView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `Pull`;
 });
 
 opt_matchoctave.addEventListener("change", () => {
@@ -1133,7 +1179,11 @@ opt_pianoLabels.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 
-opt_accidentals.addEventListener("change", () => {
+opt_flat.addEventListener("change", () => {
+    renderAngloKeyboard();
+});
+
+opt_sharp.addEventListener("change", () => {
     renderAngloKeyboard();
 });
 
@@ -1249,8 +1299,13 @@ closeModalBtn.onclick = function () {
     aboutModal.style.display = "none";
 }
 
+function closePopovers(e) {
+    e && e.preventDefault();
+    [...document.getElementsByClassName("popover")].forEach((element) => element.style.display = "none");
+}
+
 window.onclick = function (event) {
-    if (event.target.className == "modal") {
+    if (event.target.className == "modal" || event.target.className == "popover") {
         closeModal();
     }
 }
