@@ -865,12 +865,14 @@ document.getElementById("highlight-colors").addEventListener("change", (e) => {
 document.getElementById("stop-highlighting").addEventListener("click", () => stopHighlighting());
 document.getElementById("editHighlightsBtn").addEventListener("click", () => startHighlighting());
 moreDisplayOptionsBtn.addEventListener("click", () => {
-    if (document.getElementById("more-display-options").style.display == "none") {
-        moreDisplayOptionsBtn.innerText = "Fewer options";
-        document.getElementById("more-display-options").style.display = "flex";
+    if (document.getElementById("display-options").style.display == "none") {
+        moreDisplayOptionsBtn.classList.add("open");
+        moreDisplayOptionsBtn.classList.remove("closed");
+        document.getElementById("display-options").style.display = "flex";
     } else {
-        moreDisplayOptionsBtn.innerText = "More options..."
-        document.getElementById("more-display-options").style.display = "none";
+        moreDisplayOptionsBtn.classList.add("closed");
+        moreDisplayOptionsBtn.classList.remove("open");
+        document.getElementById("display-options").style.display = "none";
     }
 });
 openComposerBtn.addEventListener("click", () => {

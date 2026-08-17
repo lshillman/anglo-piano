@@ -56,7 +56,7 @@
                                 <div id="layout-actions">
                                     <button id="editLayoutBtn">Edit layout</button>
                                     <button id="getLinkBtn">Get link</button>
-                                    <button id="layoutActionsBtn" title="More layout actions">...</button>
+                                    <button id="layoutActionsBtn" title="More layout actions"><svg class="icon-button" x="0px" y="0px" viewBox="0 0 30 30"><circle cx="15.0500002" cy="6" r="3"/><circle cx="14.9499998" cy="14.5749998" r="3"/><circle cx="14.9499998" cy="23.1499996" r="3"/></svg></button>
                                     <div id="more-layout-actions" class="popover">
                                         <button id="editHighlightsBtn">Highlight buttons...</button>
                                         <button id="addToLayoutsBtn">Add to your layouts</button>
@@ -74,14 +74,14 @@
                                 </div>
                             </div>
                         </div> <!--First row-->
-                        <button>More display options</button>
-                        <section id="display-options">
+                        <button id="moreDisplayOptionsBtn" class="accordion-button closed"><span>More display options</span><svg x="0px" y="0px" viewBox="0 0 30 30"><path class="right" d="M22.2415791,14.8819952c0.048811-0.2521744,0.048811-0.5119019,0-0.7639904 c-0.0732403-0.3781967-0.256319-0.7393456-0.5491905-1.032218l-7.7781754-7.7781749 c-0.7810364-0.7810373-2.0473461-0.7810802-2.8284264,0c-0.7810373,0.7810369-0.7810373,2.04739,0,2.8284268L17.4497471,14.5 l-6.3639603,6.3639603c-0.7810373,0.7810383-0.7810373,2.04739,0,2.8284283c0.7810364,0.7810364,2.04739,0.7810364,2.8284264,0 l7.7781754-7.7781754C21.9853039,15.6212978,22.1683826,15.260148,22.2415791,14.8819952z"/><path class="down" d="M15.1179886,21.4633827c0.2521744,0.048811,0.5119019,0.048811,0.7639904,0 c0.3781967-0.0732403,0.7393456-0.2563171,1.0322189-0.5491905l7.7781734-7.7781744 c0.7810383-0.7810373,0.7810802-2.0473471,0-2.8284273c-0.7810364-0.7810373-2.04739-0.7810373-2.8284264,0l-6.3639612,6.3639603 l-6.3639612-6.3639603c-0.7810373-0.7810373-2.04739-0.7810373-2.8284268,0s-0.7810373,2.04739,0,2.8284273l7.7781749,7.7781744 C14.378686,21.2071075,14.7398357,21.3901863,15.1179886,21.4633827z"/></svg></button>
+                        <section id="display-options" style="display:none;">
                             <label for="matchoctave"><div class="toggle"><input type="checkbox" id="matchoctave" name="matchoctave" checked="checked"><span class="slider"></span><span class="label">Match octave</span></div></label>
                             <div id="highlight-option">
                                 <label for="highlights"><div class="toggle"><input type="checkbox" id="highlights" name="highlights" value="true" checked="checked"><span class="slider"></span><span class="label">User highlights</span></div></label>
                             </div>
                             <label for="coloroctave"><div class="toggle"><input type="checkbox" id="coloroctave" name="coloroctave" value="false"><span class="slider"></span><span class="label">Color octaves</span></div></label>
-                            <span>Accidental spellings</span>
+                            <span id="accidentals-label">Accidental spellings</span>
                             <div id="accidentals">
                                 <label for="sharp"><input type="radio" id="sharp" name="accidentals" value="sharp" checked><strong>♯</strong> Sharp</label>
                                 <label for="flat"><input type="radio" id="flat" name="accidentals" value="flat"><strong>♭</strong> Flat</label>
