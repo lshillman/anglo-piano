@@ -342,6 +342,37 @@ select:hover {
    margin-top: 1rem;
 }
 
+#layout-preferences #first-row {
+   display:flex;
+   gap: 1.5rem;
+}
+
+#layout-preferences select,
+#layout-preferences button {
+   height: 40px;
+}
+
+#layoutActionsBtn {
+   width: 40px;
+}
+
+#more-layout-actions {
+	display: none;
+	flex-direction: column;
+	border: 1px solid #777;
+	position: absolute;
+	bottom: 40px;
+	right: 0;
+}
+
+#more-layout-actions button {
+	border: none;
+	border-bottom: 1px solid #777;
+	border-radius: 0;
+	line-height: 40px;
+	height: 40px;
+}
+
 #bellows-preferences-container {
    position: relative;
 }
@@ -360,11 +391,7 @@ select:hover {
    background-color: #fff;
 }
 
-#accidentals input {
-   display: none;
-}
-
-#bellowsPickerBtn {
+#layout-preferences #bellowsPickerBtn {
 	height: 50px;
 	width: 50px;
 	border-radius: 25px;
@@ -411,6 +438,11 @@ select:hover {
    border: none;
 }
 
+#bellows-preferences label:has(input:focus) {
+	outline: 2px solid #3279ec;
+	outline-offset: 1px;
+}
+
 #bellows-preferences label span {
    display: block;
    height: 25px;
@@ -435,14 +467,25 @@ select:hover {
    gap: 4px;
 }
 
+#accidentals input {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	display: block;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
 #accidentals label {
+   position: relative;
    display: block;
    flex-basis: 50%;
    box-sizing: border-box;
    cursor: pointer;
    border: 1px solid black;
-   height: 30px;
-   line-height: 30px;
+   height: 40px;
+   line-height: 40px;
    text-align: center;
    padding: 0;
 }
@@ -451,6 +494,11 @@ select:hover {
    background-color: #3279ec;
    color: white;
    border: none;
+}
+
+#accidentals label:has(input:focus) {
+   outline: 2px solid #3279ec;
+	outline-offset: 1px;
 }
 
 label:has(input[type=checkbox]) {
@@ -501,8 +549,9 @@ input:checked+.slider {
    background-color: #3279ec;
 }
 
-input:focus+.slider {
-   box-shadow: 0 0 1px #3279ec;
+input:focus + .slider {
+	outline: 2px solid #3279ec;
+	outline-offset: 1px;
 }
 
 input:checked+.slider:before {

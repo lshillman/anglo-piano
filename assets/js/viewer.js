@@ -1109,11 +1109,31 @@ function showShareModal () {
 }
 
 document.getElementById("bellowsPickerBtn").addEventListener("click", (e) => {
-    document.getElementById("bellows-preferences").style.display = "flex";
     e.stopPropagation();
+    closePopovers();
+    document.getElementById("bellows-preferences").style.display = "flex";
+    document.querySelectorAll("#bellows-preferences input").forEach((input) => {
+        if (input.checked) {
+            input.focus();
+        }
+    })
     window.addEventListener("click", function handlePopover(f) {
         if (!document.getElementById("bellows-preferences").contains(f.target)) {
             document.getElementById("bellows-preferences").style.display = "none";
+            console.log("in bellows handler");
+            window.removeEventListener("click", handlePopover);
+        }
+    })
+});
+
+document.getElementById("layoutActionsBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    closePopovers();
+    document.getElementById("more-layout-actions").style.display = "flex";
+    window.addEventListener("click", function handlePopover(f) {
+        if (!document.getElementById("more-layout-actions").contains(f.target)) {
+            document.getElementById("more-layout-actions").style.display = "none";
+            console.log("in layout actions handler");
             window.removeEventListener("click", handlePopover);
         }
     })
@@ -1266,6 +1286,11 @@ function closeModal(e) {
 
 closeModalBtn.onclick = function () {
     aboutModal.style.display = "none";
+}
+
+function closePopovers(e) {
+    e && e.preventDefault();
+    [...document.getElementsByClassName("popover")].forEach((element) => element.style.display = "none");
 }
 
 window.onclick = function (event) {
