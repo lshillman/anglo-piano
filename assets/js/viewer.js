@@ -1148,15 +1148,19 @@ layoutActionsBtn.addEventListener("click", (e) => {
 
 opt_pushpull.addEventListener("change", () => {
     togglePushPullView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `<span>Push</span><span>Pull</span>`;
 });
 opt_pullpush.addEventListener("change", () => {
     togglePullPushView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `<span>Pull</span><span>Push</span>`;
 });
 opt_push.addEventListener("change", () => {
     togglePushView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `Push`;
 });
 opt_pull.addEventListener("change", () => {
     togglePullView();
+    document.getElementById("bellowsPickerBtn").innerHTML = `Pull`;
 });
 
 opt_matchoctave.addEventListener("change", () => {

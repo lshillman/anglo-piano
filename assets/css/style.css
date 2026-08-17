@@ -335,6 +335,10 @@ select:hover {
    width: 100%;
 }
 
+#layout, #layout-actions button {
+   font-size: 1rem;
+}
+
 #display-options {
    display: none;
    flex-direction: column;
