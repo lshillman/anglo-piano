@@ -49,6 +49,7 @@ const opt_sharp = document.getElementById("sharp");
 const opt_absentNotes = document.getElementById("absent-notes");
 const opt_highlights = document.getElementById("highlights");
 const editHighlightsBtn = document.getElementById("editHighlightsBtn");
+const layoutActionsBtn = document.getElementById("layoutActionsBtn");
 const moreDisplayOptionsBtn = document.getElementById("moreDisplayOptionsBtn");
 const openComposerBtn = document.getElementById("openComposerBtn");
 let highlightColor = "red";
@@ -780,6 +781,7 @@ function selectLayout() {
         addToLayoutsBtn.style.display = "block";
         removeFromLayoutsBtn.style.display = "none";
         editHighlightsBtn.style.display = "none";
+        layoutActionsBtn.style.display = "block";
     } else if (opt_layout.value == "customFromEditor") {
         buttons = parsedLayoutFromEditor;
     } else if (opt_layout.value.includes("USER_LAYOUT_")) {
@@ -787,16 +789,19 @@ function selectLayout() {
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "block";
         editHighlightsBtn.style.display = "inherit";
+        layoutActionsBtn.style.display = "block";
     } else if (opt_layout.value == "compositionLayout") { 
         buttons = parsedLayoutFromComposition;
         addToLayoutsBtn.style.display = "block";
         removeFromLayoutsBtn.style.display = "none";
         editHighlightsBtn.style.display = "none";
+        layoutActionsBtn.style.display = "block";
     } else if (LAYOUTS[opt_layout.value]) {
         buttons = LAYOUTS[opt_layout.value].layout;
         addToLayoutsBtn.style.display = "none";
         removeFromLayoutsBtn.style.display = "none";
         editHighlightsBtn.style.display = "none";
+        layoutActionsBtn.style.display = "none";
     }
     renderAngloKeyboard();
     opt_layout.blur();
@@ -1128,7 +1133,7 @@ document.getElementById("bellowsPickerBtn").addEventListener("click", (e) => {
     })
 });
 
-document.getElementById("layoutActionsBtn").addEventListener("click", (e) => {
+layoutActionsBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     closePopovers();
     document.getElementById("more-layout-actions").style.display = "flex";
