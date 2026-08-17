@@ -1655,3 +1655,9 @@ svg.icon-button {
       display: flex;
    }
 }
+
+@media only screen and (max-width: 430px) {
+   #viewer-options {
+      max-width: 100%;
+   }
+}
