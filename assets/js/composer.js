@@ -32,7 +32,7 @@ function loadCompositions() {
         comp_delete.style.display = "inline-block";
         document.getElementById("comp-export").style.display = "inline-block";
         document.getElementById("frame-actions").style.display = "block";
-        playbackControls.style.display = "block";
+        playbackControls.style.display = "flex";
         populateTimeline(compositions[comp_dropdown.value].frames);
     } else {
         console.log("no compositions in localStorage")
@@ -283,7 +283,7 @@ function updateFrameActionsUI() {
         playbackControls.style.display = "none";
         frame_save.style.display = "inline-block";
     } else {
-        playbackControls.style.display = "block";
+        playbackControls.style.display = "flex";
         if (document.getElementById("new-composition-message")) {
             document.getElementById("new-composition-message").remove();
         }
@@ -651,20 +651,18 @@ function switchToCompLayout() {
 
 function showComposer() {
     composer_container.style.display = "block";
-    document.getElementById("default-view-container").style.paddingBottom = "8rem";
+    document.getElementById("default-view-container").style.paddingBottom = "11rem";
     console.warn("The composer is actively being developed. Use at your own risk!")
     loadCompositions();
     setSelectionMode();
-    openComposerBtn.innerText = "Close composer"
 }
 
 function closeComposer() {
     composer_container.style.display = "none";
-    document.getElementById("default-view-container").style.paddingBottom = "0";
+    document.getElementById("default-view-container").style.paddingBottom = "2rem;";
     comp_dropdown.innerHTML = "";
     timeline.innerHTML = "";
     setSelectionMode();
-    openComposerBtn.innerText = "Open composer"
 }
 
 if (urlParams.composer) {

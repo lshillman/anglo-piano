@@ -95,6 +95,10 @@ body {
    text-align: center;
 }
 
+#default-view-container {
+   padding-bottom: 2rem;
+}
+
 /* #viewer {
    min-height: calc(100vh - 15rem);
 } */
@@ -747,22 +751,26 @@ button#addToLayoutsBtn:active {
    text-align: left;
    max-width: fit-content;
    margin: 2rem auto;
-   gap: 1rem;
+   gap: 0.5rem;
    flex-wrap: wrap;
    align-items: center;
 }
 
 #highlight-colors {
-   margin: 1rem;
    display: flex;
-   gap: 0.5rem
+   gap: 6px;
 }
 
 #highlight-colors input[type="radio"] {
-   appearance: none;
+   position: absolute;
+   opacity: 0;
+   height: 100%;
+   width: 100%;
+   margin: 0;
 }
 
 #highlight-colors label {
+   position: relative;
    height: 100%;
    height: 2rem;
    width: 2rem;
@@ -770,32 +778,32 @@ button#addToLayoutsBtn:active {
    cursor: pointer;
 }
 
-#highlight-colors input[type="radio"]:checked+label {
+#highlight-colors label:has(input:checked) {
    outline: 2px solid black;
    outline-offset: 2px;
 }
 
-#highlight-colors #red+label {
+#highlight-colors label[for="red"] {
    background-color: red;
 }
 
-#highlight-colors #orange+label {
+#highlight-colors label[for="orange"] {
    background-color: orange;
 }
 
-#highlight-colors #green+label {
+#highlight-colors label[for="green"] {
    background-color: green;
 }
 
-#highlight-colors #blue+label {
+#highlight-colors label[for="blue"] {
    background-color: blue;
 }
 
-#highlight-colors #pink+label {
+#highlight-colors label[for="pink"] {
    background-color: magenta;
 }
 
-#highlight-colors #purple+label {
+#highlight-colors label[for="purple"] {
    background-color: purple;
 }
 
@@ -912,9 +920,27 @@ button#addToLayoutsBtn:active {
 }
 
 #openComposerBtn {
-   width: fit-content;
+	position: fixed;
+	bottom: 0;
+	left: 10px;
+   display: flex;
+   align-items: center;
+   gap: .25rem;
+	border-radius: 8px 8px 0 0;
+	height: 50px;
+	padding: 0 1rem;
+   font-size: 1rem;
+	background-color: #efefef;
+	border: 4px solid #ccc;
+	border-bottom: none;
 }
 
+#openComposerBtn svg,
+#close-composer svg {
+   height: 100%;
+   width: 1.2em;
+   fill: currentColor;
+}
 
 /* ===== COMPOSER ===== */
 
@@ -926,6 +952,21 @@ button#addToLayoutsBtn:active {
    width: 100%;
    background-color: #fff;
    margin-top: 2rem;
+}
+
+#close-composer {
+	position: absolute;
+	height: 40px;
+   display: flex;
+   align-items: center;
+   gap: .25rem;
+	background-color: #efefef;
+	border: 4px solid #ccc;
+	border-bottom: none;
+	border-radius: 8px 8px 0 0;
+	left: 10px;
+	top: -36px;
+   padding: 0 1rem;
 }
 
 #composer {
@@ -1011,12 +1052,22 @@ button#addToLayoutsBtn:active {
 }
 
 #playback-controls {
-   white-space: nowrap;
+   display: flex;
 }
 
 #playback-controls button {
    height: 100%;
    padding: 0 1rem;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   gap: 4px;
+   border-radius: 0;
+}
+
+#playback-controls button svg {
+   width: 1.5rem;
+   fill: currentColor;
 }
 
 .composer-frame {
@@ -1586,6 +1637,11 @@ svg.icon-button {
    #playback-controls button {
       width: 50%;
       height: 40px;
+      align-items: center;
+   }
+
+   #playback-controls button span {
+      display: none;
    }
 
    #editor-header {

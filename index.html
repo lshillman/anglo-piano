@@ -103,34 +103,23 @@
                         <label for="concertina-labels"><input type="checkbox" id="concertina-labels" name="concertina-labels" value="true" checked="checked">Concertina labels</label>
                         <label for="piano-labels"><input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">Piano labels</label>
                     </div>
-                    <button id="openComposerBtn">Open composer</button>
                 </div>
             </div>
             <div id="highlight-controls">
                 <div id="highlight-colors">
-                    <input type="radio" id="red" name="colors" value="1" checked>
-                    <label for="red"></label>
-                  
-                    <input type="radio" id="orange" name="colors" value="2">
-                    <label for="orange"></label>
-                  
-                    <input type="radio" id="green" name="colors" value="3">
-                    <label for="green"></label>
-                  
-                    <input type="radio" id="blue" name="colors" value="4">
-                    <label for="blue"></label>
-                  
-                    <input type="radio" id="pink" name="colors" value="5">
-                    <label for="pink"></label>
-                    
-                    <input type="radio" id="purple" name="colors" value="5">
-                    <label for="purple"></label>
+                    <label for="red"><input type="radio" id="red" name="colors" value="1" checked></label>
+                    <label for="orange"><input type="radio" id="orange" name="colors" value="2"></label>
+                    <label for="green"><input type="radio" id="green" name="colors" value="3"></label>
+                    <label for="blue"><input type="radio" id="blue" name="colors" value="4"></label>
+                    <label for="pink"><input type="radio" id="pink" name="colors" value="5"></label>
+                    <label for="purple"><input type="radio" id="purple" name="colors" value="5"></label>
                   </div>
                   <button id="stop-highlighting">Done highlighting</button>
             </div>
         </div>
-
+        <button id="openComposerBtn"><span>Composer</span><svg x="0px" y="0px" viewBox="0 0 30 30"><path class="down" d="M15.1179886,21.4633827c0.2521744,0.048811,0.5119019,0.048811,0.7639904,0 c0.3781967-0.0732403,0.7393456-0.2563171,1.0322189-0.5491905l7.7781734-7.7781744 c0.7810383-0.7810373,0.7810802-2.0473471,0-2.8284273c-0.7810364-0.7810373-2.04739-0.7810373-2.8284264,0l-6.3639612,6.3639603 l-6.3639612-6.3639603c-0.7810373-0.7810373-2.04739-0.7810373-2.8284268,0s-0.7810373,2.04739,0,2.8284273l7.7781749,7.7781744 C14.378686,21.2071075,14.7398357,21.3901863,15.1179886,21.4633827z"/></svg></button>
         <div id="composer-container" style="display:none;">
+            <button id="close-composer" title="Close composer"><span>Composer</span><svg x="0px" y="0px" viewBox="0 0 30 30"><path class="down" d="M15.1179886,21.4633827c0.2521744,0.048811,0.5119019,0.048811,0.7639904,0 c0.3781967-0.0732403,0.7393456-0.2563171,1.0322189-0.5491905l7.7781734-7.7781744 c0.7810383-0.7810373,0.7810802-2.0473471,0-2.8284273c-0.7810364-0.7810373-2.04739-0.7810373-2.8284264,0l-6.3639612,6.3639603 l-6.3639612-6.3639603c-0.7810373-0.7810373-2.04739-0.7810373-2.8284268,0s-0.7810373,2.04739,0,2.8284273l7.7781749,7.7781744 C14.378686,21.2071075,14.7398357,21.3901863,15.1179886,21.4633827z"/></svg></button>
             <div id="composer">
                 <div id="composer-controls">
                     <div>
@@ -150,7 +139,7 @@
                     </div>
                     <span id="layout-mismatch">Switch to <button id="comp-layout-button">this composition's layout</button> to enable editing.</span>
                     <div>
-                        <button id="close-composer" title="Close composer">&times;</button>
+                        <button id="composer-help" title="Composer help">Help</button>
                     </div>
                 </div>
                 <div id="timeline-container">
@@ -158,8 +147,8 @@
                         <!-- frames -->
                     </div>
                     <div id="playback-controls">
-                        <button id="frame-prev">Prev<br>[J]</button>
-                        <button id="frame-next">Next<br>[K]</button>
+                        <button id="frame-prev" title="Previous frame [J]"><svg x="0px" y="0px" viewBox="0 0 30 30"><path d="M5.1821051,17.1898251l14.853282,8.1779118c1.332922,0.7338791,2.9646168-0.2304039,2.9646168-1.7520046 L22.9999981,7.2599006c-0.0000019-1.5215998-1.6316948-2.4858828-2.9646187-1.7520018L5.1821041,13.6858196 C3.801594,14.4459009,3.8015947,16.4297447,5.1821051,17.1898251z"/></svg><span>[J]</span></button>
+                        <button id="frame-next" title="Next frame [K]"><svg x="0px" y="0px" viewBox="0 0 30 30"><path d="M24.817894,13.8101749L9.9646139,5.6322637C8.63169,4.8983836,6.9999967,5.8626676,6.9999971,7.3842673L7.0000024,23.740099 c0.000001,1.5216007,1.6316953,2.4858837,2.9646182,1.7520027l14.8532753-8.1779213 C26.1984062,16.5540981,26.1984043,14.5702562,24.817894,13.8101749z"/></svg><span>[K]</span></button>
                     </div>
                 </div>
             </div>
