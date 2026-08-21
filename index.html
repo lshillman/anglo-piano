@@ -19,7 +19,8 @@
             <h1>Anglo Piano</h1>
         </div>
         <div>
-            <button id="keyboardShortcutsBtn"></button>
+            <label for="sound"><input type="checkbox" id="sound" name="sound" title="Sound" checked="checked"></label>
+            <button id="keyboardShortcutsBtn" title="Keyboard shortcuts"></button>
             <button id="about">About</button>
         </div>
     </header>
@@ -89,20 +90,11 @@
                         </section>
                     </div>
                 </div>
-
-
-                <div id="view-preferences" style="display:none;">
-                    <div id="sound-option">
-                        <label for="sound"><input type="checkbox" id="sound" name="sound" checked="checked">Sound</label>
-                    </div>
+                <div id="debug-controls" style="display:none;">
                     <label for="multiselect"><input type="checkbox" id="multiselect" name="multiselect" value="false"><span>Select multiple notes [long-press]</span></label>
-
-                    <button id="moreDisplayOptionsBtn">More options...</button>
-                    <div id="more-display-options" style="display:none;">
-                        <label for="absent-notes"><input type="checkbox" id="absent-notes" name="absent-notes" value="true" checked="checked">Gray out absent notes</label>
-                        <label for="concertina-labels"><input type="checkbox" id="concertina-labels" name="concertina-labels" value="true" checked="checked">Concertina labels</label>
-                        <label for="piano-labels"><input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">Piano labels</label>
-                    </div>
+                    <label for="absent-notes"><input type="checkbox" id="absent-notes" name="absent-notes" value="true" checked="checked">Gray out absent notes</label>
+                    <label for="concertina-labels"><input type="checkbox" id="concertina-labels" name="concertina-labels" value="true" checked="checked">Concertina labels</label>
+                    <label for="piano-labels"><input type="checkbox" id="piano-labels" name="piano-labels" value="true" checked="checked">Piano labels</label>
                 </div>
             </div>
             <div id="highlight-controls">
@@ -125,9 +117,12 @@
                     <div>
                         <select id="composition"></select>
                         <button id="comp-new">New composition</button>
-                        <button id="comp-import">Import...</button>
-                        <button id="comp-export">Export...</button>
-                        <button id="comp-delete" class="light-destructive">Delete composition</button>
+                        <button id="composerActionsBtn">More...</button>
+                        <div id="composer-actions">
+                            <button id="comp-import">Import...</button>
+                            <button id="comp-export">Export...</button>
+                            <button id="comp-delete" class="light-destructive">Delete composition</button>
+                        </div>
                     </div>
                     <div id="frame-actions">
                         <button id="frame-save" title="Create new frame [Shift + S]">Create new frame</button>
@@ -139,7 +134,7 @@
                     </div>
                     <span id="layout-mismatch">Switch to <button id="comp-layout-button">this composition's layout</button> to enable editing.</span>
                     <div>
-                        <button id="composer-help" title="Composer help">Help</button>
+                        <a href="/help/" target="_blank" id="composer-help" title="Composer help">Help</a>
                     </div>
                 </div>
                 <div id="timeline-container">
