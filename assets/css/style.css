@@ -38,6 +38,28 @@ header h1 {
    display: inline-block;
 }
 
+label[for="sound"] {
+   background: transparent url(../images/sound-off.svg) no-repeat center;
+   height: 50px;
+   width: 60px;
+   cursor: pointer;
+}
+
+label[for="sound"]:has(input:checked) {
+   background: transparent url(../images/sound-on.svg) no-repeat center;
+}
+
+label[for="sound"]:has(input:focus) {
+   outline: 2px solid #ccccff;
+}
+
+#sound {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	opacity: 0;
+}
+
 #keyboardShortcutsBtn {
    background: transparent url(../images/ic-keyboard.svg) no-repeat center;
    border: none;
@@ -62,7 +84,9 @@ header h1 {
 }
 
 #about:hover,
-#keyboardShortcutsBtn:hover {
+#keyboardShortcutsBtn:hover,
+label[for="sound"]:hover,
+label[for="sound"]:has(input:checked):hover {
    background-color: #555;
 }
 
@@ -300,7 +324,7 @@ button {
    gap: 0.3rem;
 } */
 
-#viewer-options #sound-option {
+#viewer-options {
    margin-top: 1rem;
 }
 
@@ -983,10 +1007,19 @@ button#addToLayoutsBtn:active {
    overflow-x: auto;
    padding: 0.5rem;
    background-color: #efefef;
+   position: relative;
+   overflow: visible;
 }
 
 #composer-controls select {
    margin-bottom: 0;
+}
+
+#composer-actions {
+   display: inline-flex;
+   flex-direction: column;
+   position: absolute;
+   bottom: 40px;
 }
 
 #layout-mismatch {
