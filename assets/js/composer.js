@@ -1,6 +1,7 @@
 // composer elements
 const comp_dropdown = document.getElementById("composition");
 const comp_new = document.getElementById("comp-new"); // shows the create modal
+const comp_actions = document.getElementById("composer-actions");
 const comp_createBtn = document.getElementById("createCompBtn"); // inside the create modal
 const comp_delete = document.getElementById("comp-delete");
 const frame_save = document.getElementById("frame-save");
@@ -10,6 +11,7 @@ const frame_delete = document.getElementById("frame-delete");
 const frame_next = document.getElementById("frame-next");
 const frame_prev = document.getElementById("frame-prev");
 const timeline = document.getElementById("timeline");
+const compActionsBtn = document.getElementById("composerActionsBtn");
 const pasteFramesBtn = document.getElementById("paste-frames");
 const copyFramesBtn = document.getElementById("copy-frames");
 const playbackControls = document.getElementById("playback-controls");
@@ -561,6 +563,24 @@ pasteFramesBtn.addEventListener("click", () => pasteFrames());
 frame_delete.addEventListener("click", () => deleteFrames());
 frame_next.addEventListener("click", () => loadNextFrame());
 frame_prev.addEventListener("click", () => loadPrevFrame());
+
+compActionsBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closePopovers();
+    let buttonTop = compActionsBtn.getBoundingClientRect().top;
+    let buttonLeft = compActionsBtn.getBoundingClientRect().left;
+    console.log(`${buttonTop}, ${buttonLeft}`);
+    comp_actions.style.display = "flex";
+    let menuHeight = comp_actions.getBoundingClientRect().height;
+    comp_actions.style.top = `${buttonTop - menuHeight}px`;
+    comp_actions.style.left = `${buttonLeft}px`;
+    window.addEventListener("click", function handlePopover(f) {
+        if (!comp_actions.contains(f.target)) {
+            comp_actions.style.display = "none";
+            window.removeEventListener("click", handlePopover);
+        }
+    });
+});
 
 timeline.addEventListener((mobileDevice ? 'touchstart' : 'mousedown'), (e) => {
     timelineTouch = true;

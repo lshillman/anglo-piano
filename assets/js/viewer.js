@@ -1130,7 +1130,7 @@ document.getElementById("bellowsPickerBtn").addEventListener("click", (e) => {
             console.log("in bellows handler");
             window.removeEventListener("click", handlePopover);
         }
-    })
+    });
 });
 
 layoutActionsBtn.addEventListener("click", (e) => {
