@@ -1030,6 +1030,11 @@ button#addToLayoutsBtn:active {
 	gap: 4px;
 }
 
+#composition {
+   max-width: 200px;
+   text-overflow: ellipsis;
+}
+
 #composer-actions {
 	flex-direction: column;
 	position: fixed;
