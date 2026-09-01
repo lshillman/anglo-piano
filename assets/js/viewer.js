@@ -66,6 +66,9 @@ const keyboardShortcutsBtn = document.getElementById("keyboardShortcutsBtn");
 const addToLayoutsBtn = document.getElementById("addToLayoutsBtn");
 const removeFromLayoutsBtn = document.getElementById("removeFromLayoutsBtn");
 
+// an audio context to play our audio
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
 // are we selecting notes or buttons? EXPERIMENTAL
 let selectionMode = "notes"
 
@@ -566,7 +569,6 @@ function deselectChordButtons() {
 
 function playNote(note) {
     if (opt_sound.checked && note != "~") {
-        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let oscillator;
         let gainNode = audioCtx.createGain(); // prerequisite for making the volume adjustable
         let freq = notes[noteNames[note]];
